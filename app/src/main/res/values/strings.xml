@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Yo密码</string>
+
+    <string name="dummy_button_login">QQ授权登录</string>
+    <string name="dummy_content">hi</string>
+
+    <string name="qq_auth_cancel">授权登录取消</string>
+    <string name="qq_auth_completel">授权登录成功</string>
+</resources>
