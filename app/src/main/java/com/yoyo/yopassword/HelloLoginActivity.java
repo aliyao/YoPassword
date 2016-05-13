@@ -79,6 +79,7 @@ public class HelloLoginActivity extends AppCompatActivity {
             protected void doComplete(Object o) {
                 YoLogUtils.i(o.toString());
                 ToastUtils.show(HelloLoginActivity.this,R.string.qq_auth_completel);
+                startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
             }
 
             @Override
@@ -106,7 +107,9 @@ public class HelloLoginActivity extends AppCompatActivity {
      */
     public void loginQQ() {
         if (!mTencent.isSessionValid()) {
-            mTencent.login(this, YoConfig.KEY_SCOPE, baseUiListener);
+            startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
+            finish();
+            //mTencent.login(this, YoConfig.KEY_SCOPE, baseUiListener);
         }
     }
 
