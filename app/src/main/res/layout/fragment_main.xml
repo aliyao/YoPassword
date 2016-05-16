@@ -8,9 +8,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.yoyo.yopassword.MainActivity$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <com.pulltorefreshandload.RefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+    </com.pulltorefreshandload.RefreshLayout>
 </RelativeLayout>
