@@ -1,4 +1,4 @@
-package com.yoyo.yopassword;
+package com.yoyo.yopassword.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -7,12 +7,13 @@ import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
-import com.yoyo.yopassword.utils.ToastUtils;
-import com.yoyo.yopassword.utils.YoLogUtils;
+import com.yoyo.yopassword.R;
+import com.yoyo.yopassword.YoConfig;
+import com.yoyo.yopassword.util.ToastUtils;
+import com.yoyo.yopassword.util.YoLogUtils;
 import com.yoyo.yopassword.wrapper.BaseUiListener;
 
 public class HelloLoginActivity extends AppCompatActivity {

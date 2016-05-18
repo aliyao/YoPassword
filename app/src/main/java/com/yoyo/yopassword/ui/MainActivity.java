@@ -1,4 +1,4 @@
-package com.yoyo.yopassword;
+package com.yoyo.yopassword.ui;
 
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,8 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ListView;
-import android.widget.TextView;
+import com.yoyo.yopassword.R;
 
 public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;

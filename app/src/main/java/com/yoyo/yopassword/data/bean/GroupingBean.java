@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.bean;
+package com.yoyo.yopassword.data.bean;
 
 /**
  * 项目名称：YoPassword

@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.utils;
+package com.yoyo.yopassword.util;
 
 import android.content.Context;
 import android.widget.Toast;

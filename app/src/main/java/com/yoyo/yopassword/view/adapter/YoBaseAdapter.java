@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.adapter;
+package com.yoyo.yopassword.view.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

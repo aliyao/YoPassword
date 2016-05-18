@@ -1,6 +1,4 @@
-package com.yoyo.yopassword.bean;
-
-import java.util.Date;
+package com.yoyo.yopassword.data.bean;
 
 /**
  * 项目名称：YoPassword

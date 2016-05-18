@@ -2,9 +2,7 @@ package com.yoyo.yopassword.wrapper;
 
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
-import com.yoyo.yopassword.utils.YoLogUtils;
-
-import org.json.JSONObject;
+import com.yoyo.yopassword.util.YoLogUtils;
 
 /**
  * 项目名称：YoPassword

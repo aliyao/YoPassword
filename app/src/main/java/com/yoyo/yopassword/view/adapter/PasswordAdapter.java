@@ -1,11 +1,11 @@
-package com.yoyo.yopassword.adapter;
+package com.yoyo.yopassword.view.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yoyo.yopassword.bean.PasswordInfoBean;
+import com.yoyo.yopassword.data.bean.PasswordInfoBean;
 
 import java.util.List;
 
