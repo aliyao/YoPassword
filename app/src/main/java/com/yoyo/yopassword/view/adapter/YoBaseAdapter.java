@@ -1,25 +1,26 @@
 package com.yoyo.yopassword.view.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
-import android.widget.BaseAdapter;
+import android.support.v7.widget.RecyclerView;
+import android.view.ViewGroup;
+
+import com.yoyo.yopassword.view.adapter.viewholder.PasswordViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class YoBaseAdapter<T> extends BaseAdapter {
+public abstract class YoBaseAdapter<T,L extends RecyclerView.ViewHolder> extends RecyclerView.Adapter {
     protected List<T> mData = new ArrayList<T>();
     public List<Object> clickGray = new ArrayList<Object>();//点击变色
-    protected LayoutInflater mInflater;
-    protected Context context;
 
-    public YoBaseAdapter(Context context, @NonNull List<T> mData) {
-        this.mInflater = LayoutInflater.from(context);
+    public YoBaseAdapter(@NonNull List<T> mData) {
         this.mData = mData;
-        this.context = context;
     }
 
+    @Override
+    public int getItemCount() {
+        return mData.size();
+    }
     public void addData(@NonNull List<T> list) {
         this.mData.addAll(list);
     }
@@ -37,20 +38,14 @@ public abstract class YoBaseAdapter<T> extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return mData.size();
+    public L onCreateViewHolder(ViewGroup parent, int viewType) {
+        return null;
     }
 
     @Override
-    public T getItem(int position) {
-        return mData.get(position);
-    }
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
-
 }
 
 

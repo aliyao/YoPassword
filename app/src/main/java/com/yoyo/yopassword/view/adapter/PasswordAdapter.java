@@ -1,11 +1,11 @@
 package com.yoyo.yopassword.view.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.view.View;
+import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.yoyo.yopassword.data.bean.PasswordInfoBean;
+import com.yoyo.yopassword.view.adapter.viewholder.PasswordViewHolder;
 
 import java.util.List;
 
@@ -18,14 +18,21 @@ import java.util.List;
  * 修改时间：2016/5/16 17:28
  * 修改备注：
  */
-public class PasswordAdapter extends YoBaseAdapter<PasswordInfoBean> {
+public class PasswordAdapter extends YoBaseAdapter<PasswordInfoBean,PasswordViewHolder> {
 
-    public PasswordAdapter(Context context, @NonNull List<PasswordInfoBean> mData) {
-        super(context, mData);
+    public PasswordAdapter(@NonNull List<PasswordInfoBean> mData) {
+        super(mData);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return null;
     }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+    }
 }
+
+
