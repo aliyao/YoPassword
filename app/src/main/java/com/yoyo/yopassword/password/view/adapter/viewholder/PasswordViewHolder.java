@@ -1,7 +1,9 @@
-package com.yoyo.yopassword.view.adapter.viewholder;
+package com.yoyo.yopassword.password.view.adapter.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.yoyo.yopassword.base.BaseRecyclerViewViewHolder;
 
 /**
  * 项目名称：YoPassword
@@ -12,7 +14,7 @@ import android.view.View;
  * 修改时间：2016/5/18 17:45
  * 修改备注：
  */
-public class PasswordViewHolder extends RecyclerView.ViewHolder {
+public class PasswordViewHolder extends BaseRecyclerViewViewHolder{
 
     public PasswordViewHolder(View itemView) {
         super(itemView);

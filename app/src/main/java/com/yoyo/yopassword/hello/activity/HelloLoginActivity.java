@@ -1,22 +1,23 @@
-package com.yoyo.yopassword.ui;
+package com.yoyo.yopassword.hello.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 import com.yoyo.yopassword.R;
-import com.yoyo.yopassword.YoConfig;
-import com.yoyo.yopassword.util.ToastUtils;
-import com.yoyo.yopassword.util.YoLogUtils;
-import com.yoyo.yopassword.wrapper.BaseUiListener;
+import com.yoyo.yopassword.base.BaseAppCompatActivity;
+import com.yoyo.yopassword.base.BaseUiListener;
+import com.yoyo.yopassword.common.config.AppConfig;
+import com.yoyo.yopassword.common.util.YoLogUtils;
+import com.yoyo.yopassword.common.view.YoToast;
+import com.yoyo.yopassword.home.activity.MainActivity;
 
-public class HelloLoginActivity extends AppCompatActivity {
+public class HelloLoginActivity extends BaseAppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
@@ -74,23 +75,23 @@ public class HelloLoginActivity extends AppCompatActivity {
      * qq授权初始化
      */
     private void initQQAuth() {
-        mTencent = Tencent.createInstance(YoConfig.KEY_APP_ID, this.getApplicationContext());
+        mTencent = Tencent.createInstance(AppConfig.KEY_APP_ID, this.getApplicationContext());
         baseUiListener = new BaseUiListener() {
             @Override
             protected void doComplete(Object o) {
                 YoLogUtils.i(o.toString());
-                ToastUtils.show(HelloLoginActivity.this,R.string.qq_auth_completel);
+                YoToast.show(HelloLoginActivity.this,R.string.qq_auth_completel);
                 startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
             }
 
             @Override
             protected void doError(UiError e) {
-                ToastUtils.show(HelloLoginActivity.this,e.errorMessage);
+                YoToast.show(HelloLoginActivity.this,e.errorMessage);
             }
 
             @Override
             protected void doCancel() {
-                ToastUtils.show(HelloLoginActivity.this,R.string.qq_auth_cancel);
+                YoToast.show(HelloLoginActivity.this,R.string.qq_auth_cancel);
             }
         };
     }

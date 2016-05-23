@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.ui;
+package com.yoyo.yopassword.home.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yoyo.yopassword.R;
+import com.yoyo.yopassword.base.BaseAppCompatActivity;
+import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
+import com.yoyo.yopassword.common.view.RefreshLayout;
+import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseAppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements OnBaseRecyclerViewListener{
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public PlaceholderFragment() {
@@ -82,21 +86,33 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            RefreshLayout refreshLayout= (RefreshLayout) rootView.findViewById(R.id.refresh_layout);
             // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             RecyclerView recyclerViewPassword = (RecyclerView) rootView.findViewById(R.id.recycler_view_password);
             recyclerViewPassword.setHasFixedSize(true);
             //设置布局管理器
             recyclerViewPassword.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            adapter.setOnRecyclerViewListener(this);
+            PasswordAdapter passwordAdapter=new PasswordAdapter(null);
+            passwordAdapter.setOnRecyclerViewListener(this);
             //设置adapter
-            recyclerViewPassword.setAdapter(adapter);
+            recyclerViewPassword.setAdapter(passwordAdapter);
             //设置Item增加、移除动画
             recyclerViewPassword.setItemAnimator(new DefaultItemAnimator());
             //添加分割线
-            recyclerViewPassword.addItemDecoration(new DividerItemDecoration(
-                    getActivity(), DividerItemDecoration.HORIZONTAL_LIST));
+         /*   recyclerViewPassword.addItemDecoration(new DividerItemDecoration(
+                    getActivity(), DividerItemDecoration.HORIZONTAL_LIST));*/
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
+        }
+
+        @Override
+        public void onItemClick(int position) {
+
+        }
+
+        @Override
+        public boolean onItemLongClick(int position) {
+            return false;
         }
     }
 

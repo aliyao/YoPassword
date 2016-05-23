@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.util;
+package com.yoyo.yopassword.common.view;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -12,7 +12,7 @@ import android.widget.Toast;
  * 修改时间：2016/5/7 18:01
  * 修改备注：
  */
-public class ToastUtils {
+public class YoToast {
     public static void show(Context context, int resId) {
         Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
     }

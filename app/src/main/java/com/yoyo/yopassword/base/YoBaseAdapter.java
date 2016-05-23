@@ -1,29 +1,37 @@
-package com.yoyo.yopassword.view.adapter;
+package com.yoyo.yopassword.base;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.yoyo.yopassword.view.adapter.viewholder.PasswordViewHolder;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class YoBaseAdapter<T,L extends RecyclerView.ViewHolder> extends RecyclerView.Adapter {
-    protected List<T> mData = new ArrayList<T>();
-    public List<Object> clickGray = new ArrayList<Object>();//点击变色
+public abstract class YoBaseAdapter<T, L extends BaseRecyclerViewViewHolder> extends RecyclerView.Adapter<L> {
+    protected List<T> mData = new ArrayList<>();
+    public List<Object> clickGray = new ArrayList<>();//点击变色
+    OnBaseRecyclerViewListener onRecyclerViewListener;
 
     public YoBaseAdapter(@NonNull List<T> mData) {
+        if(mData==null){
+            mData = new ArrayList<>();
+        }
         this.mData = mData;
+    }
+
+    public void setOnRecyclerViewListener(OnBaseRecyclerViewListener onRecyclerViewListener) {
+        this.onRecyclerViewListener = onRecyclerViewListener;
     }
 
     @Override
     public int getItemCount() {
         return mData.size();
     }
+
     public void addData(@NonNull List<T> list) {
         this.mData.addAll(list);
     }
+
     public void clearData() {
         this.mData.clear();
         this.clickGray.clear();
@@ -43,8 +51,11 @@ public abstract class YoBaseAdapter<T,L extends RecyclerView.ViewHolder> extends
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(L holder, int position) {
+        holder.position=position;
+        if(onRecyclerViewListener!=null){
+            holder.onRecyclerViewListener=onRecyclerViewListener;
+        }
     }
 }
 

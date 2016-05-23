@@ -1,8 +1,8 @@
-package com.yoyo.yopassword.util;
+package com.yoyo.yopassword.common.util;
 
 import android.util.Log;
 
-import com.yoyo.yopassword.YoConfig;
+import com.yoyo.yopassword.common.config.AppConfig;
 
 /**
  * 项目名称：YoPassword
@@ -15,34 +15,34 @@ import com.yoyo.yopassword.YoConfig;
  */
 public class YoLogUtils {
     public static void i(String msg){
-        if(YoConfig.isDebug){
+        if(AppConfig.isDebug){
             return;
         }
-        Log.i(YoConfig.logTag,msg);
+        Log.i(AppConfig.logTag,msg);
     }
     public static void e(String msg){
-        if(YoConfig.isDebug){
+        if(AppConfig.isDebug){
             return;
         }
-        Log.e(YoConfig.logTag,msg);
+        Log.e(AppConfig.logTag,msg);
     }
     public static void d(String msg){
-        if(YoConfig.isDebug){
+        if(AppConfig.isDebug){
             return;
         }
-        Log.d(YoConfig.logTag,msg);
+        Log.d(AppConfig.logTag,msg);
     }
 
     public static void d(String tag,String msg){
-        if(YoConfig.isDebug){
+        if(AppConfig.isDebug){
             return;
         }
-        Log.d(YoConfig.logTag+tag,msg);
+        Log.d(AppConfig.logTag+tag,msg);
     }
     public static void v(String msg){
-        if(YoConfig.isDebug){
+        if(AppConfig.isDebug){
             return;
         }
-        Log.v(YoConfig.logTag,msg);
+        Log.v(AppConfig.logTag,msg);
     }
 }

@@ -11,4 +11,5 @@
     <string name="action_password">密码</string>
     <string name="action_me">我</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="refresh_loading">正在加载</string>
 </resources>
