@@ -22,7 +22,12 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
+import com.yoyo.yopassword.password.entity.PasswordInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends BaseAppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -43,7 +48,7 @@ public class MainActivity extends BaseAppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, R.string.main_snackbar_tip, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -101,6 +106,21 @@ public class MainActivity extends BaseAppCompatActivity {
          /*   recyclerViewPassword.addItemDecoration(new DividerItemDecoration(
                     getActivity(), DividerItemDecoration.HORIZONTAL_LIST));*/
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            List<PasswordInfo> passwordInfoList=new ArrayList<>();
+            for (int i=0;i<20;i++){
+                PasswordInfo passwordInfo=new PasswordInfo();
+                passwordInfo.setAccount("yoyo"+i);
+                passwordInfo.setPassword("yoyo"+i+i+i);
+                passwordInfo.setRemarks("yoyo备注显示信息"+i);
+                passwordInfo.setSaveInfoTime(new Date().getTime()-(i*10000));
+                passwordInfo.setTitle("yoyoTitle"+i);
+                passwordInfo.setTop(i%2==0);
+                passwordInfo.setPasswordInfoId(i);
+                passwordInfo.setGroupingId(i%2+1);
+            }
+            passwordAdapter.setmData(passwordInfoList);
+            passwordAdapter.notifyDataSetChanged();
             return rootView;
         }
 

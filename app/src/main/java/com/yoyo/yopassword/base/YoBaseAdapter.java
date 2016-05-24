@@ -28,6 +28,10 @@ public abstract class YoBaseAdapter<T, L extends BaseRecyclerViewViewHolder> ext
         return mData.size();
     }
 
+    public T getItem(int position) {
+        return mData.get(position);
+    }
+
     public void addData(@NonNull List<T> list) {
         this.mData.addAll(list);
     }
