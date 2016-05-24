@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.home.activity;
+package com.yoyo.yopassword.main.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

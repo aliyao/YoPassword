@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.password.bean;
+package com.yoyo.yopassword.password.entity;
 
 /**
  * 项目名称：YoPassword
@@ -9,7 +9,7 @@ package com.yoyo.yopassword.password.bean;
  * 修改时间：2016/5/13 17:59
  * 修改备注：
  */
-public class GroupingBean {
+public class GroupingInfo {
     int groupingId;
     String groupingName;
 

@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.hello.activity;
+package com.yoyo.yopassword.main.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,7 +15,6 @@ import com.yoyo.yopassword.base.BaseUiListener;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.YoLogUtils;
 import com.yoyo.yopassword.common.view.YoToast;
-import com.yoyo.yopassword.home.activity.MainActivity;
 
 public class HelloLoginActivity extends BaseAppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;

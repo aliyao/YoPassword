@@ -3,9 +3,9 @@ package com.yoyo.yopassword.password.view.adapter;
 import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 
-import com.yoyo.yopassword.password.bean.PasswordInfoBean;
+import com.yoyo.yopassword.password.entity.PasswordInfo;
 import com.yoyo.yopassword.base.YoBaseAdapter;
-import com.yoyo.yopassword.password.view.adapter.viewholder.PasswordViewHolder;
+import com.yoyo.yopassword.password.view.adapter.holder.PasswordViewHolder;
 
 import java.util.List;
 
@@ -18,9 +18,9 @@ import java.util.List;
  * 修改时间：2016/5/16 17:28
  * 修改备注：
  */
-public class PasswordAdapter extends YoBaseAdapter<PasswordInfoBean, PasswordViewHolder> {
+public class PasswordAdapter extends YoBaseAdapter<PasswordInfo, PasswordViewHolder> {
 
-    public PasswordAdapter(@NonNull List<PasswordInfoBean> mData) {
+    public PasswordAdapter(@NonNull List<PasswordInfo> mData) {
         super(mData);
     }
 

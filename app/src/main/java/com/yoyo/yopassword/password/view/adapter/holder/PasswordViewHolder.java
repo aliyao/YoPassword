@@ -1,6 +1,5 @@
-package com.yoyo.yopassword.password.view.adapter.viewholder;
+package com.yoyo.yopassword.password.view.adapter.holder;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.yoyo.yopassword.base.BaseRecyclerViewViewHolder;
