@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,13 +22,12 @@ import android.view.ViewGroup;
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
+import com.yoyo.yopassword.common.config.AppConfig;
+import com.yoyo.yopassword.common.util.DensityUtils;
 import com.yoyo.yopassword.common.view.RefreshLayout;
-import com.yoyo.yopassword.password.entity.PasswordInfo;
+import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.yoyo.yopassword.test.TestUtils;
 
 public class MainActivity extends BaseAppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -74,6 +74,8 @@ public class MainActivity extends BaseAppCompatActivity {
 
     public static class PlaceholderFragment extends Fragment implements OnBaseRecyclerViewListener{
         private static final String ARG_SECTION_NUMBER = "section_number";
+        PasswordAdapter passwordAdapter;
+        RefreshLayout refreshLayout;
 
         public PlaceholderFragment() {
         }
@@ -90,13 +92,13 @@ public class MainActivity extends BaseAppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            RefreshLayout refreshLayout= (RefreshLayout) rootView.findViewById(R.id.refresh_layout);
+            refreshLayout= (RefreshLayout) rootView.findViewById(R.id.refresh_layout);
             // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             RecyclerView recyclerViewPassword = (RecyclerView) rootView.findViewById(R.id.recycler_view_password);
             recyclerViewPassword.setHasFixedSize(true);
             //设置布局管理器
             recyclerViewPassword.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            PasswordAdapter passwordAdapter=new PasswordAdapter(null);
+            passwordAdapter=new PasswordAdapter(TestUtils.getListPasswordInfo());
             passwordAdapter.setOnRecyclerViewListener(this);
             //设置adapter
             recyclerViewPassword.setAdapter(passwordAdapter);
@@ -105,22 +107,25 @@ public class MainActivity extends BaseAppCompatActivity {
             //添加分割线
          /*   recyclerViewPassword.addItemDecoration(new DividerItemDecoration(
                     getActivity(), DividerItemDecoration.HORIZONTAL_LIST));*/
+
+            int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.space_item_decoration);
+            recyclerViewPassword.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
-            List<PasswordInfo> passwordInfoList=new ArrayList<>();
-            for (int i=0;i<20;i++){
-                PasswordInfo passwordInfo=new PasswordInfo();
-                passwordInfo.setAccount("yoyo"+i);
-                passwordInfo.setPassword("yoyo"+i+i+i);
-                passwordInfo.setRemarks("yoyo备注显示信息"+i);
-                passwordInfo.setSaveInfoTime(new Date().getTime()-(i*10000));
-                passwordInfo.setTitle("yoyoTitle"+i);
-                passwordInfo.setTop(i%2==0);
-                passwordInfo.setPasswordInfoId(i);
-                passwordInfo.setGroupingId(i%2+1);
-            }
-            passwordAdapter.setmData(passwordInfoList);
-            passwordAdapter.notifyDataSetChanged();
+            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+                @Override
+                public void onRefresh() {
+                    refreshLayout.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            passwordAdapter.setmData(TestUtils.getListPasswordInfo());
+                            passwordAdapter.notifyDataSetChanged();
+                            refreshLayout.setRefreshing(false);
+                        }
+                    }, AppConfig.RefreshViewTime);
+                }
+            });
             return rootView;
         }
 
@@ -162,4 +167,6 @@ public class MainActivity extends BaseAppCompatActivity {
             return null;
         }
     }
+
+
 }

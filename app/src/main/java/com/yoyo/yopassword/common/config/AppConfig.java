@@ -15,4 +15,6 @@ public class AppConfig {
     public final static String KEY_SCOPE="all"; // 获取信息的范围参数
     public final static String KEY_APP_ID="1105311351";
     public final static int minPageSize = 18;//判断是否显示加载更多
+    //上下拉刷新延迟时间
+    public final static long RefreshViewTime = 500;//毫秒
 }

@@ -18,6 +18,8 @@
             android:id="@+id/recycler_view_password"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+            android:scrollbars="none">
+
+        </android.support.v7.widget.RecyclerView>
     </com.yoyo.yopassword.common.view.RefreshLayout>
 </RelativeLayout>
