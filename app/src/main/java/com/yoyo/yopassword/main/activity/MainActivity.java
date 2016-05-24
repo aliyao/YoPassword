@@ -23,11 +23,14 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
-import com.yoyo.yopassword.common.util.DensityUtils;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
+import com.yoyo.yopassword.password.entity.GroupingInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 import com.yoyo.yopassword.test.TestUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseAppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -65,7 +68,9 @@ public class MainActivity extends BaseAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_back) {
+            finish();
+            System.exit(0);
             return true;
         }
 
@@ -141,9 +146,17 @@ public class MainActivity extends BaseAppCompatActivity {
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
+        List<GroupingInfo> pageTitleList;
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            this.pageTitleList=;
+            if( this.pageTitleList==null){
+                this.pageTitleList=new ArrayList<>();
+            }
+            GroupingInfo groupingInfo=new GroupingInfo();
+            groupingInfo.setGroupingId(0);
+            groupingInfo.setGroupingName(MainActivity.this.getResources().getString(R.string.action_password));
+            this.pageTitleList.add(groupingInfo);
         }
 
         @Override
@@ -153,16 +166,13 @@ public class MainActivity extends BaseAppCompatActivity {
 
         @Override
         public int getCount() {
-            return 2;
+            return pageTitleList.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return MainActivity.this.getResources().getString(R.string.action_password);
-                case 1:
-                    return MainActivity.this.getResources().getString(R.string.action_me);
+            if(position<pageTitleList.size()){
+                return pageTitleList.get(position).getGroupingName();
             }
             return null;
         }

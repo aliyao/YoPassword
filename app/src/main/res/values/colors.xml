@@ -6,5 +6,5 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="yo_white">#FFFFFF</color>
-
+    <color name="tip">#9c9c9c</color>
 </resources>

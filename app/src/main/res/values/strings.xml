@@ -7,9 +7,9 @@
     <string name="qq_auth_cancel">授权登录取消</string>
     <string name="qq_auth_completel">授权登录成功</string>
     <string name="title_activity_main">YoPassword</string>
-    <string name="action_settings">设置</string>
+    <string name="action_back">退出</string>
     <string name="action_password">密码</string>
-    <string name="action_me">我</string>
+   <!-- <string name="action_me">我</string>-->
     <string name="refresh_loading">正在加载</string>
     <string name="main_snackbar_tip">提示</string>
 
