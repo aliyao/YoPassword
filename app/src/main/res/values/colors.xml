@@ -7,4 +7,8 @@
     <color name="black_overlay">#66000000</color>
     <color name="yo_white">#FFFFFF</color>
     <color name="tip">#9c9c9c</color>
+
+    <color name="white_pressed">#F5F5F5</color>
+    <color name="white_normal" >#FFFFFF</color>
+    <color name="white_unable" >#DDDDDD</color>
 </resources>
