@@ -149,14 +149,11 @@ public class MainActivity extends BaseAppCompatActivity {
         List<GroupingInfo> pageTitleList;
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            this.pageTitleList=;
-            if( this.pageTitleList==null){
-                this.pageTitleList=new ArrayList<>();
-            }
+            pageTitleList=new ArrayList<>();
             GroupingInfo groupingInfo=new GroupingInfo();
             groupingInfo.setGroupingId(0);
             groupingInfo.setGroupingName(MainActivity.this.getResources().getString(R.string.action_password));
-            this.pageTitleList.add(groupingInfo);
+            pageTitleList.add(groupingInfo);
         }
 
         @Override
