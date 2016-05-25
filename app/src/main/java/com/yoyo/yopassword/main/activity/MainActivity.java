@@ -81,6 +81,17 @@ public class MainActivity extends BaseAppCompatActivity {
         private static final String ARG_SECTION_NUMBER = "section_number";
         PasswordAdapter passwordAdapter;
         RefreshLayout refreshLayout;
+        OnBaseRecyclerViewListener onBaseRecyclerViewListener=new  OnBaseRecyclerViewListener() {
+            @Override
+            public void onItemClick(int position) {
+
+            }
+
+            @Override
+            public boolean onItemLongClick(int position) {
+                return false;
+            }
+        };
 
         public PlaceholderFragment() {
         }
@@ -131,6 +142,8 @@ public class MainActivity extends BaseAppCompatActivity {
                     }, AppConfig.RefreshViewTime);
                 }
             });
+
+            passwordAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
             return rootView;
         }
 
