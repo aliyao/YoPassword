@@ -8,6 +8,9 @@
     <color name="yo_white">#FFFFFF</color>
     <color name="tip">#9c9c9c</color>
 
+    <color name="font_color_9c">#9c9c9c</color>
+    <color name="font_color_dc">#acacac</color>
+
     <color name="white_pressed">#F5F5F5</color>
     <color name="white_normal" >#FFFFFF</color>
     <color name="white_unable" >#DDDDDD</color>

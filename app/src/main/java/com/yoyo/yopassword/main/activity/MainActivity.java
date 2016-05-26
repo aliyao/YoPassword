@@ -51,8 +51,7 @@ public class MainActivity extends BaseAppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, R.string.main_snackbar_tip, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
             }
         });
 
@@ -68,9 +67,8 @@ public class MainActivity extends BaseAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_back) {
-            finish();
-            System.exit(0);
+        if (id == R.id.action_grouping) {
+
             return true;
         }
 
