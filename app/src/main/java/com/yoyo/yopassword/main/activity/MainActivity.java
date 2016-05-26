@@ -1,5 +1,6 @@
 package com.yoyo.yopassword.main.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,8 +25,10 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
+import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
+import com.yoyo.yopassword.common.view.YoAlertDialog;
 import com.yoyo.yopassword.password.entity.GroupingInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 import com.yoyo.yopassword.test.TestUtils;
@@ -87,6 +91,27 @@ public class MainActivity extends BaseAppCompatActivity {
 
             @Override
             public boolean onItemLongClick(int position) {
+                String[] toDo = getContext().getResources().getStringArray(R.array.alert_dialog_list_todo_password_item_long_click);
+                YoAlertDialog.showAlertDialogList(getContext(),toDo,new OnToDoItemClickListener(){
+
+                    @Override
+                    public void onItemClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+
+                                break;
+                            case 1:
+                                YoAlertDialog.showAlertDialog(getContext(), R.string.qq_auth_completel,new OnToDoItemClickListener(){
+                                    @Override
+                                    public void onPositiveClick(DialogInterface dialog, int which) {
+                                        super.onPositiveClick(dialog, which);
+                                    }
+                                });
+                                break;
+                        }
+
+                    }
+                });
                 return false;
             }
         };
