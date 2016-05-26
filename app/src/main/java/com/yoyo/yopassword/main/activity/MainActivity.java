@@ -101,10 +101,11 @@ public class MainActivity extends BaseAppCompatActivity {
 
                                 break;
                             case 1:
-                                YoAlertDialog.showAlertDialog(getContext(), R.string.qq_auth_completel,new OnToDoItemClickListener(){
+                                YoAlertDialog.showAlertDialog(getContext(), R.string.password_item_delect_todo,new OnToDoItemClickListener(){
                                     @Override
                                     public void onPositiveClick(DialogInterface dialog, int which) {
                                         super.onPositiveClick(dialog, which);
+
                                     }
                                 });
                                 break;

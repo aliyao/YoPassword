@@ -22,4 +22,6 @@
         <item>修改</item>
         <item>删除</item>
     </string-array>
+
+    <string name="password_item_delect_todo">是否确定删除？</string>
 </resources>
