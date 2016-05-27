@@ -19,4 +19,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
     }
+
+    public void init(){
+
+    }
 }

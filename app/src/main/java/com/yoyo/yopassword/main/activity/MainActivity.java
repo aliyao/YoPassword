@@ -33,18 +33,23 @@ import com.yoyo.yopassword.password.entity.GroupingInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 import com.yoyo.yopassword.test.TestUtils;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+
 import java.util.ArrayList;
 import java.util.List;
-
+@EActivity(R.layout.activity_main)
 public class MainActivity extends BaseAppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    @ViewById
+    private ViewPager container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setContentView(R.layout.activity_main);
+      /*  Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -57,8 +62,27 @@ public class MainActivity extends BaseAppCompatActivity {
             public void onClick(View view) {
 
             }
-        });
+        });*/
 
+    }
+
+    @AfterViews
+    public void init(){
+        super.init();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        container = (ViewPager) findViewById(R.id.container);
+        container.setAdapter(mSectionsPagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(container);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
 
@@ -101,6 +125,9 @@ public class MainActivity extends BaseAppCompatActivity {
 
                                 break;
                             case 1:
+
+                                break;
+                            case 2:
                                 YoAlertDialog.showAlertDialog(getContext(), R.string.password_item_delect_todo,new OnToDoItemClickListener(){
                                     @Override
                                     public void onPositiveClick(DialogInterface dialog, int which) {
