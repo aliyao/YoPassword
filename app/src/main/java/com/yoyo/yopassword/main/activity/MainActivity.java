@@ -1,6 +1,7 @@
 package com.yoyo.yopassword.main.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
@@ -28,6 +29,7 @@ import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoAlertDialog;
+import com.yoyo.yopassword.password.activity.AddPasswordActivity;
 import com.yoyo.yopassword.password.entity.GroupingInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 import com.yoyo.yopassword.test.TestUtils;
@@ -52,7 +54,7 @@ public class MainActivity extends BaseAppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(MainActivity.this, AddPasswordActivity.class));
             }
         });
     }
