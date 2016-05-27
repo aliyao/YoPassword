@@ -34,6 +34,6 @@ public class BaseRecyclerViewViewHolder extends RecyclerView.ViewHolder implemen
         if (null != onRecyclerViewListener) {
             return onRecyclerViewListener.onItemLongClick(position);
         }
-        return false;
+        return true;
     }
 }

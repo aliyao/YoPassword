@@ -76,4 +76,15 @@ public class X3DBUtils {
         return list;
     }
 
+    public static  <T> T findItem(Class<T> entityType, Object idValue)  {
+        T item=null;
+        try {
+            DbManager db = getDb();
+            item= db.findById(entityType,idValue);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return item;
+    }
+
 }

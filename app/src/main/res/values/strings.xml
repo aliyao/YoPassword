@@ -20,7 +20,7 @@
     <string name="btn_cancle">取消</string>
 
     <string-array name="alert_dialog_list_todo_password_item_long_click">
-        <item>复制</item>
+        <item>复制密码</item>
         <item>修改</item>
         <item>删除</item>
     </string-array>

@@ -4,21 +4,20 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
 import com.yoyo.yopassword.R;
+import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
+import com.yoyo.yopassword.common.tool.StartActivityTools;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
@@ -31,13 +30,18 @@ import com.yoyo.yopassword.grouping.view.adapter.GroupingAdapter;
 import java.util.Date;
 import java.util.List;
 
-public class GroupingActivity extends AppCompatActivity {
+public class GroupingActivity extends BaseAppCompatActivity {
     GroupingAdapter groupingAdapter;
     RefreshLayout refreshLayout;
+
+    boolean isSelect;
     OnBaseRecyclerViewListener onBaseRecyclerViewListener=new  OnBaseRecyclerViewListener() {
         @Override
         public void onItemClick(int position) {
-
+            if(isSelect){
+               StartActivityTools.doGroupingActivitySetResult(GroupingActivity.this,groupingAdapter.getItem(position).getGroupingId());
+                finish();
+            }
         }
 
         @Override
@@ -117,6 +121,7 @@ public class GroupingActivity extends AppCompatActivity {
         groupingAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
         refreshLayout.setRefreshing(true);
         refreshGrouping();
+        isSelect=getIntent().getBooleanExtra(StartActivityTools.ToGroupingActivity_IsSelect,false);
     }
 
     public void refreshGrouping(){

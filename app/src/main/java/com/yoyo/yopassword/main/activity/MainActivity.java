@@ -24,13 +24,13 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
+import com.yoyo.yopassword.common.tool.StartActivityTools;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoAlertDialog;
-import com.yoyo.yopassword.grouping.activity.GroupingActivity;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
-import com.yoyo.yopassword.password.activity.AddPasswordActivity;
+import com.yoyo.yopassword.password.entity.PasswordInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 import com.yoyo.yopassword.test.TestUtils;
 
@@ -41,7 +41,7 @@ public class MainActivity extends BaseAppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager container;
 
-    public void init(){
+    public void init() {
         super.init();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -51,11 +51,11 @@ public class MainActivity extends BaseAppCompatActivity {
         container.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(container);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, AddPasswordActivity.class));
+                StartActivityTools.toAddPasswordActivity(MainActivity.this, false, false,0);
             }
         });
     }
@@ -71,39 +71,39 @@ public class MainActivity extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_grouping) {
-            startActivity(new Intent(MainActivity.this, GroupingActivity.class));
+            StartActivityTools.toGroupingActivity(MainActivity.this, false, false);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public static class PlaceholderFragment extends Fragment implements OnBaseRecyclerViewListener{
+    public static class PlaceholderFragment extends Fragment implements OnBaseRecyclerViewListener {
         private static final String ARG_SECTION_NUMBER = "section_number";
         PasswordAdapter passwordAdapter;
         RefreshLayout refreshLayout;
-        OnBaseRecyclerViewListener onBaseRecyclerViewListener=new  OnBaseRecyclerViewListener() {
+        OnBaseRecyclerViewListener onBaseRecyclerViewListener = new OnBaseRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
 
             }
 
             @Override
-            public boolean onItemLongClick(int position) {
+            public boolean onItemLongClick(final int position) {
                 String[] toDo = getContext().getResources().getStringArray(R.array.alert_dialog_list_todo_password_item_long_click);
-                YoAlertDialog.showAlertDialogList(getContext(),toDo,new OnToDoItemClickListener(){
+                YoAlertDialog.showAlertDialogList(getContext(), toDo, new OnToDoItemClickListener() {
 
                     @Override
                     public void onItemClick(DialogInterface dialog, int which) {
-                        switch (which){
+                        switch (which) {
                             case 0:
 
                                 break;
                             case 1:
-
+                                StartActivityTools.toAddPasswordActivity(PlaceholderFragment.this, true, true,passwordAdapter.getItem(position).getPasswordInfoId());
                                 break;
                             case 2:
-                                YoAlertDialog.showAlertDialog(getContext(), R.string.password_item_delect_todo,new OnToDoItemClickListener(){
+                                YoAlertDialog.showAlertDialog(getContext(), R.string.password_item_delect_todo, new OnToDoItemClickListener() {
                                     @Override
                                     public void onPositiveClick(DialogInterface dialog, int which) {
                                         super.onPositiveClick(dialog, which);
@@ -134,13 +134,13 @@ public class MainActivity extends BaseAppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            refreshLayout= (RefreshLayout) rootView.findViewById(R.id.refresh_layout);
+            refreshLayout = (RefreshLayout) rootView.findViewById(R.id.refresh_layout);
             // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             RecyclerView recyclerViewPassword = (RecyclerView) rootView.findViewById(R.id.recycler_view_password);
             recyclerViewPassword.setHasFixedSize(true);
             //设置布局管理器
             recyclerViewPassword.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            passwordAdapter=new PasswordAdapter(TestUtils.getListPasswordInfo());
+            passwordAdapter = new PasswordAdapter(null);
             //passwordAdapter.setOnRecyclerViewListener(this);
             //设置adapter
             recyclerViewPassword.setAdapter(passwordAdapter);
@@ -161,17 +161,26 @@ public class MainActivity extends BaseAppCompatActivity {
                     refreshLayout.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            passwordAdapter.setmData(TestUtils.getListPasswordInfo());
-                            passwordAdapter.notifyDataSetChanged();
-                            refreshLayout.setRefreshing(false);
+                            refreshPasswordAdapter();
                         }
                     }, AppConfig.RefreshViewTime);
                 }
             });
 
             passwordAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
+            refreshPasswordAdapter();
             return rootView;
         }
+
+        private void refreshPasswordAdapter() {
+            List<PasswordInfo> passwordInfoList = TestUtils.getListPasswordInfo();
+            passwordAdapter.setmData(passwordInfoList);
+            passwordAdapter.notifyDataSetChanged();
+            if (refreshLayout.isRefreshing()) {
+                refreshLayout.setRefreshing(false);
+            }
+        }
+
 
         @Override
         public void onItemClick(int position) {
@@ -182,15 +191,25 @@ public class MainActivity extends BaseAppCompatActivity {
         public boolean onItemLongClick(int position) {
             return false;
         }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == StartActivityTools.ToAddPasswordActivity_RequestCode && resultCode == StartActivityTools.ToAddPasswordActivity_ResultCode) {
+                refreshPasswordAdapter();
+            }
+        }
+
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         List<GroupingInfo> pageTitleList;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            pageTitleList=new ArrayList<>();
-            GroupingInfo groupingInfo=new GroupingInfo(MainActivity.this.getResources().getString(R.string.action_password),0);
-            groupingInfo.setGroupingId(0);
+            pageTitleList = new ArrayList<>();
+            GroupingInfo groupingInfo = new GroupingInfo(MainActivity.this.getResources().getString(R.string.action_password), 0);
+            groupingInfo.setGroupingId(1);
             pageTitleList.add(groupingInfo);
         }
 
@@ -206,12 +225,10 @@ public class MainActivity extends BaseAppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position<pageTitleList.size()){
+            if (position < pageTitleList.size()) {
                 return pageTitleList.get(position).getGroupingName();
             }
             return null;
         }
     }
-
-
 }
