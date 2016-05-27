@@ -53,13 +53,13 @@ public class X3DBUtils {
             e.printStackTrace();
         }
     }
-    public static void delect(Object items) {
-        if (items == null) {
+    public static void delectById(Class<?> entityType, Object idValue) {
+        if (idValue == null) {
             return;
         }
         try {
             DbManager db = getDb();
-            db.delete(items);
+            db.deleteById(entityType, idValue);
         } catch (Throwable e) {
             e.printStackTrace();
         }

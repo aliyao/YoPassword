@@ -25,6 +25,9 @@ public class GroupingInfo {
         this.groupingName=groupingName;
         this.saveInfoTime=saveInfoTime;
     }
+    public GroupingInfo(){
+
+    }
 
     public long getGroupingId() {
         return groupingId;

@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
@@ -40,7 +41,7 @@ public class GroupingActivity extends AppCompatActivity {
         }
 
         @Override
-        public boolean onItemLongClick(int position) {
+        public boolean onItemLongClick(final int position) {
             String[] toDo = getResources().getStringArray(R.array.alert_dialog_list_todo_grouping_item_long_click);
             YoAlertDialog.showAlertDialogList(GroupingActivity.this,toDo,new OnToDoItemClickListener(){
 
@@ -48,17 +49,15 @@ public class GroupingActivity extends AppCompatActivity {
                 public void onItemClick(DialogInterface dialog, int which) {
                     switch (which){
                         case 0:
-
+                            doGroupingNameEdittext(groupingAdapter.getItem(position));
                             break;
                         case 1:
-
-                            break;
-                        case 2:
                             YoAlertDialog.showAlertDialog(GroupingActivity.this, R.string.grouping_item_delect_todo,new OnToDoItemClickListener(){
                                 @Override
                                 public void onPositiveClick(DialogInterface dialog, int which) {
                                     super.onPositiveClick(dialog, which);
-
+                                    X3DBUtils.delectById(GroupingInfo.class,groupingAdapter.getItem(position).getGroupingId());
+                                    refreshGrouping();
                                 }
                             });
                             break;
@@ -81,18 +80,7 @@ public class GroupingActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final EditText groupingNameEditText=new EditText(GroupingActivity.this);
-                YoAlertDialog.showAlertDialogEditText(GroupingActivity.this,R.string.action_add_grouping,groupingNameEditText,new OnToDoItemClickListener(){
-                    @Override
-                    public void onPositiveClick(DialogInterface dialog, int which) {
-                        super.onPositiveClick(dialog, which);
-                        String groupingName=groupingNameEditText.getText().toString();
-                        if(TextUtils.isEmpty(groupingName)){
-                            YoSnackbar.showSnackbar(refreshLayout,R.string.edit_grouping_name);
-                        }
-                        X3DBUtils.save(new GroupingInfo(groupingName,new Date().getTime()));
-                    }
-                });
+                doGroupingNameEdittext(null);
             }
         });
 
@@ -126,15 +114,51 @@ public class GroupingActivity extends AppCompatActivity {
                 }, AppConfig.RefreshViewTime);
             }
         });
-
         groupingAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
+        refreshLayout.setRefreshing(true);
+        refreshGrouping();
     }
 
     public void refreshGrouping(){
         List<GroupingInfo> groupingInfoList= X3DBUtils.findAll(GroupingInfo.class);
         groupingAdapter.setmData(groupingInfoList);
         groupingAdapter.notifyDataSetChanged();
-        refreshLayout.setRefreshing(false);
+        if(refreshLayout.isRefreshing()){
+            refreshLayout.setRefreshing(false);
+        }
+    }
+
+    /**
+     *
+     * @param groupingInfo
+     */
+    private void doGroupingNameEdittext(final GroupingInfo groupingInfo){
+        View viewlayout= LayoutInflater.from(GroupingActivity.this).inflate(R.layout.view_add_grouping_edittext, null);
+        final EditText groupingNameEditText=(EditText)viewlayout.findViewById(R.id.et_add_grouping);
+        if(groupingInfo!=null&&!TextUtils.isEmpty(groupingInfo.getGroupingName())){
+            groupingNameEditText.setText(groupingInfo.getGroupingName());
+        }
+        YoAlertDialog.showAlertDialogEditText(GroupingActivity.this,R.string.action_add_grouping,viewlayout,new OnToDoItemClickListener(){
+            @Override
+            public void onPositiveClick(DialogInterface dialog, int which) {
+                super.onPositiveClick(dialog, which);
+                String groupingName=groupingNameEditText.getText().toString();
+                if(TextUtils.isEmpty(groupingName)){
+                    YoSnackbar.showSnackbar(refreshLayout,R.string.edit_grouping_name);
+                    return;
+                }
+                GroupingInfo groupingInfoNew=groupingInfo;
+                if(groupingInfoNew==null){
+                    groupingInfoNew= new GroupingInfo();
+                }
+                groupingInfoNew.setGroupingName(groupingName);
+                if(groupingInfoNew.getSaveInfoTime()<=0){
+                    groupingInfoNew.setSaveInfoTime(new Date().getTime());
+                }
+                X3DBUtils.save(groupingInfoNew);
+                refreshGrouping();
+            }
+        });
     }
 
 }
