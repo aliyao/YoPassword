@@ -22,7 +22,9 @@ android {
 }
 apt {
     arguments {
-        androidManifestFile variant.outputs[0].processResources.manifestFile resourcePackageName "anjibei.com(com.yoyo.yopassword)"
+        //androidManifestFile variant.outputs[0].processResources.manifestFile resourcePackageName "com.yoyo.yopassword"
+        androidManifestFile variant.outputs[0].processResources.manifestFile
+        resourcePackageName 'com.yoyo.yopassword'
     }
 }
 
