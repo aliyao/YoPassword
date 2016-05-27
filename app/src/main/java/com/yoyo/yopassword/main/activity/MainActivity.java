@@ -2,6 +2,7 @@ package com.yoyo.yopassword.main.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -30,27 +31,20 @@ import com.yoyo.yopassword.common.view.YoAlertDialog;
 import com.yoyo.yopassword.password.entity.GroupingInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 import com.yoyo.yopassword.test.TestUtils;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
-
 import java.util.ArrayList;
 import java.util.List;
-@EActivity(R.layout.activity_main)
+
 public class MainActivity extends BaseAppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    @ViewById
     ViewPager container;
 
-    @AfterViews
     public void init(){
         super.init();
-        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-       // container = (ViewPager) findViewById(R.id.container);
+        container = (ViewPager) findViewById(R.id.container);
         container.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(container);

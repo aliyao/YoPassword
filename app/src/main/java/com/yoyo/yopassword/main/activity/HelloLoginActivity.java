@@ -17,17 +17,10 @@ import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.YoLogUtils;
 import com.yoyo.yopassword.common.view.YoToast;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
-
-@EActivity(R.layout.activity_hello_login)
 public class HelloLoginActivity extends BaseAppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
-    @ViewById
     View fullscreen_content;
-    @ViewById
     View fullscreen_content_controls;
 
 
@@ -72,14 +65,11 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
     private BaseUiListener baseUiListener;
     private Tencent mTencent;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-       // initQQAuth();
-    }
-    @AfterViews
     public void init(){
         super.init();
+        setContentView(R.layout.activity_hello_login);
+        fullscreen_content_controls = findViewById(R.id.fullscreen_content_controls);
+        fullscreen_content = findViewById(R.id.fullscreen_content);
         initQQAuth();
     }
 
@@ -121,7 +111,7 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
      */
     public void loginQQ() {
         if (!mTencent.isSessionValid()) {
-            startActivity(new Intent(HelloLoginActivity.this,MainActivity_.class));
+            startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
             finish();
             //mTencent.login(this, YoConfig.KEY_SCOPE, baseUiListener);
         }
