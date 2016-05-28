@@ -1,5 +1,8 @@
 package com.yoyo.yopassword.password.entity;
 
+import org.xutils.db.annotation.Column;
+import org.xutils.db.annotation.Table;
+
 /**
  * 项目名称：YoPassword
  * 类描述：密码的信息
@@ -9,21 +12,30 @@ package com.yoyo.yopassword.password.entity;
  * 修改时间：2016/5/13 17:54
  * 修改备注：
  */
+@Table(name = "PasswordInfo")
 public class PasswordInfo {
-    int passwordInfoId;
+    @Column(name="passwordInfoId",isId = true)
+    long passwordInfoId;
+    @Column(name="account")
     String account;
+    @Column(name="password")
     String password;
+    @Column(name="title")
     String title;
+    @Column(name="isTop")
     boolean isTop;
+    @Column(name="saveInfoTime")
     long saveInfoTime;
+    @Column(name="remarks")
     String remarks;
-    int groupingId;
+    @Column(name="groupingId")
+    long groupingId;
 
-    public int getPasswordInfoId() {
+    public long getPasswordInfoId() {
         return passwordInfoId;
     }
 
-    public void setPasswordInfoId(int passwordInfoId) {
+    public void setPasswordInfoId(long passwordInfoId) {
         this.passwordInfoId = passwordInfoId;
     }
 
@@ -75,11 +87,11 @@ public class PasswordInfo {
         this.remarks = remarks;
     }
 
-    public int getGroupingId() {
+    public long getGroupingId() {
         return groupingId;
     }
 
-    public void setGroupingId(int groupingId) {
+    public void setGroupingId(long groupingId) {
         this.groupingId = groupingId;
     }
 }

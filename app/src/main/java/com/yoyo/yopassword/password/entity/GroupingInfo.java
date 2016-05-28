@@ -1,5 +1,8 @@
 package com.yoyo.yopassword.password.entity;
 
+import org.xutils.db.annotation.Column;
+import org.xutils.db.annotation.Table;
+
 /**
  * 项目名称：YoPassword
  * 类描述：分组
@@ -9,15 +12,18 @@ package com.yoyo.yopassword.password.entity;
  * 修改时间：2016/5/13 17:59
  * 修改备注：
  */
+@Table(name = "GroupingInfo")
 public class GroupingInfo {
-    int groupingId;
+    @Column(name ="groupingId",isId=true)
+    long groupingId;
+    @Column(name ="groupingName")
     String groupingName;
 
-    public int getGroupingId() {
+    public long getGroupingId() {
         return groupingId;
     }
 
-    public void setGroupingId(int groupingId) {
+    public void setGroupingId(long groupingId) {
         this.groupingId = groupingId;
     }
 

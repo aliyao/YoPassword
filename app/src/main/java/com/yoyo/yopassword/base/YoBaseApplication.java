@@ -1,6 +1,8 @@
 package com.yoyo.yopassword.base;
 
 import android.app.Application;
+import android.support.design.BuildConfig;
+import org.xutils.x;
 
 /**
  * 项目名称：YoPassword
@@ -15,5 +17,11 @@ public class YoBaseApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        initXutils();
+    }
+
+    public void initXutils(){
+        x.Ext.init(this);
+        x.Ext.setDebug(BuildConfig.DEBUG);
     }
 }
