@@ -17,4 +17,7 @@ public class AppConfig {
     public final static int minPageSize = 18;//判断是否显示加载更多
     //上下拉刷新延迟时间
     public final static long RefreshViewTime = 500;//毫秒
+    public final static int DBVersion = 1;//数据库版本
+    public final static String DBName = "YoPasswordDB";
+
 }

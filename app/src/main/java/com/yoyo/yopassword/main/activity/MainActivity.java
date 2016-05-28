@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
@@ -29,14 +30,12 @@ import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoAlertDialog;
 import com.yoyo.yopassword.password.activity.AddPasswordActivity;
-import com.yoyo.yopassword.password.entity.GroupingInfo;
+import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 import com.yoyo.yopassword.test.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//import com.yoyo.yopassword.password.activity.AddPasswordActivity;
 
 public class MainActivity extends BaseAppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -72,7 +71,14 @@ public class MainActivity extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_grouping) {
+            EditText editText=new EditText(MainActivity.this);
+            YoAlertDialog.showAlertDialogEditText(MainActivity.this,R.string.action_grouping,editText,new OnToDoItemClickListener(){
+                @Override
+                public void onPositiveClick(DialogInterface dialog, int which) {
+                    super.onPositiveClick(dialog, which);
 
+                }
+            });
             return true;
         }
 

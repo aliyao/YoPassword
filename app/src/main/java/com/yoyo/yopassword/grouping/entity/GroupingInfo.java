@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.password.entity;
+package com.yoyo.yopassword.grouping.entity;
 
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
@@ -14,10 +14,12 @@ import org.xutils.db.annotation.Table;
  */
 @Table(name = "GroupingInfo")
 public class GroupingInfo {
-    @Column(name ="groupingId",isId=true)
+    @Column(name = "groupingId", isId = true)
     long groupingId;
-    @Column(name ="groupingName")
+    @Column(name = "groupingName")
     String groupingName;
+    @Column(name="saveInfoTime")
+    long saveInfoTime;
 
     public long getGroupingId() {
         return groupingId;
@@ -33,5 +35,13 @@ public class GroupingInfo {
 
     public void setGroupingName(String groupingName) {
         this.groupingName = groupingName;
+    }
+
+    public long getSaveInfoTime() {
+        return saveInfoTime;
+    }
+
+    public void setSaveInfoTime(long saveInfoTime) {
+        this.saveInfoTime = saveInfoTime;
     }
 }

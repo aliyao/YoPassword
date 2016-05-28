@@ -41,4 +41,9 @@
         　　
         <item name="android:maxHeight">76dip</item>
     </style>
+
+    <style name="EditTextStyle">
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
 </resources>

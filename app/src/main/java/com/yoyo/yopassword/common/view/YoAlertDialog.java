@@ -3,6 +3,8 @@ package com.yoyo.yopassword.common.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.View;
+import android.widget.EditText;
 
 import com.yoyo.yopassword.R;
 
@@ -36,16 +38,22 @@ public class YoAlertDialog {
         builder.show();
     }
     public static void showAlertDialog(Context context,int rStrMessage, OnToDoItemClickListener onToDoItemClickListener){
-        showAlertDialog(context,0,rStrMessage,R.string.btn_ok, R.string.btn_cancle, 0,onToDoItemClickListener);
+        showAlertDialog(context,0,rStrMessage,R.string.btn_ok, R.string.btn_cancle, 0,null,onToDoItemClickListener);
     }
 
-    public static void showAlertDialog(Context context,int rStrTitle, int rStrMessage, int rStrPositiveButtonText,int rStrNegativeButtonText,int rStrNeutralButtonText,final OnToDoItemClickListener onToDoItemClickListener){
+    public static void showAlertDialog(Context context, int rStrTitle, int rStrMessage, int rStrPositiveButtonText, int rStrNegativeButtonText, int rStrNeutralButtonText, View view, final OnToDoItemClickListener onToDoItemClickListener){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if(rStrTitle>0){
             builder.setTitle(rStrTitle);
         }
-        builder.setMessage(rStrMessage);
+        if(view!=null){
+            builder.setView(view);
+        }
+        if(rStrMessage>0){
+            builder.setMessage(rStrMessage);
+        }
+
         if(rStrPositiveButtonText>0) {
             builder.setPositiveButton(rStrPositiveButtonText, new DialogInterface.OnClickListener() {
                 @Override
@@ -81,5 +89,9 @@ public class YoAlertDialog {
             });
         }
         builder.show();
+    }
+
+    public static void showAlertDialogEditText(Context context,int rStrTitle,View view,OnToDoItemClickListener onToDoItemClickListener){
+        showAlertDialog(context, rStrTitle, 0,R.string.btn_ok, R.string.btn_cancle, 0,view,onToDoItemClickListener);
     }
 }
