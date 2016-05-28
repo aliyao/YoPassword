@@ -21,6 +21,11 @@ public class GroupingInfo {
     @Column(name="saveInfoTime")
     long saveInfoTime;
 
+    public GroupingInfo(String groupingName,long saveInfoTime){
+        this.groupingName=groupingName;
+        this.saveInfoTime=saveInfoTime;
+    }
+
     public long getGroupingId() {
         return groupingId;
     }

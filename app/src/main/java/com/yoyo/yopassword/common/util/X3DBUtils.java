@@ -1,9 +1,10 @@
 package com.yoyo.yopassword.common.util;
 
 import com.yoyo.yopassword.common.config.AppConfig;
-
 import org.xutils.DbManager;
 import org.xutils.x;
+
+import java.util.List;
 
 /**
  * 项目名称：PartTimeCat
@@ -26,7 +27,6 @@ public class X3DBUtils {
                 .setDbUpgradeListener(new DbManager.DbUpgradeListener() {
                     @Override
                     public void onUpgrade(DbManager db, int oldVersion, int newVersion) {
-                        // TODO: ...
                         // db.addColumn(...);
                         // db.dropTable(...);
                         // ...
@@ -63,6 +63,17 @@ public class X3DBUtils {
         } catch (Throwable e) {
             e.printStackTrace();
         }
+    }
+
+    public static  <T> List<T> findAll(Class<T> entityType)  {
+        List<T> list=null;
+        try {
+            DbManager db = getDb();
+            list= db.findAll(entityType);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }

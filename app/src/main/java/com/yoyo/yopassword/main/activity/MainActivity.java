@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
@@ -29,8 +28,9 @@ import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoAlertDialog;
-import com.yoyo.yopassword.password.activity.AddPasswordActivity;
+import com.yoyo.yopassword.grouping.activity.GroupingActivity;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
+import com.yoyo.yopassword.password.activity.AddPasswordActivity;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 import com.yoyo.yopassword.test.TestUtils;
 
@@ -71,14 +71,7 @@ public class MainActivity extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_grouping) {
-            EditText editText=new EditText(MainActivity.this);
-            YoAlertDialog.showAlertDialogEditText(MainActivity.this,R.string.action_grouping,editText,new OnToDoItemClickListener(){
-                @Override
-                public void onPositiveClick(DialogInterface dialog, int which) {
-                    super.onPositiveClick(dialog, which);
-
-                }
-            });
+            startActivity(new Intent(MainActivity.this, GroupingActivity.class));
             return true;
         }
 
@@ -148,7 +141,7 @@ public class MainActivity extends BaseAppCompatActivity {
             //设置布局管理器
             recyclerViewPassword.setLayoutManager(new LinearLayoutManager(this.getContext()));
             passwordAdapter=new PasswordAdapter(TestUtils.getListPasswordInfo());
-            passwordAdapter.setOnRecyclerViewListener(this);
+            //passwordAdapter.setOnRecyclerViewListener(this);
             //设置adapter
             recyclerViewPassword.setAdapter(passwordAdapter);
             //设置Item增加、移除动画
@@ -196,9 +189,8 @@ public class MainActivity extends BaseAppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             pageTitleList=new ArrayList<>();
-            GroupingInfo groupingInfo=new GroupingInfo();
+            GroupingInfo groupingInfo=new GroupingInfo(MainActivity.this.getResources().getString(R.string.action_password),0);
             groupingInfo.setGroupingId(0);
-            groupingInfo.setGroupingName(MainActivity.this.getResources().getString(R.string.action_password));
             pageTitleList.add(groupingInfo);
         }
 

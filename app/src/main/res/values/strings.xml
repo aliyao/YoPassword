@@ -7,7 +7,8 @@
     <string name="qq_auth_cancel">授权登录取消</string>
     <string name="qq_auth_completel">授权登录成功</string>
     <string name="title_activity_main">YoPassword</string>
-    <string name="action_grouping">添加分组</string>
+    <string name="action_grouping">分组管理</string>
+    <string name="action_add_grouping">添加分组</string>
     <string name="action_password">密码</string>
     <string name="refresh_loading">正在加载</string>
 
@@ -23,7 +24,14 @@
         <item>修改</item>
         <item>删除</item>
     </string-array>
+    <string-array name="alert_dialog_list_todo_grouping_item_long_click">
+        <item>修改</item>
+        <item>删除</item>
+    </string-array>
 
     <string name="password_item_delect_todo">是否确定删除？</string>
+    <string name="grouping_item_delect_todo">是否确定删除？</string>
     <string name="title_activity_add_password">YoPassword</string>
+    <string name="title_activity_grouping">YoPassword</string>
+    <string name="edit_grouping_name">请输入组名</string>
 </resources>
