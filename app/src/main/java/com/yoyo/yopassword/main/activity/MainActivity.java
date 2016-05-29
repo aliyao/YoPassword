@@ -198,7 +198,6 @@ public class MainActivity extends BaseAppCompatActivity {
                 refreshPasswordAdapter();
             }
         }
-
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -207,7 +206,11 @@ public class MainActivity extends BaseAppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             pageTitleList = new ArrayList<>();
+            refreshData();
+        }
+        public void refreshData(){
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
+            pageTitleList.clear();
             pageTitleList.addAll(groupingInfoList);
         }
 
