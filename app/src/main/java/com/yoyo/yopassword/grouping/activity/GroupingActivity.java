@@ -47,6 +47,12 @@ public class GroupingActivity extends BaseAppCompatActivity {
         @Override
         public boolean onItemLongClick(final int position) {
             String[] toDo = getResources().getStringArray(R.array.alert_dialog_list_todo_grouping_item_long_click);
+            GroupingInfo groupingInfoTo=groupingAdapter.getItem(position);
+            if(groupingInfoTo.getGroupingId()==AppConfig.DefaultGroupingId){
+                String[] mToDo=toDo;
+                toDo=new String[1];
+                toDo[0]=mToDo[0];
+            }
             YoAlertDialog.showAlertDialogList(GroupingActivity.this,toDo,new OnToDoItemClickListener(){
 
                 @Override

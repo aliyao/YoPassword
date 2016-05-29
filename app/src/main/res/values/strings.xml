@@ -8,8 +8,9 @@
     <string name="qq_auth_completel">授权登录成功</string>
     <string name="title_activity_main">YoPassword</string>
     <string name="action_grouping">分组管理</string>
+    <string name="action_confirm">确定</string>
     <string name="action_add_grouping">添加分组</string>
-    <string name="action_password">密码</string>
+    <string name="action_default_grouping_name">默认</string>
     <string name="refresh_loading">正在加载</string>
 
     <string name="password_item_account_tip">账号：</string>
@@ -34,4 +35,16 @@
     <string name="title_activity_add_password">YoPassword</string>
     <string name="title_activity_grouping">YoPassword</string>
     <string name="edit_grouping_name">请输入组名</string>
+
+    <string name="yo_title">标题</string>
+    <string name="yo_account">账号</string>
+    <string name="yo_password">密码</string>
+    <string name="yo_remarks">备注</string>
+    <string name="yo_top">置顶</string>
+
+    <string name="edit_title">请输入标题</string>
+    <string name="edit_account">请输入账号</string>
+    <string name="edit_password">请输入密码</string>
+    <string name="edit_remarks">请输入标备注</string>
+
 </resources>

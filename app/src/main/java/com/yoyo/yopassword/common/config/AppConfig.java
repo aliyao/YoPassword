@@ -19,5 +19,7 @@ public class AppConfig {
     public final static long RefreshViewTime = 500;//毫秒
     public final static int DBVersion = 1;//数据库版本
     public final static String DBName = "YoPasswordDB";
+    //默认的组ID
+    public final static long DefaultGroupingId = 1;
 
 }

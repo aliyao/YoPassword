@@ -33,6 +33,9 @@ public abstract class YoBaseAdapter<T, L extends BaseRecyclerViewViewHolder> ext
     }
 
     public void addData(@NonNull List<T> list) {
+        if(list==null){
+            return;
+        }
         this.mData.addAll(list);
     }
 
@@ -46,6 +49,9 @@ public abstract class YoBaseAdapter<T, L extends BaseRecyclerViewViewHolder> ext
     }
 
     public void setmData(@NonNull List<T> mData) {
+        if(mData==null){
+            mData = new ArrayList<>();
+        }
         this.mData = mData;
     }
 

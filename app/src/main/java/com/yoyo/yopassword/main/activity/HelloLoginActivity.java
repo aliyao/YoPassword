@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.tencent.tauth.Tencent;
@@ -14,8 +14,12 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.BaseUiListener;
 import com.yoyo.yopassword.common.config.AppConfig;
+import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.util.YoLogUtils;
 import com.yoyo.yopassword.common.view.YoToast;
+import com.yoyo.yopassword.grouping.entity.GroupingInfo;
+
+import java.util.Date;
 
 public class HelloLoginActivity extends BaseAppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;
@@ -70,7 +74,15 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_hello_login);
         fullscreen_content_controls = findViewById(R.id.fullscreen_content_controls);
         fullscreen_content = findViewById(R.id.fullscreen_content);
+        initApp();
         initQQAuth();
+    }
+    private void initApp(){
+        GroupingInfo groupingInfo= X3DBUtils.findItem(GroupingInfo.class,AppConfig.DefaultGroupingId);
+        if(groupingInfo==null|| TextUtils.isEmpty(groupingInfo.getGroupingName())){
+            groupingInfo = new GroupingInfo(HelloLoginActivity.this.getResources().getString(R.string.action_default_grouping_name), new Date().getTime());
+            X3DBUtils.save(groupingInfo);
+        }
     }
 
     /**

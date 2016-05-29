@@ -3,6 +3,8 @@ package com.yoyo.yopassword.password.entity;
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
 
+import java.util.Date;
+
 /**
  * 项目名称：YoPassword
  * 类描述：密码的信息
@@ -25,7 +27,7 @@ public class PasswordInfo {
     @Column(name="isTop")
     boolean isTop;
     @Column(name="saveInfoTime")
-    long saveInfoTime;
+    long saveInfoTime=new Date().getTime();
     @Column(name="remarks")
     String remarks;
     @Column(name="groupingId")

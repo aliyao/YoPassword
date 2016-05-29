@@ -35,8 +35,8 @@ public class StartActivityTools {
         activity.setResult(ToGroupingActivity_ResultCode,new Intent().putExtra(ToGroupingActivity_GroupingId,groupingId));
     }
 
-    public static void doAddPasswordActivitySetResult(Activity activity,long passwordInfoId){
-        activity.setResult(ToAddPasswordActivity_ResultCode,new Intent().putExtra(ToAddPasswordActivity_PasswordInfoId,passwordInfoId));
+    public static void doAddPasswordActivitySetResult(Activity activity){
+        activity.setResult(ToAddPasswordActivity_ResultCode,new Intent());
     }
 
     public static void toAddPasswordActivity(Object object, boolean isUpdate, boolean isForResult,long passwordInfoId){

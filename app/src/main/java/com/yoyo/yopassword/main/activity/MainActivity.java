@@ -25,6 +25,7 @@ import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.tool.StartActivityTools;
+import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
@@ -59,8 +60,6 @@ public class MainActivity extends BaseAppCompatActivity {
             }
         });
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -173,7 +172,7 @@ public class MainActivity extends BaseAppCompatActivity {
         }
 
         private void refreshPasswordAdapter() {
-            List<PasswordInfo> passwordInfoList = TestUtils.getListPasswordInfo();
+            List<PasswordInfo> passwordInfoList = X3DBUtils.findAll(PasswordInfo.class);
             passwordAdapter.setmData(passwordInfoList);
             passwordAdapter.notifyDataSetChanged();
             if (refreshLayout.isRefreshing()) {
@@ -208,9 +207,8 @@ public class MainActivity extends BaseAppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             pageTitleList = new ArrayList<>();
-            GroupingInfo groupingInfo = new GroupingInfo(MainActivity.this.getResources().getString(R.string.action_password), 0);
-            groupingInfo.setGroupingId(1);
-            pageTitleList.add(groupingInfo);
+            List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
+            pageTitleList.addAll(groupingInfoList);
         }
 
         @Override
