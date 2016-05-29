@@ -5,7 +5,7 @@ import org.xutils.db.annotation.Table;
 
 /**
  * 项目名称：YoPassword
- * 类描述：分组
+ * 类描述：标签
  * 创建人：yoyo
  * 创建时间：2016/5/13 17:59
  * 修改人：yoyo

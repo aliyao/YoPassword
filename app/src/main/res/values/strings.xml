@@ -7,10 +7,9 @@
     <string name="qq_auth_cancel">授权登录取消</string>
     <string name="qq_auth_completel">授权登录成功</string>
     <string name="title_activity_main">YoPassword</string>
-    <string name="action_grouping">分组管理</string>
+    <string name="action_grouping">标签管理</string>
     <string name="action_confirm">确定</string>
-    <string name="action_add_grouping">添加分组</string>
-    <string name="action_default_grouping_name">默认</string>
+    <string name="action_add_grouping">添加标签</string>
     <string name="refresh_loading">正在加载</string>
 
     <string name="password_item_account_tip">账号：</string>
@@ -34,7 +33,7 @@
     <string name="grouping_item_delect_todo">是否确定删除？</string>
     <string name="title_activity_add_password">YoPassword</string>
     <string name="title_activity_grouping">YoPassword</string>
-    <string name="edit_grouping_name">请输入组名</string>
+    <string name="edit_grouping_name">请输入标签</string>
 
     <string name="yo_title">标题</string>
     <string name="yo_account">账号</string>
@@ -47,4 +46,8 @@
     <string name="edit_password">请输入密码</string>
     <string name="edit_remarks">请输入标备注</string>
 
+    <string-array name="main_page_title">
+        <item>密码</item>
+        <item>我</item>
+    </string-array>
 </resources>
