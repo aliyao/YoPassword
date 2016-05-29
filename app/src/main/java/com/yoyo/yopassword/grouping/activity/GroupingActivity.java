@@ -18,6 +18,7 @@ import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.tool.StartActivityTools;
+import com.yoyo.yopassword.common.tool.TableColumnName;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
@@ -25,6 +26,7 @@ import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoAlertDialog;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
+import com.yoyo.yopassword.grouping.entity.PasswordGroupingInfo;
 import com.yoyo.yopassword.grouping.view.adapter.GroupingAdapter;
 
 import java.util.Date;
@@ -39,20 +41,16 @@ public class GroupingActivity extends BaseAppCompatActivity {
         @Override
         public void onItemClick(int position) {
             if(isSelect){
-               StartActivityTools.doGroupingActivitySetResult(GroupingActivity.this,groupingAdapter.getItem(position).getGroupingId());
-                finish();
+              /* StartActivityTools.doGroupingActivitySetResult(GroupingActivity.this,groupingAdapter.getItem(position).getGroupingId());
+                finish();*/
+                groupingAdapter.setItemIsChecked(position);
+
             }
         }
 
         @Override
         public boolean onItemLongClick(final int position) {
             String[] toDo = getResources().getStringArray(R.array.alert_dialog_list_todo_grouping_item_long_click);
-            GroupingInfo groupingInfoTo=groupingAdapter.getItem(position);
-            if(groupingInfoTo.getGroupingId()==AppConfig.DefaultGroupingId){
-                String[] mToDo=toDo;
-                toDo=new String[1];
-                toDo[0]=mToDo[0];
-            }
             YoAlertDialog.showAlertDialogList(GroupingActivity.this,toDo,new OnToDoItemClickListener(){
 
                 @Override
@@ -67,6 +65,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
                                 public void onPositiveClick(DialogInterface dialog, int which) {
                                     super.onPositiveClick(dialog, which);
                                     X3DBUtils.delectById(GroupingInfo.class,groupingAdapter.getItem(position).getGroupingId());
+                                    X3DBUtils.delect(PasswordGroupingInfo.class, TableColumnName.groupingId,"==",groupingAdapter.getItem(position).getGroupingId());
                                     refreshGrouping();
                                 }
                             });
@@ -99,7 +98,8 @@ public class GroupingActivity extends BaseAppCompatActivity {
         recyclerViewGrouping.setHasFixedSize(true);
         //设置布局管理器
         recyclerViewGrouping.setLayoutManager(new LinearLayoutManager(this));
-        groupingAdapter=new GroupingAdapter(null);
+        isSelect=getIntent().getBooleanExtra(StartActivityTools.ToGroupingActivity_IsSelect,false);
+        groupingAdapter=new GroupingAdapter(null,isSelect);
         //设置adapter
         recyclerViewGrouping.setAdapter(groupingAdapter);
         //设置Item增加、移除动画
@@ -127,7 +127,6 @@ public class GroupingActivity extends BaseAppCompatActivity {
         groupingAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
         refreshLayout.setRefreshing(true);
         refreshGrouping();
-        isSelect=getIntent().getBooleanExtra(StartActivityTools.ToGroupingActivity_IsSelect,false);
     }
 
     public void refreshGrouping(){

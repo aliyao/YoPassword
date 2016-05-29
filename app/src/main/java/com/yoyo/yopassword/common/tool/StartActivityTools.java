@@ -13,7 +13,7 @@ import com.yoyo.yopassword.password.activity.AddPasswordActivity;
  */
 public class StartActivityTools {
     public static final String ToGroupingActivity_IsSelect="ToGroupingActivity_IsSelect";
-    public static final String ToGroupingActivity_GroupingId="ToGroupingActivity_GroupingId";
+    public static final String ToGroupingActivity_GroupingId_Array="ToGroupingActivity_GroupingId_Array";
 
     public static final String ToAddPasswordActivity_IsUpdate="ToAddPasswordActivity_IsUpdate";
     public static final String ToAddPasswordActivity_PasswordInfoId="ToAddPasswordActivity_PasswordInfoId";
@@ -31,9 +31,9 @@ public class StartActivityTools {
             activity.startActivity(new Intent(activity, GroupingActivity.class).putExtra(ToGroupingActivity_IsSelect,isSelect));
         }
     }
-    public static void doGroupingActivitySetResult(Activity activity,long groupingId){
-        activity.setResult(ToGroupingActivity_ResultCode,new Intent().putExtra(ToGroupingActivity_GroupingId,groupingId));
-    }
+  /*  public static void doGroupingActivitySetResult(Activity activity,long[] groupingId){
+        activity.setResult(ToGroupingActivity_ResultCode,new Intent().putExtra(ToGroupingActivity_GroupingId_Array,groupingId));
+    }*/
 
     public static void doAddPasswordActivitySetResult(Activity activity){
         activity.setResult(ToAddPasswordActivity_ResultCode,new Intent());

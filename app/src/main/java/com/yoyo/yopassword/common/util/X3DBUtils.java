@@ -1,7 +1,9 @@
 package com.yoyo.yopassword.common.util;
 
 import com.yoyo.yopassword.common.config.AppConfig;
+
 import org.xutils.DbManager;
+import org.xutils.db.sqlite.WhereBuilder;
 import org.xutils.x;
 
 import java.util.List;
@@ -85,6 +87,37 @@ public class X3DBUtils {
             e.printStackTrace();
         }
         return item;
+    }
+
+  /*  public static  <T> T findItem(Class<T> entityType,String columnName ,long columnValue)  {
+        T item=null;
+        try {
+            DbManager db = getDb();
+            item= db.selector(entityType).where(columnName,"==",columnValue).findFirst();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return item;
+    }*/
+
+    public static  <T> List<T> findAll(Class<T> entityType,String columnName , String op,Object columnValue)  {
+        List<T> list=null;
+        try {
+            DbManager db = getDb();
+            list= db.selector(entityType).where(columnName,op,columnValue).findAll();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static void delect(Class<?> entityType,String columnName, String op, Object value) {
+        try {
+            DbManager db = getDb();
+            db.delete(entityType, WhereBuilder.b(columnName,  op,  value));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
 }
