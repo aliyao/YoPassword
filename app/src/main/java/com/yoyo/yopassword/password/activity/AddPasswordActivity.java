@@ -91,7 +91,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     @Override
     public void finish() {
         if(isEdit){
-            StartActivityTools.doAddPasswordActivitySetResult(AddPasswordActivity.this);
+            StartActivityTools.doAddPasswordActivitySetResult(AddPasswordActivity.this,groupingInfo.getGroupingId());
         }
         super.finish();
     }
