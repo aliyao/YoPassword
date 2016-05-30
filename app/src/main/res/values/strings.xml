@@ -15,7 +15,7 @@
 
     <string name="password_item_account_tip">账号：</string>
     <string name="password_item_password_tip">密码：</string>
-    <string name="password_item_remarks_tip">备注↓↓↓</string>
+    <string name="password_item_remarks_tip">备注↓↓</string>
 
     <string name="btn_ok">确定</string>
     <string name="btn_cancle">取消</string>
@@ -46,5 +46,5 @@
     <string name="edit_account">请输入账号</string>
     <string name="edit_password">请输入密码</string>
     <string name="edit_remarks">请输入标备注</string>
-
+    <string name="copy_success_tip">复制成功</string>
 </resources>

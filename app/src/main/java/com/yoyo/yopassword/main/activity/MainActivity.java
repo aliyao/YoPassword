@@ -1,5 +1,7 @@
 package com.yoyo.yopassword.main.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,10 +32,10 @@ import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoAlertDialog;
+import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
-import com.yoyo.yopassword.test.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,7 @@ public class MainActivity extends BaseAppCompatActivity {
         container.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(container);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +99,11 @@ public class MainActivity extends BaseAppCompatActivity {
                     public void onItemClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-
+                                ClipboardManager myClipboard = (ClipboardManager)PlaceholderFragment.this.getActivity().getSystemService(CLIPBOARD_SERVICE);
+                                String text = passwordAdapter.getItem(position).getPassword();
+                                ClipData myClip = ClipData.newPlainText("text", text);
+                                myClipboard.setPrimaryClip(myClip);
+                                YoSnackbar.showSnackbar(refreshLayout,R.string.copy_success_tip);
                                 break;
                             case 1:
                                 StartActivityTools.toAddPasswordActivity(PlaceholderFragment.this, true, true,passwordAdapter.getItem(position).getPasswordInfoId());
@@ -106,7 +113,8 @@ public class MainActivity extends BaseAppCompatActivity {
                                     @Override
                                     public void onPositiveClick(DialogInterface dialog, int which) {
                                         super.onPositiveClick(dialog, which);
-
+                                        X3DBUtils.delectById(PasswordInfo.class,passwordAdapter.getItem(position).getPasswordInfoId());
+                                        refreshPasswordAdapter();
                                     }
                                 });
                                 break;

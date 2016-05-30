@@ -134,10 +134,6 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
             YoSnackbar.showSnackbar(et_title,R.string.edit_password);
             return;
         }
-        if(TextUtils.isEmpty(remarks)){
-            YoSnackbar.showSnackbar(et_title,R.string.edit_remarks);
-            return;
-        }
 
         PasswordInfo passwordInfoEdit=new PasswordInfo();
         passwordInfoEdit.setTitle(title);
@@ -154,5 +150,6 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
             passwordInfoEdit.setPasswordInfoId(updatePasswordInfoId);
         }
         X3DBUtils.save(passwordInfoEdit);
+        finish();
     }
 }

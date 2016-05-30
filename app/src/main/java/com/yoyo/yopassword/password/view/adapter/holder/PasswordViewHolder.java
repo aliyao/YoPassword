@@ -20,6 +20,7 @@ public class PasswordViewHolder extends BaseRecyclerViewViewHolder{
     public TextView password_item_save_info_time;
     public TextView password_item_account;
     public TextView password_item_remarks;
+    public View password_item_top;
 
     public PasswordViewHolder(View itemView) {
         super(itemView);
@@ -27,5 +28,6 @@ public class PasswordViewHolder extends BaseRecyclerViewViewHolder{
         password_item_save_info_time=(TextView)itemView.findViewById(R.id.password_item_save_info_time);
         password_item_account=(TextView)itemView.findViewById(R.id.password_item_account);
         password_item_remarks=(TextView)itemView.findViewById(R.id.password_item_remarks);
+        password_item_top=itemView.findViewById(R.id.password_item_top);
     }
 }

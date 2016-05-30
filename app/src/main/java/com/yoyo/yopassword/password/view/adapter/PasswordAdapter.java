@@ -48,6 +48,7 @@ public class PasswordAdapter extends YoBaseAdapter<PasswordInfo, PasswordViewHol
         holder.password_item_remarks.setText(getRemarksText(passwordInfo.getRemarks()));
         holder.password_item_title.setText(passwordInfo.getTitle());
         holder.password_item_save_info_time.setText(DateUtils.getTimestampString(passwordInfo.getSaveInfoTime()));
+        holder.password_item_top.setVisibility(passwordInfo.isTop()?View.VISIBLE:View.GONE);
     }
 
     public String getRemarksText(String remarks){
