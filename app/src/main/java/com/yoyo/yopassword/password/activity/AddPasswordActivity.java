@@ -56,6 +56,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         et_title.setText(passwordInfo.getTitle());
         et_account.setText(passwordInfo.getAccount());
         et_remarks.setText(passwordInfo.getRemarks());
+        et_password.setText(passwordInfo.getPassword());
         cb_is_top.setChecked(passwordInfo.isTop());
         refreshGroupingInfo();
     }
