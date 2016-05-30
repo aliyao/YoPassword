@@ -44,6 +44,7 @@ import java.util.List;
 public class MainActivity extends BaseAppCompatActivity {
     public SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager container;
+
     public void init() {
         super.init();
         setContentView(R.layout.activity_main);
@@ -60,10 +61,11 @@ public class MainActivity extends BaseAppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StartActivityTools.toAddPasswordActivity(MainActivity.this, false, true,0);
+                StartActivityTools.toAddPasswordActivity(MainActivity.this, false, true, 0);
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -83,6 +85,7 @@ public class MainActivity extends BaseAppCompatActivity {
 
     public static class PlaceholderFragment extends Fragment implements OnBaseRecyclerViewListener {
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String ARG_SECTION_GROUPING_ID = "ARG_SECTION_GROUPING_ID";
         PasswordAdapter passwordAdapter;
         RefreshLayout refreshLayout;
         OnBaseRecyclerViewListener onBaseRecyclerViewListener = new OnBaseRecyclerViewListener() {
@@ -100,21 +103,21 @@ public class MainActivity extends BaseAppCompatActivity {
                     public void onItemClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ClipboardManager myClipboard = (ClipboardManager)PlaceholderFragment.this.getActivity().getSystemService(CLIPBOARD_SERVICE);
+                                ClipboardManager myClipboard = (ClipboardManager) PlaceholderFragment.this.getActivity().getSystemService(CLIPBOARD_SERVICE);
                                 String text = passwordAdapter.getItem(position).getPassword();
                                 ClipData myClip = ClipData.newPlainText("text", text);
                                 myClipboard.setPrimaryClip(myClip);
-                                YoSnackbar.showSnackbar(refreshLayout,R.string.copy_success_tip);
+                                YoSnackbar.showSnackbar(refreshLayout, R.string.copy_success_tip);
                                 break;
                             case 1:
-                                StartActivityTools.toAddPasswordActivity(PlaceholderFragment.this, true, true,passwordAdapter.getItem(position).getPasswordInfoId());
+                                StartActivityTools.toAddPasswordActivity(PlaceholderFragment.this, true, true, passwordAdapter.getItem(position).getPasswordInfoId());
                                 break;
                             case 2:
                                 YoAlertDialog.showAlertDialog(getContext(), R.string.password_item_delect_todo, new OnToDoItemClickListener() {
                                     @Override
                                     public void onPositiveClick(DialogInterface dialog, int which) {
                                         super.onPositiveClick(dialog, which);
-                                        X3DBUtils.delectById(PasswordInfo.class,passwordAdapter.getItem(position).getPasswordInfoId());
+                                        X3DBUtils.delectById(PasswordInfo.class, passwordAdapter.getItem(position).getPasswordInfoId());
                                         refreshPasswordAdapter();
                                     }
                                 });
@@ -130,10 +133,11 @@ public class MainActivity extends BaseAppCompatActivity {
         public PlaceholderFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber) {
+        public static PlaceholderFragment newInstance(int sectionNumber,long groupingId) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putLong(ARG_SECTION_GROUPING_ID,groupingId);
             fragment.setArguments(args);
             return fragment;
         }
@@ -181,7 +185,14 @@ public class MainActivity extends BaseAppCompatActivity {
         }
 
         private void refreshPasswordAdapter() {
-            List<PasswordInfo> passwordInfoList = X3DBUtils.findAll(PasswordInfo.class);
+            if(passwordAdapter==null){
+                return;
+            }
+            Long groupingId=getArguments().getLong(ARG_SECTION_GROUPING_ID,0);
+            if(groupingId<=0){
+                return;
+            }
+            List<PasswordInfo> passwordInfoList = X3DBUtils.findAll(PasswordInfo.class,"groupingId","=",groupingId);
             passwordAdapter.setmData(passwordInfoList);
             passwordAdapter.notifyDataSetChanged();
             if (refreshLayout.isRefreshing()) {
@@ -209,34 +220,41 @@ public class MainActivity extends BaseAppCompatActivity {
         }
     }
 
+    public void refreshFragmentItem(long groupingId) {
+        List<GroupingInfo> pageTitleList = mSectionsPagerAdapter.pageTitleList;
+        for (int i = 0; i < pageTitleList.size(); i++) {
+            if (pageTitleList.get(i).getGroupingId() == groupingId) {
+                PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(container, i);
+                if(someFragment!=null){
+                    someFragment.refreshPasswordAdapter();
+                }
+
+            }
+        }
+    }
+
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        List<GroupingInfo> pageTitleList;
+        public List<GroupingInfo> pageTitleList;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             pageTitleList = new ArrayList<>();
-            refreshData( false);
+            refreshData(false);
         }
-        public void refreshData(boolean isRefresh){
+
+        public void refreshData(boolean isRefresh) {
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
             pageTitleList.clear();
             pageTitleList.addAll(groupingInfoList);
-            if(isRefresh){
+            if (isRefresh) {
                 notifyDataSetChanged();
-            }
-        }
-
-        public void refreshFragmentItem(long groupingId){
-            for (int i=0;i<pageTitleList.size();i++) {
-                if(pageTitleList.get(i).getGroupingId()==groupingId){
-                    ((PlaceholderFragment)getItem(i)).refreshPasswordAdapter();
-                }
             }
         }
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position + 1);
+            return PlaceholderFragment.newInstance(position + 1,pageTitleList.get(position).getGroupingId());
         }
 
         @Override
@@ -263,9 +281,9 @@ public class MainActivity extends BaseAppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == StartActivityTools.ToAddPasswordActivity_RequestCode && resultCode == StartActivityTools.ToAddPasswordActivity_ResultCode) {
-            long groupingId=data.getLongExtra(StartActivityTools.ToAddPasswordActivity_GroupingId,0);
-            if(groupingId>0){
-                mSectionsPagerAdapter.refreshFragmentItem(groupingId);
+            long groupingId = data.getLongExtra(StartActivityTools.ToAddPasswordActivity_GroupingId, 0);
+            if (groupingId > 0) {
+                refreshFragmentItem(groupingId);
             }
 
         }
