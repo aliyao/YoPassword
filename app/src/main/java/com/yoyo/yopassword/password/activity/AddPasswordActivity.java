@@ -28,6 +28,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     boolean isUpdate;
     long updatePasswordInfoId;
     PasswordInfo passwordInfo;
+    boolean isEdit;
 
      public void init(){
          setContentView(R.layout.activity_add_password);
@@ -39,7 +40,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         et_password=(EditText)findViewById(R.id.et_password);
         et_remarks=(EditText)findViewById(R.id.et_remarks);
         cb_is_top=(CheckBox)findViewById(R.id.cb_is_top);
-
+         isEdit=false;
          isUpdate=getIntent().getBooleanExtra(StartActivityTools.ToAddPasswordActivity_IsUpdate ,false);
          updatePasswordInfoId=getIntent().getLongExtra(StartActivityTools.ToAddPasswordActivity_PasswordInfoId ,0);
          if(isUpdate&&updatePasswordInfoId>0){
@@ -89,7 +90,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
 
     @Override
     public void finish() {
-        if(passwordInfo!=null){
+        if(isEdit){
             StartActivityTools.doAddPasswordActivitySetResult(AddPasswordActivity.this);
         }
         super.finish();
@@ -151,6 +152,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
             passwordInfoEdit.setPasswordInfoId(updatePasswordInfoId);
         }
         X3DBUtils.save(passwordInfoEdit);
+        isEdit=true;
         finish();
     }
 }

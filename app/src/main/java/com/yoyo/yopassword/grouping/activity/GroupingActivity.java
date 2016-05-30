@@ -17,6 +17,7 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
+import com.yoyo.yopassword.common.tool.AppSingletonTools;
 import com.yoyo.yopassword.common.tool.StartActivityTools;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
@@ -33,7 +34,6 @@ import java.util.List;
 public class GroupingActivity extends BaseAppCompatActivity {
     GroupingAdapter groupingAdapter;
     RefreshLayout refreshLayout;
-
     boolean isSelect;
     OnBaseRecyclerViewListener onBaseRecyclerViewListener=new  OnBaseRecyclerViewListener() {
         @Override
@@ -68,6 +68,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
                                     super.onPositiveClick(dialog, which);
                                     X3DBUtils.delectById(GroupingInfo.class,groupingAdapter.getItem(position).getGroupingId());
                                     refreshGrouping();
+                                    refreshMainActivityGrouping();
                                 }
                             });
                             break;
@@ -79,13 +80,16 @@ public class GroupingActivity extends BaseAppCompatActivity {
         }
     };
 
+    private void refreshMainActivityGrouping(){
+        AppSingletonTools.getInstance().refreshGrouping();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grouping);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +121,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
             @Override
             public void onRefresh() {
                 refreshLayout.postDelayed(new Runnable() {
-                    @Override
+               @Override
                     public void run() {
                         refreshGrouping();
                     }
@@ -168,8 +172,13 @@ public class GroupingActivity extends BaseAppCompatActivity {
                 }
                 X3DBUtils.save(groupingInfoNew);
                 refreshGrouping();
+                refreshMainActivityGrouping();
             }
         });
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+    }
 }

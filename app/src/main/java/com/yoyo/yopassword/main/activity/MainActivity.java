@@ -26,6 +26,7 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
+import com.yoyo.yopassword.common.tool.AppSingletonTools;
 import com.yoyo.yopassword.common.tool.StartActivityTools;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
@@ -41,12 +42,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseAppCompatActivity {
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    public SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager container;
-
     public void init() {
         super.init();
         setContentView(R.layout.activity_main);
+        AppSingletonTools.getInstance().initMainActivity(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -59,7 +60,7 @@ public class MainActivity extends BaseAppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StartActivityTools.toAddPasswordActivity(MainActivity.this, false, false,0);
+                StartActivityTools.toAddPasswordActivity(MainActivity.this, false, true,0);
             }
         });
     }
@@ -73,7 +74,7 @@ public class MainActivity extends BaseAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_grouping) {
-            StartActivityTools.toGroupingActivity(MainActivity.this, false, false);
+            StartActivityTools.toGroupingActivity(MainActivity.this, false, true);
             return true;
         }
 
@@ -214,12 +215,23 @@ public class MainActivity extends BaseAppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             pageTitleList = new ArrayList<>();
-            refreshData();
+            refreshData( false);
         }
-        public void refreshData(){
+        public void refreshData(boolean isRefresh){
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
             pageTitleList.clear();
             pageTitleList.addAll(groupingInfoList);
+            if(isRefresh){
+                notifyDataSetChanged();
+            }
+        }
+
+        public void refreshFragmentItem(long groupingId){
+            for (int i=0;i<pageTitleList.size();i++) {
+                if(pageTitleList.get(i).getGroupingId()==groupingId){
+                    ((PlaceholderFragment)getItem(i)).refreshPasswordAdapter();
+                }
+            }
         }
 
         @Override
@@ -238,6 +250,24 @@ public class MainActivity extends BaseAppCompatActivity {
                 return pageTitleList.get(position).getGroupingName();
             }
             return null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        AppSingletonTools.getInstance().destroyMainActivity();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == StartActivityTools.ToAddPasswordActivity_RequestCode && resultCode == StartActivityTools.ToAddPasswordActivity_ResultCode) {
+            long groupingId=data.getLongExtra(StartActivityTools.ToAddPasswordActivity_GroupingId,0);
+            if(groupingId>0){
+                mSectionsPagerAdapter.refreshFragmentItem(groupingId);
+            }
+
         }
     }
 }

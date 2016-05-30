@@ -17,6 +17,7 @@ public class StartActivityTools {
 
     public static final String ToAddPasswordActivity_IsUpdate="ToAddPasswordActivity_IsUpdate";
     public static final String ToAddPasswordActivity_PasswordInfoId="ToAddPasswordActivity_PasswordInfoId";
+    public static final String ToAddPasswordActivity_GroupingId="ToAddPasswordActivity_GroupingId";
 
     public static final int ToAddPasswordActivity_RequestCode=10;
     public static final int ToAddPasswordActivity_ResultCode=10000;
@@ -31,12 +32,16 @@ public class StartActivityTools {
             activity.startActivity(new Intent(activity, GroupingActivity.class).putExtra(ToGroupingActivity_IsSelect,isSelect));
         }
     }
-    public static void doGroupingActivitySetResult(Activity activity,long groupingId){
-        activity.setResult(ToGroupingActivity_ResultCode,new Intent().putExtra(ToGroupingActivity_GroupingId,groupingId));
+    public static void doGroupingActivitySetResult(Activity activity,long groupingId ){
+        Intent intent=new Intent();
+        if(groupingId>0){
+            intent.putExtra(ToGroupingActivity_GroupingId,groupingId);
+        }
+        activity.setResult(ToGroupingActivity_ResultCode,intent);
     }
 
-    public static void doAddPasswordActivitySetResult(Activity activity){
-        activity.setResult(ToAddPasswordActivity_ResultCode,new Intent());
+    public static void doAddPasswordActivitySetResult(Activity activity,long groupingId){
+        activity.setResult(ToAddPasswordActivity_ResultCode,new Intent().putExtra(ToAddPasswordActivity_GroupingId,groupingId));
     }
 
     public static void toAddPasswordActivity(Object object, boolean isUpdate, boolean isForResult,long passwordInfoId){
