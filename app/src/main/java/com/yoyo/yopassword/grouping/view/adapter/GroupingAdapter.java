@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.YoBaseAdapter;
-import com.yoyo.yopassword.grouping.entity.GroupingAdaterInfo;
+import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.grouping.view.adapter.holder.GroupingViewHolder;
 
 import java.util.List;
@@ -22,11 +22,10 @@ import java.util.List;
  * 修改时间：2016/5/16 17:28
  * 修改备注：
  */
-public class GroupingAdapter extends YoBaseAdapter<GroupingAdaterInfo, GroupingViewHolder> {
-    boolean isSelect;
-    public GroupingAdapter(@NonNull List<GroupingAdaterInfo> mData, boolean isSelect) {
+public class GroupingAdapter extends YoBaseAdapter<GroupingInfo, GroupingViewHolder> {
+
+    public GroupingAdapter(@NonNull List<GroupingInfo> mData) {
         super(mData);
-        this.isSelect=isSelect;
     }
 
     @Override
@@ -41,20 +40,8 @@ public class GroupingAdapter extends YoBaseAdapter<GroupingAdaterInfo, GroupingV
     @Override
     public void onBindViewHolder(GroupingViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        GroupingAdaterInfo groupingAdaterInfo=getItem(position);
-        holder.grouping_item_name.setText(groupingAdaterInfo.getGroupingName());
-        if(isSelect){
-            holder.cb_is_select.setVisibility(View.VISIBLE);
-            holder.cb_is_select.setChecked(groupingAdaterInfo.isSelect());
-        }else{
-            holder.cb_is_select.setVisibility(View.GONE);
-        }
-    }
-
-    public void setItemIsChecked(int position){
-        boolean isChecked= getItem(position).isSelect();
-        getItem(position).setSelect(isChecked);
-        notifyDataSetChanged();
+        GroupingInfo groupingInfo=getItem(position);
+        holder.grouping_item_name.setText(groupingInfo.getGroupingName());
     }
 }
 

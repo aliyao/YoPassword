@@ -1,7 +1,5 @@
 package com.yoyo.yopassword.password.entity;
 
-import com.yoyo.yopassword.common.tool.TableColumnName;
-
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
 
@@ -18,7 +16,7 @@ import java.util.Date;
  */
 @Table(name = "PasswordInfo")
 public class PasswordInfo {
-    @Column(name= TableColumnName.passwordInfoId,isId = true)
+    @Column(name="passwordInfoId",isId = true)
     long passwordInfoId;
     @Column(name="account")
     String account;
@@ -32,6 +30,8 @@ public class PasswordInfo {
     long saveInfoTime=new Date().getTime();
     @Column(name="remarks")
     String remarks;
+    @Column(name="groupingId")
+    long groupingId;
 
     public long getPasswordInfoId() {
         return passwordInfoId;
@@ -87,5 +87,13 @@ public class PasswordInfo {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public long getGroupingId() {
+        return groupingId;
+    }
+
+    public void setGroupingId(long groupingId) {
+        this.groupingId = groupingId;
     }
 }

@@ -12,22 +12,19 @@ import android.widget.EditText;
 
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
+import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.tool.StartActivityTools;
-import com.yoyo.yopassword.common.tool.TableColumnName;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
-import com.yoyo.yopassword.grouping.entity.PasswordGroupingInfo;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
-
-import java.util.List;
 
 public class AddPasswordActivity extends BaseAppCompatActivity {
     Button groupingBtn;
     EditText et_title,et_account,et_password,et_remarks;
     CheckBox cb_is_top;
 
-    List<PasswordGroupingInfo> passwordGroupingInfos;
+    GroupingInfo groupingInfo;
     boolean isUpdate;
     long updatePasswordInfoId;
     PasswordInfo passwordInfo;
@@ -47,9 +44,10 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
          updatePasswordInfoId=getIntent().getLongExtra(StartActivityTools.ToAddPasswordActivity_PasswordInfoId ,0);
          if(isUpdate&&updatePasswordInfoId>0){
              passwordInfo=X3DBUtils.findItem(PasswordInfo.class,updatePasswordInfoId);
-             passwordGroupingInfos=X3DBUtils.findAll(PasswordGroupingInfo.class,TableColumnName.passwordInfoId,"==",updatePasswordInfoId);
+             groupingInfo=X3DBUtils.findItem(GroupingInfo.class,passwordInfo.getGroupingId());
              updatePasswordInfo();
          }else{
+             groupingInfo=X3DBUtils.findItem(GroupingInfo.class, AppConfig.DefaultGroupingId);
              refreshGroupingInfo();
          }
 
@@ -66,11 +64,11 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode== StartActivityTools.ToGroupingActivity_RequestCode&&resultCode==StartActivityTools.ToGroupingActivity_ResultCode&&data!=null){
-            long[] groupingIdArray=data.getLongArrayExtra(StartActivityTools.ToGroupingActivity_GroupingId_Array);
-            if(groupingIdArray==null||groupingIdArray.length==0) return;
-            List<GroupingInfo> groupingInfoListData= X3DBUtils.findAll(GroupingInfo.class,TableColumnName.groupingId,"in",groupingIdArray);
+            long groupingId=data.getLongExtra(StartActivityTools.ToGroupingActivity_GroupingId,0);
+            if(groupingId<=0) return;
+            GroupingInfo groupingInfoData= X3DBUtils.findItem(GroupingInfo.class,groupingId);
             if(groupingInfoData!=null){
-                groupingInfoList=groupingInfoListData;
+                groupingInfo=groupingInfoData;
                 refreshGroupingInfo();
             }
         }
@@ -146,6 +144,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         passwordInfoEdit.setAccount(account);
         passwordInfoEdit.setPassword(password);
         passwordInfoEdit.setRemarks(remarks);
+        passwordInfoEdit.setGroupingId(groupingId);
         passwordInfoEdit.setTop(isTop);
         if(passwordInfo!=null){
             passwordInfoEdit.setSaveInfoTime(passwordInfo.getSaveInfoTime());

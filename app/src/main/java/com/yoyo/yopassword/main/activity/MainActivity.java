@@ -1,6 +1,5 @@
 package com.yoyo.yopassword.main.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,7 +47,7 @@ public class MainActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),MainActivity.this);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         container = (ViewPager) findViewById(R.id.container);
         container.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -202,11 +201,17 @@ public class MainActivity extends BaseAppCompatActivity {
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        String[] pageTitleStr;
+        List<GroupingInfo> pageTitleList;
 
-        public SectionsPagerAdapter(FragmentManager fm, Context context) {
+        public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            pageTitleStr= context.getResources().getStringArray(R.array.main_page_title);
+            pageTitleList = new ArrayList<>();
+            refreshData();
+        }
+        public void refreshData(){
+            List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
+            pageTitleList.clear();
+            pageTitleList.addAll(groupingInfoList);
         }
 
         @Override
@@ -216,12 +221,15 @@ public class MainActivity extends BaseAppCompatActivity {
 
         @Override
         public int getCount() {
-            return pageTitleStr.length;
+            return pageTitleList.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-                return pageTitleStr[position];
+            if (position < pageTitleList.size()) {
+                return pageTitleList.get(position).getGroupingName();
+            }
+            return null;
         }
     }
 }

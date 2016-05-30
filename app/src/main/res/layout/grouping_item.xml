@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:background="@drawable/selector_click"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
     <TextView
         android:id="@+id/grouping_item_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="name"
         android:padding="@dimen/space_item_x"
         android:textSize="@dimen/title_text_size" />
-    <CheckBox
-        android:id="@+id/cb_is_select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/font_color_79"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:clickable="false"
-        android:layout_marginRight="@dimen/space_item_x"
-        android:checked="false" />
 
-</RelativeLayout>
+</LinearLayout>

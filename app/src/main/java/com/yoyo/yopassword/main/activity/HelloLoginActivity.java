@@ -74,7 +74,15 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_hello_login);
         fullscreen_content_controls = findViewById(R.id.fullscreen_content_controls);
         fullscreen_content = findViewById(R.id.fullscreen_content);
+        initApp();
         initQQAuth();
+    }
+    private void initApp(){
+        GroupingInfo groupingInfo= X3DBUtils.findItem(GroupingInfo.class,AppConfig.DefaultGroupingId);
+        if(groupingInfo==null|| TextUtils.isEmpty(groupingInfo.getGroupingName())){
+            groupingInfo = new GroupingInfo(HelloLoginActivity.this.getResources().getString(R.string.action_default_grouping_name), new Date().getTime());
+            X3DBUtils.save(groupingInfo);
+        }
     }
 
     /**
