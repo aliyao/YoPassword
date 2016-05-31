@@ -43,7 +43,7 @@ import java.util.List;
 
 public class MainActivity extends BaseAppCompatActivity {
     public SectionsPagerAdapter mSectionsPagerAdapter;
-    ViewPager container;
+    ViewPager mViewPager;
 
     public void init() {
         super.init();
@@ -52,10 +52,10 @@ public class MainActivity extends BaseAppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        container = (ViewPager) findViewById(R.id.container);
-        container.setAdapter(mSectionsPagerAdapter);
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(container);
+        tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -224,7 +224,7 @@ public class MainActivity extends BaseAppCompatActivity {
         List<GroupingInfo> pageTitleList = mSectionsPagerAdapter.pageTitleList;
         for (int i = 0; i < pageTitleList.size(); i++) {
             if (pageTitleList.get(i).getGroupingId() == groupingId) {
-                PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(container, i);
+                PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
                 if(someFragment!=null){
                     someFragment.refreshPasswordAdapter();
                 }

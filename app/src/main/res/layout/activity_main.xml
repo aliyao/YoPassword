@@ -24,6 +24,7 @@
         </android.support.v7.widget.Toolbar>
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
+            style="@style/Yo.Base.Widget.Design.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/toolbar"
