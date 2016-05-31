@@ -44,7 +44,7 @@ public final class x {
 
     public static class Ext {
         private static boolean debug;
-        private static Application app;
+        public static Application app;
 
         private Ext() {
         }
