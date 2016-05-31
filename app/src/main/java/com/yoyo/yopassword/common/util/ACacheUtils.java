@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class ACacheUtils {
     static ACache mCache;
+    final  static String OpenId="OpenId";//1登录
     final  static String LoginStatus="LoginStatus";//1登录
     final  static String FirstOpen="FirstOpen";//1第一次打开
 
@@ -43,12 +44,19 @@ public class ACacheUtils {
          put(mContext,LoginStatus,0);
          Tencent.createInstance(GlobalKey.APP_ID, mContext.getApplicationContext()).logout(mContext);
      }*/
-    public static void loginIn(Context mContext){
+    public static void loginIn(Context mContext,String openId){
         if(mCache==null){
             mCache = ACache.get(mContext);
         }
         putTime3Day( mContext, LoginStatus,1);
-
+        putTime3Day(mContext,OpenId,openId);
+    }
+    public static void signOut(Context mContext){
+        if(mCache==null){
+            mCache = ACache.get(mContext);
+        }
+        putTime3Day( mContext, LoginStatus,0);
+        putTime3Day(mContext,OpenId,"");
     }
 
     public static Object getAsObject(Context mContext,String key){
@@ -56,6 +64,10 @@ public class ACacheUtils {
             mCache = ACache.get(mContext);
         }
         return mCache.getAsObject(key);
+    }
+
+    public static String getOpenId(Context mContext){
+        return getAsObject(mContext,OpenId)+"";
     }
     public static Object getAsObjectDefault(Context mContext,String key,Object defaultObj){
         if(mCache==null){

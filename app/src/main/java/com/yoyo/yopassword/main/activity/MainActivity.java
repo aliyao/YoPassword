@@ -28,6 +28,7 @@ import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.tool.AppSingletonTools;
 import com.yoyo.yopassword.common.tool.StartActivityTools;
+import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
@@ -75,9 +76,15 @@ public class MainActivity extends BaseAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_grouping) {
-            StartActivityTools.toGroupingActivity(MainActivity.this, false, true);
-            return true;
+        switch (id) {
+            case R.id.action_grouping:
+                StartActivityTools.toGroupingActivity(MainActivity.this, false, true);
+                return true;
+            case R.id.action_sign_out:
+                ACacheUtils.signOut(MainActivity.this);
+                finish();
+                System.exit(0);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -133,11 +140,11 @@ public class MainActivity extends BaseAppCompatActivity {
         public PlaceholderFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber,long groupingId) {
+        public static PlaceholderFragment newInstance(int sectionNumber, long groupingId) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            args.putLong(ARG_SECTION_GROUPING_ID,groupingId);
+            args.putLong(ARG_SECTION_GROUPING_ID, groupingId);
             fragment.setArguments(args);
             return fragment;
         }
@@ -185,14 +192,14 @@ public class MainActivity extends BaseAppCompatActivity {
         }
 
         private void refreshPasswordAdapter() {
-            if(passwordAdapter==null){
+            if (passwordAdapter == null) {
                 return;
             }
-            Long groupingId=getArguments().getLong(ARG_SECTION_GROUPING_ID,0);
-            if(groupingId<=0){
+            Long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
+            if (groupingId <= 0) {
                 return;
             }
-            List<PasswordInfo> passwordInfoList = X3DBUtils.findAll(PasswordInfo.class,"groupingId","=",groupingId);
+            List<PasswordInfo> passwordInfoList = X3DBUtils.findAll(PasswordInfo.class, "groupingId", "=", groupingId);
             passwordAdapter.setmData(passwordInfoList);
             passwordAdapter.notifyDataSetChanged();
             if (refreshLayout.isRefreshing()) {
@@ -225,7 +232,7 @@ public class MainActivity extends BaseAppCompatActivity {
         for (int i = 0; i < pageTitleList.size(); i++) {
             if (pageTitleList.get(i).getGroupingId() == groupingId) {
                 PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
-                if(someFragment!=null){
+                if (someFragment != null) {
                     someFragment.refreshPasswordAdapter();
                 }
 
@@ -254,7 +261,7 @@ public class MainActivity extends BaseAppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position + 1,pageTitleList.get(position).getGroupingId());
+            return PlaceholderFragment.newInstance(position + 1, pageTitleList.get(position).getGroupingId());
         }
 
         @Override

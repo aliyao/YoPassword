@@ -1,5 +1,6 @@
 package com.yoyo.yopassword.common.util;
 
+import com.yoyo.yopassword.base.YoBaseApplication;
 import com.yoyo.yopassword.common.config.AppConfig;
 import org.xutils.DbManager;
 import org.xutils.x;
@@ -34,12 +35,13 @@ public class X3DBUtils {
                 });
         return daoConfig;
     }
-    public static DbManager getDb(String dbName){
+   /* public static DbManager getDb(String dbName){
         DbManager db = x.getDb(getDaoConfig(dbName));
         return db;
-    }
+    }*/
     public static DbManager getDb(){
-        DbManager db = x.getDb( getDaoConfig(AppConfig.DBName));
+        String dbName=ACacheUtils.getOpenId(x.Ext.app)+AppConfig.DBName;
+        DbManager db = x.getDb( getDaoConfig(dbName));
         return db;
     }
     public static void save(Object items) {
