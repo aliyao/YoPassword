@@ -17,13 +17,13 @@ import java.util.List;
  */
 public class X3DBUtils {
     public static  DbManager.DaoConfig getDaoConfig(String dbName){
+       /* DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
+                .setDbName(dbName)
+                .setDbVersion(AppConfig.DBVersion);*/
         DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
                 .setDbName(dbName)
-                .setDbVersion(AppConfig.DBVersion);
-      /*  DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
-                .setDbName("test")
-                .setDbDir(new File("/sdcard"))
-                .setDbVersion(1)
+               // .setDbDir(new File("/sdcard"))
+                .setDbVersion(AppConfig.DBVersion)
                 .setDbUpgradeListener(new DbManager.DbUpgradeListener() {
                     @Override
                     public void onUpgrade(DbManager db, int oldVersion, int newVersion) {
@@ -31,7 +31,7 @@ public class X3DBUtils {
                         // db.dropTable(...);
                         // ...
                     }
-                });*/
+                });
         return daoConfig;
     }
     public static DbManager getDb(String dbName){

@@ -32,6 +32,8 @@ public class PasswordInfo {
     String remarks;
     @Column(name="groupingId")
     long groupingId;
+    @Column(name = "isHideAccount")
+    boolean isHideAccount;
 
     public long getPasswordInfoId() {
         return passwordInfoId;
@@ -95,5 +97,13 @@ public class PasswordInfo {
 
     public void setGroupingId(long groupingId) {
         this.groupingId = groupingId;
+    }
+
+    public boolean isHideAccount() {
+        return isHideAccount;
+    }
+
+    public void setHideAccount(boolean hideAccount) {
+        isHideAccount = hideAccount;
     }
 }

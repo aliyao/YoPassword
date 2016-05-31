@@ -44,7 +44,7 @@ public class PasswordAdapter extends YoBaseAdapter<PasswordInfo, PasswordViewHol
     public void onBindViewHolder(PasswordViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         PasswordInfo passwordInfo=getItem(position);
-        holder.password_item_account.setText(passwordInfo.getAccount());
+        holder.password_item_account.setText(passwordInfo.isHideAccount()?"********":passwordInfo.getAccount());
         holder.password_item_remarks.setText(getRemarksText(passwordInfo.getRemarks()));
         holder.password_item_title.setText(passwordInfo.getTitle());
         holder.password_item_save_info_time.setText(DateUtils.getTimestampString(passwordInfo.getSaveInfoTime()));

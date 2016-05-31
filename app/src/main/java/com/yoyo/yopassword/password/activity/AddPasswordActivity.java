@@ -21,8 +21,8 @@ import com.yoyo.yopassword.password.entity.PasswordInfo;
 
 public class AddPasswordActivity extends BaseAppCompatActivity {
     Button groupingBtn;
-    EditText et_title,et_account,et_password,et_remarks;
-    CheckBox cb_is_top;
+    EditText et_title, et_account, et_password, et_remarks;
+    CheckBox cb_is_top, cb_is_hide_account;
 
     GroupingInfo groupingInfo;
     boolean isUpdate;
@@ -30,68 +30,71 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     PasswordInfo passwordInfo;
     boolean isEdit;
 
-     public void init(){
-         setContentView(R.layout.activity_add_password);
-         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-         setSupportActionBar(toolbar);
-        groupingBtn=(Button)findViewById(R.id.btn_grouping);
-        et_title=(EditText)findViewById(R.id.et_title);
-        et_account=(EditText)findViewById(R.id.et_account);
-        et_password=(EditText)findViewById(R.id.et_password);
-        et_remarks=(EditText)findViewById(R.id.et_remarks);
-        cb_is_top=(CheckBox)findViewById(R.id.cb_is_top);
-         isEdit=false;
-         isUpdate=getIntent().getBooleanExtra(StartActivityTools.ToAddPasswordActivity_IsUpdate ,false);
-         updatePasswordInfoId=getIntent().getLongExtra(StartActivityTools.ToAddPasswordActivity_PasswordInfoId ,0);
-         if(isUpdate&&updatePasswordInfoId>0){
-             passwordInfo=X3DBUtils.findItem(PasswordInfo.class,updatePasswordInfoId);
-             groupingInfo=X3DBUtils.findItem(GroupingInfo.class,passwordInfo.getGroupingId());
-             updatePasswordInfo();
-         }else{
-             groupingInfo=X3DBUtils.findItem(GroupingInfo.class, AppConfig.DefaultGroupingId);
-             refreshGroupingInfo();
-         }
+    public void init() {
+        setContentView(R.layout.activity_add_password);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        groupingBtn = (Button) findViewById(R.id.btn_grouping);
+        et_title = (EditText) findViewById(R.id.et_title);
+        et_account = (EditText) findViewById(R.id.et_account);
+        et_password = (EditText) findViewById(R.id.et_password);
+        et_remarks = (EditText) findViewById(R.id.et_remarks);
+        cb_is_top = (CheckBox) findViewById(R.id.cb_is_top);
+        cb_is_hide_account = (CheckBox) findViewById(R.id.cb_is_hide_account);
+        isEdit = false;
+        isUpdate = getIntent().getBooleanExtra(StartActivityTools.ToAddPasswordActivity_IsUpdate, false);
+        updatePasswordInfoId = getIntent().getLongExtra(StartActivityTools.ToAddPasswordActivity_PasswordInfoId, 0);
+        if (isUpdate && updatePasswordInfoId > 0) {
+            passwordInfo = X3DBUtils.findItem(PasswordInfo.class, updatePasswordInfoId);
+            groupingInfo = X3DBUtils.findItem(GroupingInfo.class, passwordInfo.getGroupingId());
+            updatePasswordInfo();
+        } else {
+            groupingInfo = X3DBUtils.findItem(GroupingInfo.class, AppConfig.DefaultGroupingId);
+            refreshGroupingInfo();
+        }
 
     }
-    private void updatePasswordInfo(){
+
+    private void updatePasswordInfo() {
         et_title.setText(passwordInfo.getTitle());
         et_account.setText(passwordInfo.getAccount());
         et_remarks.setText(passwordInfo.getRemarks());
         et_password.setText(passwordInfo.getPassword());
         cb_is_top.setChecked(passwordInfo.isTop());
+        cb_is_hide_account.setChecked(passwordInfo.isHideAccount());
         refreshGroupingInfo();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode== StartActivityTools.ToGroupingActivity_RequestCode&&resultCode==StartActivityTools.ToGroupingActivity_ResultCode&&data!=null){
-            long groupingId=data.getLongExtra(StartActivityTools.ToGroupingActivity_GroupingId,0);
-            if(groupingId<=0) return;
-            GroupingInfo groupingInfoData= X3DBUtils.findItem(GroupingInfo.class,groupingId);
-            if(groupingInfoData!=null){
-                groupingInfo=groupingInfoData;
+        if (requestCode == StartActivityTools.ToGroupingActivity_RequestCode && resultCode == StartActivityTools.ToGroupingActivity_ResultCode && data != null) {
+            long groupingId = data.getLongExtra(StartActivityTools.ToGroupingActivity_GroupingId, 0);
+            if (groupingId <= 0) return;
+            GroupingInfo groupingInfoData = X3DBUtils.findItem(GroupingInfo.class, groupingId);
+            if (groupingInfoData != null) {
+                groupingInfo = groupingInfoData;
                 refreshGroupingInfo();
             }
         }
     }
 
-    private void refreshGroupingInfo(){
+    private void refreshGroupingInfo() {
         groupingBtn.setText(groupingInfo.getGroupingName());
     }
 
     public void onYoClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_grouping:
-                StartActivityTools.toGroupingActivity(AddPasswordActivity.this,true,true);
+                StartActivityTools.toGroupingActivity(AddPasswordActivity.this, true, true);
                 break;
         }
     }
 
     @Override
     public void finish() {
-        if(isEdit){
-            StartActivityTools.doAddPasswordActivitySetResult(AddPasswordActivity.this,groupingInfo.getGroupingId());
+        if (isEdit) {
+            StartActivityTools.doAddPasswordActivitySetResult(AddPasswordActivity.this, groupingInfo.getGroupingId());
         }
         super.finish();
     }
@@ -116,43 +119,44 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     /**
      * 确定完成
      */
-    private void doConfirm(){
-        String title=et_title.getText().toString();
-        String account=et_account.getText().toString();
-        String password=et_password.getText().toString();
-        String remarks=et_remarks.getText().toString();
-        long groupingId=groupingInfo.getGroupingId();
-        boolean isTop=cb_is_top.isChecked();
+    private void doConfirm() {
+        String title = et_title.getText().toString();
+        String account = et_account.getText().toString();
+        String password = et_password.getText().toString();
+        String remarks = et_remarks.getText().toString();
+        long groupingId = groupingInfo.getGroupingId();
+        boolean isTop = cb_is_top.isChecked();
+        boolean isHideAccount = cb_is_hide_account.isChecked();
+        if (TextUtils.isEmpty(title)) {
+            YoSnackbar.showSnackbar(et_title, R.string.edit_title);
+            return;
+        }
+        if (TextUtils.isEmpty(account)) {
+            YoSnackbar.showSnackbar(et_title, R.string.edit_account);
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            YoSnackbar.showSnackbar(et_title, R.string.edit_password);
+            return;
+        }
 
-        if(TextUtils.isEmpty(title)){
-            YoSnackbar.showSnackbar(et_title,R.string.edit_title);
-            return;
-        }
-        if(TextUtils.isEmpty(account)){
-            YoSnackbar.showSnackbar(et_title,R.string.edit_account);
-            return;
-        }
-        if(TextUtils.isEmpty(password)){
-            YoSnackbar.showSnackbar(et_title,R.string.edit_password);
-            return;
-        }
-
-        PasswordInfo passwordInfoEdit=new PasswordInfo();
+        PasswordInfo passwordInfoEdit = new PasswordInfo();
         passwordInfoEdit.setTitle(title);
         passwordInfoEdit.setAccount(account);
         passwordInfoEdit.setPassword(password);
         passwordInfoEdit.setRemarks(remarks);
         passwordInfoEdit.setGroupingId(groupingId);
         passwordInfoEdit.setTop(isTop);
-        if(passwordInfo!=null){
+        passwordInfoEdit.setHideAccount(isHideAccount);
+        if (passwordInfo != null) {
             passwordInfoEdit.setSaveInfoTime(passwordInfo.getSaveInfoTime());
         }
 
-        if(updatePasswordInfoId>0){
+        if (updatePasswordInfoId > 0) {
             passwordInfoEdit.setPasswordInfoId(updatePasswordInfoId);
         }
         X3DBUtils.save(passwordInfoEdit);
-        isEdit=true;
+        isEdit = true;
         finish();
     }
 }
