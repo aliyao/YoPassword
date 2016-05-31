@@ -123,9 +123,9 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
      */
     public void loginQQ() {
         if (!mTencent.isSessionValid()) {
-            startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
-            finish();
-            //mTencent.login(this, YoConfig.KEY_SCOPE, baseUiListener);
+           // startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
+            //finish();
+            mTencent.loginServerSide(this, AppConfig.KEY_SCOPE, baseUiListener);
         }
     }
 
