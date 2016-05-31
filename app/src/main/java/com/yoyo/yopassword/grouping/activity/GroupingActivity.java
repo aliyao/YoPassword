@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -153,28 +154,41 @@ public class GroupingActivity extends BaseAppCompatActivity {
         if(groupingInfo!=null&&!TextUtils.isEmpty(groupingInfo.getGroupingName())){
             groupingNameEditText.setText(groupingInfo.getGroupingName());
         }
+        groupingNameEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    doPositiveClick(groupingNameEditText,groupingInfo);
+                    return true;
+                }
+                return false;
+            }
+        });
         YoAlertDialog.showAlertDialogEditText(GroupingActivity.this,R.string.action_add_grouping,viewlayout,new OnToDoItemClickListener(){
             @Override
             public void onPositiveClick(DialogInterface dialog, int which) {
                 super.onPositiveClick(dialog, which);
-                String groupingName=groupingNameEditText.getText().toString();
-                if(TextUtils.isEmpty(groupingName)){
-                    YoSnackbar.showSnackbar(refreshLayout,R.string.edit_grouping_name);
-                    return;
-                }
-                GroupingInfo groupingInfoNew=groupingInfo;
-                if(groupingInfoNew==null){
-                    groupingInfoNew= new GroupingInfo();
-                }
-                groupingInfoNew.setGroupingName(groupingName);
-                if(groupingInfoNew.getSaveInfoTime()<=0){
-                    groupingInfoNew.setSaveInfoTime(new Date().getTime());
-                }
-                X3DBUtils.save(groupingInfoNew);
-                refreshGrouping();
-                refreshMainActivityGrouping();
+                doPositiveClick(groupingNameEditText,groupingInfo);
             }
         });
+    }
+    private void doPositiveClick(EditText groupingNameEditText,GroupingInfo groupingInfo){
+        String groupingName=groupingNameEditText.getText().toString();
+        if(TextUtils.isEmpty(groupingName)){
+            YoSnackbar.showSnackbar(refreshLayout,R.string.edit_grouping_name);
+            return;
+        }
+        GroupingInfo groupingInfoNew=groupingInfo;
+        if(groupingInfoNew==null){
+            groupingInfoNew= new GroupingInfo();
+        }
+        groupingInfoNew.setGroupingName(groupingName);
+        if(groupingInfoNew.getSaveInfoTime()<=0){
+            groupingInfoNew.setSaveInfoTime(new Date().getTime());
+        }
+        X3DBUtils.save(groupingInfoNew);
+        refreshGrouping();
+        refreshMainActivityGrouping();
     }
 
     @Override
