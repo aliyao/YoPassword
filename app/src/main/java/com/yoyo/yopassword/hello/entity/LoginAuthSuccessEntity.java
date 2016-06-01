@@ -3,7 +3,7 @@ package com.yoyo.yopassword.hello.entity;
 /**
  * Created by nidey on 2016/5/31.
  */
-public class LoginAuthEntity {
+public class LoginAuthSuccessEntity {
     /*        "ret":0,
               "pay_token":"F2CB657CB0CB7EA18221663D6365835D",
               "pf":"desktop_m_qq-10000144-android-2002-",

@@ -21,7 +21,7 @@ import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.util.YoLogUtils;
 import com.yoyo.yopassword.common.view.YoToast;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
-import com.yoyo.yopassword.hello.entity.LoginAuthEntity;
+import com.yoyo.yopassword.hello.entity.LoginAuthSuccessEntity;
 import com.yoyo.yopassword.main.activity.MainActivity;
 
 import java.util.Date;
@@ -115,7 +115,7 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
                 YoLogUtils.i(o.toString());
                 if(!TextUtils.isEmpty(o.toString())){
                     Gson gson = new Gson();
-                    LoginAuthEntity loginAuthEntity=gson.fromJson(o.toString(),LoginAuthEntity.class);
+                    LoginAuthSuccessEntity loginAuthEntity=gson.fromJson(o.toString(),LoginAuthSuccessEntity.class);
                     if(loginAuthEntity!=null){
                         YoToast.show(HelloLoginActivity.this,R.string.qq_auth_completel);
                         ACacheUtils.loginIn(HelloLoginActivity.this,loginAuthEntity.getOpenid());
