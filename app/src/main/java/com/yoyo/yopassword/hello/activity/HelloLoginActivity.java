@@ -130,6 +130,7 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
                     }
                 }
                 YoToast.show(HelloLoginActivity.this,R.string.qq_auth_fail);
+                logoutQQ();
             }
 
             @Override
@@ -160,6 +161,8 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
            // startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
             //finish();
             mTencent.loginServerSide(this, AppConfig.KEY_SCOPE, baseUiListener);
+        }else {
+            logoutQQ();
         }
     }
 
@@ -213,6 +216,5 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        logoutQQ();
     }
 }
