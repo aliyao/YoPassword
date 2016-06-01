@@ -52,7 +52,7 @@ public class ACacheUtils {
         }
         Object mCheckPassword=mCache.getAsObject(CheckPassword);
         Object mLoginStatus=mCache.getAsObject(LoginStatus);
-        return (mLoginStatus!=null&&mLoginStatus.equals(1))&& mCheckPassword!=null&&TextUtils.isEmpty(mCheckPassword.toString());
+        return (mLoginStatus!=null&&mLoginStatus.equals(1))&& mCheckPassword!=null&&!TextUtils.isEmpty(mCheckPassword.toString());
     }
     /* public static void loginOut(Context mContext){
          if(mCache==null){

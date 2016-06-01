@@ -158,8 +158,13 @@ public class GroupingActivity extends BaseAppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    doPositiveClick(groupingNameEditText,groupingInfo);
-                    return true;
+                    switch (event.getAction()) {
+                        case KeyEvent.ACTION_UP:             // 键盘松开
+                            doPositiveClick(groupingNameEditText,groupingInfo);
+                            break;
+                        case KeyEvent.ACTION_DOWN:          // 键盘按下
+                            break;
+                    }
                 }
                 return false;
             }

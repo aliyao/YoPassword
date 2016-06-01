@@ -3,59 +3,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".check.CheckPasswordActivity">
 
-    <TextView
-        android:id="@+id/tv_edit_password_tip"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_password"
-        android:gravity="center"
-        android:textSize="@dimen/title_text_size_x"
-        />
-    <EditText
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_marginTop="6dp"
-        android:layout_below="@+id/tv_edit_password_tip"
-        android:gravity="center"
-        android:hint="@string/yo_password"
-        android:imeOptions="flagNavigateNext"
-        />
-    <TextView
-        android:id="@+id/tv_edit_password_tip2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_password_too"
-        android:gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_below="@+id/et_password"
-        android:textSize="@dimen/title_text_size_x"
-        />
-    <EditText
-        android:id="@+id/et_password2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_marginTop="6dp"
-        android:layout_below="@+id/tv_edit_password_tip2"
-        android:gravity="center"
-        android:hint="@string/yo_password"
-        />
-    <Button
-        android:id="@+id/btn_sign_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action_sign_out"
-        android:layout_below="@+id/et_password2"
-        android:layout_alignParentRight="true"
-        android:onClick="onYoClick"
-        />
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:id="@+id/tv_edit_password_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/edit_password"
+                android:textSize="@dimen/title_text_size_x" />
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_edit_password_tip"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:hint="@string/yo_password"
+                android:imeOptions="flagNavigateNext"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/tv_edit_password_tip2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/et_password"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/edit_password_too"
+                android:textSize="@dimen/title_text_size_x" />
+
+            <EditText
+                android:id="@+id/et_password2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_edit_password_tip2"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:hint="@string/yo_password"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/btn_sign_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/et_password2"
+                android:onClick="onYoClick"
+                android:text="@string/action_sign_out" />
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

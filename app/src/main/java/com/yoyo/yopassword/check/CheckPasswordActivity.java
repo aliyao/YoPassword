@@ -31,9 +31,15 @@ public class CheckPasswordActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    doConfirm();
-                    return true;
+                    switch (event.getAction()) {
+                        case KeyEvent.ACTION_UP:             // 键盘松开
+                            doConfirm();
+                            break;
+                        case KeyEvent.ACTION_DOWN:          // 键盘按下
+                            break;
+                    }
                 }
+
                 return false;
             }
         });
@@ -52,6 +58,7 @@ public class CheckPasswordActivity extends AppCompatActivity {
             case R.id.btn_sign_out:
                 ACacheUtils.signOut(CheckPasswordActivity.this);
                 startActivity(new Intent(CheckPasswordActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
+                isFinish=true;
                 finish();
                 break;
         }
@@ -94,6 +101,7 @@ public class CheckPasswordActivity extends AppCompatActivity {
         }
         ACacheUtils.setCheckPassword(CheckPasswordActivity.this,password);
         startActivity(new Intent(CheckPasswordActivity.this, MainActivity.class));
+        isFinish=true;
         finish();
     }
 }
