@@ -17,14 +17,14 @@ import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 import com.yoyo.yopassword.main.activity.MainActivity;
 
 public class CheckPasswordActivity extends AppCompatActivity {
-    boolean isFinish;
+    boolean isSuccess;
     EditText etPassword,etPassword2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check);
-        isFinish=false;
+        isSuccess=false;
         etPassword=(EditText)findViewById(R.id.et_password);
         etPassword2=(EditText)findViewById(R.id.et_password2);
         etPassword2.setOnKeyListener(new View.OnKeyListener() {
@@ -48,9 +48,10 @@ public class CheckPasswordActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
-        if (isFinish){
-            super.finish();
+        if (!isSuccess){
+            ACacheUtils.signOut(CheckPasswordActivity.this);
         }
+        super.finish();
     }
 
     public void onYoClick(View view){
@@ -58,7 +59,6 @@ public class CheckPasswordActivity extends AppCompatActivity {
             case R.id.btn_sign_out:
                 ACacheUtils.signOut(CheckPasswordActivity.this);
                 startActivity(new Intent(CheckPasswordActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
-                isFinish=true;
                 finish();
                 break;
         }
@@ -101,7 +101,7 @@ public class CheckPasswordActivity extends AppCompatActivity {
         }
         ACacheUtils.setCheckPassword(CheckPasswordActivity.this,password);
         startActivity(new Intent(CheckPasswordActivity.this, MainActivity.class));
-        isFinish=true;
+        isSuccess=true;
         finish();
     }
 }
