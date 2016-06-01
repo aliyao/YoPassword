@@ -42,4 +42,10 @@ public class AppSingletonTools {
             instanceMainActivity.mSectionsPagerAdapter.refreshData(true);
         }
     }
+
+    public void refreshFragmentItem(long groupingId){
+        if(instanceMainActivity!=null){
+            instanceMainActivity.refreshFragmentItem(groupingId);
+        }
+    }
 }

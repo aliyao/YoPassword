@@ -224,6 +224,10 @@ public class MainActivity extends BaseAppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == StartActivityTools.ToAddPasswordActivity_RequestCode && resultCode == StartActivityTools.ToAddPasswordActivity_ResultCode) {
                 refreshPasswordAdapter();
+                long groupingId = data.getLongExtra(StartActivityTools.ToAddPasswordActivity_GroupingId, 0);
+                if (groupingId > 0) {
+                    AppSingletonTools.getInstance().refreshFragmentItem(groupingId);
+                }
             }
         }
     }
@@ -235,12 +239,11 @@ public class MainActivity extends BaseAppCompatActivity {
                 PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
                 if (someFragment != null) {
                     someFragment.refreshPasswordAdapter();
+                    mViewPager.setCurrentItem(i);
                 }
-
             }
         }
     }
-
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         public List<GroupingInfo> pageTitleList;
