@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ssdk_weibo_oauth_regiseter">应用授权</string>
+    <string name="ssdk_website">http://www.mob.com</string>
+    <string name="ssdk_weibo_upload_content">分享图片</string>
+    <string name="ssdk_qq_client_inavailable">QQ 版本过低或者没有安装，需要升级或安装QQ才能使用！</string>
+
+	<string name="ssdk_qq">QQ</string>
+	<string name="ssdk_share_to_qq">分享到QQ</string>
+	<string name="ssdk_share_to_qzone_default">来自%s的分享</string>
+	<string name="ssdk_use_login_button">请改用“登录”按钮</string>
+</resources>
