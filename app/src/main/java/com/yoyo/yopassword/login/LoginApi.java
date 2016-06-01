@@ -13,7 +13,6 @@ import cn.sharesdk.framework.ShareSDK;
 
 public class LoginApi{
     private String platform;
-    private Context applicationContext;
     YoPlatformActionListener yoPlatformActionListener;
 
     public LoginApi() {
@@ -23,8 +22,7 @@ public class LoginApi{
         this.platform = platform;
     }
 
-    public void login(Context context) {
-        this.applicationContext = context.getApplicationContext();
+    public void login(final Context context) {
         if (platform == null) {
             return;
         }
@@ -57,7 +55,7 @@ public class LoginApi{
                 if (action == Platform.ACTION_USER_INFOR) {
                     // 失败
                     String text = "caught error: " + t.getMessage();
-                    YoToast.show(applicationContext, text);
+                    YoToast.show(context, text);
                     t.printStackTrace();
                 }
                 t.printStackTrace();
@@ -66,7 +64,7 @@ public class LoginApi{
             public void onCancel(Platform plat, int action) {
                 if (action == Platform.ACTION_USER_INFOR) {
                     // 取消
-                    YoToast.show(applicationContext, R.string.qq_auth_cancel);
+                    YoToast.show(context, R.string.qq_auth_cancel);
                 }
             }
         });

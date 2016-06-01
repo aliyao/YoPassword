@@ -32,6 +32,7 @@ import cn.sharesdk.tencent.qq.QQ;
 public class HelloLoginActivity extends BaseAppCompatActivity{
     private static final int UI_ANIMATION_DELAY = 300;
     public static final String KEY_TO_LOGIN = "KEY_TO_LOGIN";
+    private static final int KEY_LOGIN_SUCCESS = 1000;
     private final Handler mHideHandler = new Handler();
     View fullscreen_content;
     View fullscreen_content_controls,btn_login;
@@ -82,6 +83,31 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
                     startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
                     finish();
                     break;
+                case KEY_LOGIN_SUCCESS:
+                    Object[] obj=(Object[])msg.obj;
+                    Platform platform=(Platform)obj[0];
+                    HashMap<String, Object> res=(HashMap<String, Object>) obj[1];
+                    if(res!=null){
+                        Gson gson = new Gson();
+                        String entityStr=gson.toJson(res);
+                        LoginAuthSuccessEntity loginAuthEntity=gson.fromJson(entityStr,LoginAuthSuccessEntity.class);
+                        if(loginAuthEntity!=null){
+                            String openid=platform.getDb().getUserId();
+                            loginAuthEntity.setOpen_id(openid);
+                            YoToast.show(HelloLoginActivity.this.getApplicationContext(),R.string.qq_auth_completel);
+                            ACacheUtils.loginIn(HelloLoginActivity.this,loginAuthEntity.getOpen_id());
+                            GroupingInfo groupingInfo= X3DBUtils.findItem(GroupingInfo.class,AppConfig.DefaultGroupingId);
+                            if(groupingInfo==null|| TextUtils.isEmpty(groupingInfo.getGroupingName())){
+                                groupingInfo = new GroupingInfo(HelloLoginActivity.this.getResources().getString(R.string.action_default_grouping_name), new Date().getTime());
+                                X3DBUtils.save(groupingInfo);
+                            }
+                            startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
+                            finish();
+                            return;
+                        }
+                    }
+                    YoToast.show(HelloLoginActivity.this.getApplicationContext(),R.string.qq_auth_fail);
+                    break;
             }
         }
     };
@@ -93,26 +119,13 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
         api.setYoPlatformActionListener(new YoPlatformActionListener() {
             @Override
             public void onComplete(Platform platform, int action, HashMap<String, Object> res) {
-                if(res!=null){
-                    Gson gson = new Gson();
-                    String entityStr=gson.toJson(res);
-                    LoginAuthSuccessEntity loginAuthEntity=gson.fromJson(entityStr,LoginAuthSuccessEntity.class);
-                    if(loginAuthEntity!=null){
-                        String openid=platform.getDb().getUserId();
-                        loginAuthEntity.setOpen_id(openid);
-                        YoToast.show(HelloLoginActivity.this,R.string.qq_auth_completel);
-                        ACacheUtils.loginIn(HelloLoginActivity.this,loginAuthEntity.getOpen_id());
-                        GroupingInfo groupingInfo= X3DBUtils.findItem(GroupingInfo.class,AppConfig.DefaultGroupingId);
-                        if(groupingInfo==null|| TextUtils.isEmpty(groupingInfo.getGroupingName())){
-                            groupingInfo = new GroupingInfo(HelloLoginActivity.this.getResources().getString(R.string.action_default_grouping_name), new Date().getTime());
-                            X3DBUtils.save(groupingInfo);
-                        }
-                        startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
-                        finish();
-                        return;
-                    }
-                }
-                YoToast.show(HelloLoginActivity.this,R.string.qq_auth_fail);
+                Message message=new Message();
+                message.what=KEY_LOGIN_SUCCESS;
+                Object[] objects=new Object[2];
+                objects[0]=platform;
+                objects[1]=res;
+                message.obj=objects;
+                loginHandler.sendMessage(message);
             }
         });
         api.login(this);
