@@ -16,80 +16,79 @@ public class LoginAuthSuccessEntity {
               "access_token":"45E8EABA87AED91D3325DF8067912CED",
               "login_cost":2998
   */
-    long ret;
-    String pay_token;
-    String pf;
-    long query_authority_cost;
-    long authority_cost;
-    String openid;
-    long expires_in;
-    String pfkey;
+    String ret;
+    String is_yellow_year_vip;
+    String figureurl_qq_1;
+    String figureurl_qq_2;
+    String nickname;
+    String yellow_vip_level;
+    String is_lost;
     String msg;
-    String access_token;
-    long login_cost;
+    String city;
+    String figureurl_1;
+    String figureurl_2;
+    String vip;
+    String level;
+    String province;
+    String gender;
+    String is_yellow_vip;
+    String figureurl;
+    String open_id;
 
-    public long getRet() {
+    public String getRet() {
         return ret;
     }
 
-    public void setRet(long ret) {
+    public void setRet(String ret) {
         this.ret = ret;
     }
 
-    public String getPay_token() {
-        return pay_token;
+    public String getIs_yellow_year_vip() {
+        return is_yellow_year_vip;
     }
 
-    public void setPay_token(String pay_token) {
-        this.pay_token = pay_token;
+    public void setIs_yellow_year_vip(String is_yellow_year_vip) {
+        this.is_yellow_year_vip = is_yellow_year_vip;
     }
 
-    public String getPf() {
-        return pf;
+    public String getFigureurl_qq_1() {
+        return figureurl_qq_1;
     }
 
-    public void setPf(String pf) {
-        this.pf = pf;
+    public void setFigureurl_qq_1(String figureurl_qq_1) {
+        this.figureurl_qq_1 = figureurl_qq_1;
     }
 
-    public long getQuery_authority_cost() {
-        return query_authority_cost;
+    public String getFigureurl_qq_2() {
+        return figureurl_qq_2;
     }
 
-    public void setQuery_authority_cost(long query_authority_cost) {
-        this.query_authority_cost = query_authority_cost;
+    public void setFigureurl_qq_2(String figureurl_qq_2) {
+        this.figureurl_qq_2 = figureurl_qq_2;
     }
 
-    public long getAuthority_cost() {
-        return authority_cost;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setAuthority_cost(long authority_cost) {
-        this.authority_cost = authority_cost;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public String getOpenid() {
-        return openid;
+    public String getYellow_vip_level() {
+        return yellow_vip_level;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
+    public void setYellow_vip_level(String yellow_vip_level) {
+        this.yellow_vip_level = yellow_vip_level;
     }
 
-    public long getExpires_in() {
-        return expires_in;
+    public String getIs_lost() {
+        return is_lost;
     }
 
-    public void setExpires_in(long expires_in) {
-        this.expires_in = expires_in;
-    }
-
-    public String getPfkey() {
-        return pfkey;
-    }
-
-    public void setPfkey(String pfkey) {
-        this.pfkey = pfkey;
+    public void setIs_lost(String is_lost) {
+        this.is_lost = is_lost;
     }
 
     public String getMsg() {
@@ -100,19 +99,83 @@ public class LoginAuthSuccessEntity {
         this.msg = msg;
     }
 
-    public String getAccess_token() {
-        return access_token;
+    public String getCity() {
+        return city;
     }
 
-    public void setAccess_token(String access_token) {
-        this.access_token = access_token;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public long getLogin_cost() {
-        return login_cost;
+    public String getFigureurl_1() {
+        return figureurl_1;
     }
 
-    public void setLogin_cost(long login_cost) {
-        this.login_cost = login_cost;
+    public void setFigureurl_1(String figureurl_1) {
+        this.figureurl_1 = figureurl_1;
+    }
+
+    public String getFigureurl_2() {
+        return figureurl_2;
+    }
+
+    public void setFigureurl_2(String figureurl_2) {
+        this.figureurl_2 = figureurl_2;
+    }
+
+    public String getVip() {
+        return vip;
+    }
+
+    public void setVip(String vip) {
+        this.vip = vip;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getIs_yellow_vip() {
+        return is_yellow_vip;
+    }
+
+    public void setIs_yellow_vip(String is_yellow_vip) {
+        this.is_yellow_vip = is_yellow_vip;
+    }
+
+    public String getFigureurl() {
+        return figureurl;
+    }
+
+    public void setFigureurl(String figureurl) {
+        this.figureurl = figureurl;
+    }
+
+    public String getOpen_id() {
+        return open_id;
+    }
+
+    public void setOpen_id(String open_id) {
+        this.open_id = open_id;
     }
 }

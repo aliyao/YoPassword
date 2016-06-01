@@ -10,29 +10,31 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.google.gson.Gson;
-import com.tencent.tauth.Tencent;
-import com.tencent.tauth.UiError;
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
-import com.yoyo.yopassword.base.BaseUiListener;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
-import com.yoyo.yopassword.common.util.YoLogUtils;
 import com.yoyo.yopassword.common.view.YoToast;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.entity.LoginAuthSuccessEntity;
+import com.yoyo.yopassword.login.LoginApi;
+import com.yoyo.yopassword.login.YoPlatformActionListener;
 import com.yoyo.yopassword.main.activity.MainActivity;
 
 import java.util.Date;
+import java.util.HashMap;
 
-public class HelloLoginActivity extends BaseAppCompatActivity {
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qq.QQ;
+
+public class HelloLoginActivity extends BaseAppCompatActivity{
     private static final int UI_ANIMATION_DELAY = 300;
     public static final String KEY_TO_LOGIN = "KEY_TO_LOGIN";
     private final Handler mHideHandler = new Handler();
     View fullscreen_content;
     View fullscreen_content_controls,btn_login;
-
 
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -71,9 +73,6 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
         }
     };
 
-    //qq授权登录
-    private BaseUiListener baseUiListener;
-    private Tencent mTencent;
     Handler loginHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -87,39 +86,22 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
         }
     };
 
-    public void init(){
-        super.init();
-        setContentView(R.layout.activity_hello_login);
-        fullscreen_content_controls = findViewById(R.id.fullscreen_content_controls);
-        btn_login= findViewById(R.id.btn_login);
-        fullscreen_content = findViewById(R.id.fullscreen_content);
-        initApp();
-        initQQAuth();
-    }
-    private void initApp(){
-        if(ACacheUtils.isLogin(HelloLoginActivity.this)){
-            btn_login.setVisibility(View.GONE);
-            loginHandler.sendEmptyMessageDelayed(1,1000);
-        }else {
-            btn_login.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * qq授权初始化
-     */
-    private void initQQAuth() {
-        mTencent = Tencent.createInstance(AppConfig.KEY_APP_ID, this.getApplicationContext());
-        baseUiListener = new BaseUiListener() {
+    private void loginQQ() {
+        LoginApi api = new LoginApi();
+        //设置登陆的平台后执行登陆的方法
+        api.setPlatform(QQ.NAME);
+        api.setYoPlatformActionListener(new YoPlatformActionListener() {
             @Override
-            protected void doComplete(Object o) {
-                YoLogUtils.i(o.toString());
-                if(!TextUtils.isEmpty(o.toString())){
+            public void onComplete(Platform platform, int action, HashMap<String, Object> res) {
+                if(res!=null){
                     Gson gson = new Gson();
-                    LoginAuthSuccessEntity loginAuthEntity=gson.fromJson(o.toString(),LoginAuthSuccessEntity.class);
+                    String entityStr=gson.toJson(res);
+                    LoginAuthSuccessEntity loginAuthEntity=gson.fromJson(entityStr,LoginAuthSuccessEntity.class);
                     if(loginAuthEntity!=null){
+                        String openid=platform.getDb().getUserId();
+                        loginAuthEntity.setOpen_id(openid);
                         YoToast.show(HelloLoginActivity.this,R.string.qq_auth_completel);
-                        ACacheUtils.loginIn(HelloLoginActivity.this,loginAuthEntity.getOpenid());
+                        ACacheUtils.loginIn(HelloLoginActivity.this,loginAuthEntity.getOpen_id());
                         GroupingInfo groupingInfo= X3DBUtils.findItem(GroupingInfo.class,AppConfig.DefaultGroupingId);
                         if(groupingInfo==null|| TextUtils.isEmpty(groupingInfo.getGroupingName())){
                             groupingInfo = new GroupingInfo(HelloLoginActivity.this.getResources().getString(R.string.action_default_grouping_name), new Date().getTime());
@@ -131,19 +113,28 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
                     }
                 }
                 YoToast.show(HelloLoginActivity.this,R.string.qq_auth_fail);
-                logoutQQ();
             }
+        });
+        api.login(this);
+    }
 
-            @Override
-            protected void doError(UiError e) {
-                YoToast.show(HelloLoginActivity.this,e.errorMessage);
-            }
-
-            @Override
-            protected void doCancel() {
-                YoToast.show(HelloLoginActivity.this,R.string.qq_auth_cancel);
-            }
-        };
+    public void init(){
+        super.init();
+        setContentView(R.layout.activity_hello_login);
+        //初始化SDK
+        ShareSDK.initSDK(HelloLoginActivity.this);
+        fullscreen_content_controls = findViewById(R.id.fullscreen_content_controls);
+        btn_login= findViewById(R.id.btn_login);
+        fullscreen_content = findViewById(R.id.fullscreen_content);
+        initApp();
+    }
+    private void initApp(){
+        if(ACacheUtils.isLogin(HelloLoginActivity.this)){
+            btn_login.setVisibility(View.GONE);
+            loginHandler.sendEmptyMessageDelayed(1,1000);
+        }else {
+            btn_login.setVisibility(View.VISIBLE);
+        }
     }
 
     public void onYoClick(View view){
@@ -154,24 +145,20 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
         }
     }
 
-    /**
-     * qq授权登录
-     */
-    public void loginQQ() {
-        if (!mTencent.isSessionValid()) {
-           // startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
-            //finish();
-            mTencent.loginServerSide(this, AppConfig.KEY_SCOPE, baseUiListener);
-        }else {
-            logoutQQ();
-        }
-    }
 
     /**
      * qq授权登录退出
      */
     public void logoutQQ() {
-        mTencent.logout(this);
+        try{
+            Platform plat = ShareSDK.getPlatform(HelloLoginActivity.this,QQ.NAME);
+            if (plat != null && plat.isValid()) {
+                plat.removeAccount();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -215,11 +202,16 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Tencent.onActivityResultData(requestCode, resultCode, data, baseUiListener);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void finish() {
+        logoutQQ();
+        super.finish();
     }
 }
