@@ -9,7 +9,7 @@
     <string name="qq_auth_fail">授权登录失败</string>
     <string name="title_activity_main">YoPassword</string>
     <string name="action_grouping">分组管理</string>
-    <string name="action_sign_out">退出</string>
+    <string name="action_sign_out">注销账号</string>
     <string name="action_confirm">确定</string>
     <string name="action_add_grouping">添加分组</string>
     <string name="action_default_grouping_name">默认</string>

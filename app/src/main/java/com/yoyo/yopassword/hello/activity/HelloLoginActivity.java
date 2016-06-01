@@ -28,6 +28,7 @@ import java.util.Date;
 
 public class HelloLoginActivity extends BaseAppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;
+    public static final String KEY_TO_LOGIN = "KEY_TO_LOGIN";
     private final Handler mHideHandler = new Handler();
     View fullscreen_content;
     View fullscreen_content_controls,btn_login;
@@ -176,8 +177,12 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        delayedHide(0);
-        delayedShow(2000);
+        if(getIntent().getBooleanExtra(KEY_TO_LOGIN,false)){
+            delayedShow(0);
+        }else{
+            delayedHide(0);
+            delayedShow(2000);
+        }
     }
 
     private void hide() {

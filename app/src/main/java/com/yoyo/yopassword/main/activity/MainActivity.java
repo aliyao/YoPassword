@@ -36,6 +36,7 @@ import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoAlertDialog;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
+import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 
@@ -82,8 +83,8 @@ public class MainActivity extends BaseAppCompatActivity {
                 return true;
             case R.id.action_sign_out:
                 ACacheUtils.signOut(MainActivity.this);
+                startActivity(new Intent(MainActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
                 finish();
-                System.exit(0);
                 return true;
         }
 
