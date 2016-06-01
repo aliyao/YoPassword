@@ -2,6 +2,7 @@ package com.yoyo.yopassword.common.util;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import java.io.Serializable;
 
@@ -10,9 +11,10 @@ import java.io.Serializable;
  */
 public class ACacheUtils {
     static ACache mCache;
-    final  static String OpenId="OpenId";//1登录
+    final  static String OpenId="OpenId";//userid
     final  static String LoginStatus="LoginStatus";//1登录
     final  static String FirstOpen="FirstOpen";//1第一次打开
+    final  static String CheckPassword="CheckPassword";
 
     public static boolean isFirstOpen(Context mContext){
         if(mCache==null){
@@ -30,12 +32,27 @@ public class ACacheUtils {
 
     }
 
+    public static void setCheckPassword(Context mContext,String checkPassword){
+        if(mCache==null){
+            mCache = ACache.get(mContext);
+        }
+        putTime3Day( mContext, CheckPassword,checkPassword);
+    }
+
+    public static String getCheckPassword(Context mContext){
+        if(mCache==null){
+            mCache = ACache.get(mContext);
+        }
+        Object mCheckPassword=mCache.getAsObject(CheckPassword);
+        return mCheckPassword==null?null:mCheckPassword.toString();
+    }
     public static boolean isLogin(Context mContext){
         if(mCache==null){
             mCache = ACache.get(mContext);
         }
+        Object mCheckPassword=mCache.getAsObject(CheckPassword);
         Object mLoginStatus=mCache.getAsObject(LoginStatus);
-        return mLoginStatus!=null&&mLoginStatus.equals(1);
+        return (mLoginStatus!=null&&mLoginStatus.equals(1))&& mCheckPassword!=null&&TextUtils.isEmpty(mCheckPassword.toString());
     }
     /* public static void loginOut(Context mContext){
          if(mCache==null){
@@ -55,8 +72,9 @@ public class ACacheUtils {
         if(mCache==null){
             mCache = ACache.get(mContext);
         }
-        putTime3Day( mContext, LoginStatus,0);
-        putTime3Day(mContext,OpenId,"");
+        put( mContext, LoginStatus,0);
+        put(mContext,OpenId,"");
+        put(mContext,CheckPassword,"");
     }
 
     public static Object getAsObject(Context mContext,String key){

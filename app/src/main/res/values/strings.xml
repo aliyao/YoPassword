@@ -9,7 +9,7 @@
     <string name="qq_auth_fail">授权登录失败</string>
     <string name="title_activity_main">YoPassword</string>
     <string name="action_grouping">分组管理</string>
-    <string name="action_sign_out">注销账号</string>
+    <string name="action_sign_out">退出账号</string>
     <string name="action_confirm">确定</string>
     <string name="action_add_grouping">添加分组</string>
     <string name="action_default_grouping_name">默认</string>
@@ -48,6 +48,8 @@
     <string name="edit_title">请输入标题</string>
     <string name="edit_account">请输入账号</string>
     <string name="edit_password">请输入密码</string>
+    <string name="edit_password_too">请再次输入密码</string>
+    <string name="edit_password_no_same">两次密码不一致</string>
     <string name="edit_remarks">请输入标备注</string>
     <string name="copy_success_tip">复制成功</string>
 </resources>

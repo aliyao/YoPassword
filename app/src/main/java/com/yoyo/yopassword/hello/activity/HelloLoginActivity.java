@@ -12,14 +12,15 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
+import com.yoyo.yopassword.check.CheckPasswordActivity;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.YoToast;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.entity.LoginAuthSuccessEntity;
-import com.yoyo.yopassword.login.LoginApi;
-import com.yoyo.yopassword.login.YoPlatformActionListener;
+import com.yoyo.yopassword.login.util.LoginApiUtils;
+import com.yoyo.yopassword.login.util.YoPlatformActionListener;
 import com.yoyo.yopassword.main.activity.MainActivity;
 
 import java.util.Date;
@@ -101,7 +102,12 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
                                 groupingInfo = new GroupingInfo(HelloLoginActivity.this.getResources().getString(R.string.action_default_grouping_name), new Date().getTime());
                                 X3DBUtils.save(groupingInfo);
                             }
-                            startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
+                            if(!TextUtils.isEmpty(ACacheUtils.getCheckPassword(HelloLoginActivity.this))){
+                                startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
+                            }else {
+                                startActivity(new Intent(HelloLoginActivity.this, CheckPasswordActivity.class));
+                            }
+
                             finish();
                             return;
                         }
@@ -113,7 +119,7 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
     };
 
     private void loginQQ() {
-        LoginApi api = new LoginApi();
+        LoginApiUtils api = new LoginApiUtils();
         //设置登陆的平台后执行登陆的方法
         api.setPlatform(QQ.NAME);
         api.setYoPlatformActionListener(new YoPlatformActionListener() {

@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.login;
+package com.yoyo.yopassword.login.util;
 
 import android.content.Context;
 
@@ -11,11 +11,11 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 
-public class LoginApi{
+public class LoginApiUtils {
     private String platform;
     YoPlatformActionListener yoPlatformActionListener;
 
-    public LoginApi() {
+    public LoginApiUtils() {
     }
 
     public void setPlatform(String platform) {

@@ -1,4 +1,4 @@
-package com.yoyo.yopassword.login;
+package com.yoyo.yopassword.login.util;
 
 import java.util.HashMap;
 
