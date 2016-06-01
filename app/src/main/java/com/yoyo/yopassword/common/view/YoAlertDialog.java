@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.yoyo.yopassword.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 项目名称：YoPassword
@@ -37,10 +41,10 @@ public class YoAlertDialog {
         builder.show();
     }
     public static void showAlertDialog(Context context,int rStrMessage, OnToDoItemClickListener onToDoItemClickListener){
-        showAlertDialog(context,0,rStrMessage,R.string.btn_ok, R.string.btn_cancle, 0,null,onToDoItemClickListener);
+        showAlertDialog(context,0,rStrMessage,R.string.btn_ok, R.string.btn_cancle, 0,null,false,onToDoItemClickListener);
     }
 
-    public static void showAlertDialog(Context context, int rStrTitle, int rStrMessage, int rStrPositiveButtonText, int rStrNegativeButtonText, int rStrNeutralButtonText, View view, final OnToDoItemClickListener onToDoItemClickListener){
+    public static void showAlertDialog(final Context context, int rStrTitle, int rStrMessage, int rStrPositiveButtonText, int rStrNegativeButtonText, int rStrNeutralButtonText, View view,boolean isShowKeyboard,final OnToDoItemClickListener onToDoItemClickListener){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if(rStrTitle>0){
@@ -48,6 +52,18 @@ public class YoAlertDialog {
         }
         if(view!=null){
             builder.setView(view);
+            if(isShowKeyboard){
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        InputMethodManager imm = (InputMethodManager) context
+                                .getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+                    }
+
+                }, 200);
+            }
         }
         if(rStrMessage>0){
             builder.setMessage(rStrMessage);
@@ -91,6 +107,6 @@ public class YoAlertDialog {
     }
 
     public static void showAlertDialogEditText(Context context,int rStrTitle,View view,OnToDoItemClickListener onToDoItemClickListener){
-        showAlertDialog(context, rStrTitle, 0,R.string.btn_ok, R.string.btn_cancle, 0,view,onToDoItemClickListener);
+        showAlertDialog(context, rStrTitle, 0,R.string.btn_ok, R.string.btn_cancle, 0,view,true,onToDoItemClickListener);
     }
 }
