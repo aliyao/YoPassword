@@ -16,11 +16,12 @@ import com.yoyo.yopassword.check.CheckPasswordActivity;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
+import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.common.view.YoToast;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.entity.LoginAuthSuccessEntity;
+import com.yoyo.yopassword.login.OnLoginListener;
 import com.yoyo.yopassword.login.util.LoginApiUtils;
-import com.yoyo.yopassword.login.util.YoPlatformActionListener;
 import com.yoyo.yopassword.main.activity.MainActivity;
 
 import java.util.Date;
@@ -75,6 +76,7 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
         }
     };
 
+
     Handler loginHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -95,7 +97,7 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
                         if(loginAuthEntity!=null){
                             String openid=platform.getDb().getUserId();
                             loginAuthEntity.setOpen_id(openid);
-                            YoToast.show(HelloLoginActivity.this.getApplicationContext(),R.string.qq_auth_completel);
+                            YoSnackbar.showSnackbar(fullscreen_content,R.string.qq_auth_completel);
                             ACacheUtils.loginIn(HelloLoginActivity.this,loginAuthEntity.getOpen_id());
                             GroupingInfo groupingInfo= X3DBUtils.findItem(GroupingInfo.class,AppConfig.DefaultGroupingId);
                             if(groupingInfo==null|| TextUtils.isEmpty(groupingInfo.getGroupingName())){
@@ -112,7 +114,7 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
                             return;
                         }
                     }
-                    YoToast.show(HelloLoginActivity.this.getApplicationContext(),R.string.qq_auth_fail);
+                    YoSnackbar.showSnackbar(fullscreen_content,R.string.qq_auth_fail);
                     break;
             }
         }
@@ -122,9 +124,9 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
         LoginApiUtils api = new LoginApiUtils();
         //设置登陆的平台后执行登陆的方法
         api.setPlatform(QQ.NAME);
-        api.setYoPlatformActionListener(new YoPlatformActionListener() {
+        api.setOnLoginListener(new OnLoginListener() {
             @Override
-            public void onComplete(Platform platform, int action, HashMap<String, Object> res) {
+            public boolean onLogin(Platform platform, HashMap<String, Object> res) {
                 Message message=new Message();
                 message.what=KEY_LOGIN_SUCCESS;
                 Object[] objects=new Object[2];
@@ -132,9 +134,10 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
                 objects[1]=res;
                 message.obj=objects;
                 loginHandler.sendMessage(message);
+                return false;
             }
         });
-        api.login(this);
+        api.login(this,fullscreen_content);
     }
 
     public void init(){

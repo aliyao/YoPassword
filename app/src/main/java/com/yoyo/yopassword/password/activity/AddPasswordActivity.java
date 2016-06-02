@@ -1,6 +1,7 @@
 package com.yoyo.yopassword.password.activity;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -41,6 +42,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         et_remarks = (EditText) findViewById(R.id.et_remarks);
         cb_is_top = (CheckBox) findViewById(R.id.cb_is_top);
         cb_is_hide_account = (CheckBox) findViewById(R.id.cb_is_hide_account);
+        setupActionBar();
         isEdit = false;
         isUpdate = getIntent().getBooleanExtra(StartActivityTools.ToAddPasswordActivity_IsUpdate, false);
         updatePasswordInfoId = getIntent().getLongExtra(StartActivityTools.ToAddPasswordActivity_PasswordInfoId, 0);
@@ -53,6 +55,13 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
             refreshGroupingInfo();
         }
 
+    }
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            // Show the Up button in the action bar.
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void updatePasswordInfo() {

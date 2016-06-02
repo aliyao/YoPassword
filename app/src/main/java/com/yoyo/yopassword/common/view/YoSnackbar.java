@@ -17,4 +17,9 @@ public class YoSnackbar {
         Snackbar.make(view, rStr, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
+
+    public static void showSnackbar(View view,String text){
+        Snackbar.make(view, text, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
 }

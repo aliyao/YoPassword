@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -98,7 +99,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
                 doGroupingNameEdittext(null);
             }
         });
-
+        setupActionBar();
         refreshLayout= (RefreshLayout) findViewById(R.id.refresh_layout);
         RecyclerView recyclerViewGrouping = (RecyclerView) findViewById(R.id.recycler_view_grouping);
         recyclerViewGrouping.setHasFixedSize(true);
@@ -133,6 +134,16 @@ public class GroupingActivity extends BaseAppCompatActivity {
         refreshLayout.setRefreshing(true);
         refreshGrouping();
         isSelect=getIntent().getBooleanExtra(StartActivityTools.ToGroupingActivity_IsSelect,false);
+    }
+    /**
+     * Set up the {@link android.app.ActionBar}, if the API is available.
+     */
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            // Show the Up button in the action bar.
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     public void refreshGrouping(){
