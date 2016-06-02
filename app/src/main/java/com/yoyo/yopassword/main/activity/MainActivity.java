@@ -33,7 +33,7 @@ import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
-import com.yoyo.yopassword.common.view.YoAlertDialog;
+import com.yoyo.yopassword.common.util.AlertDialogUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
@@ -105,7 +105,7 @@ public class MainActivity extends BaseAppCompatActivity {
             @Override
             public boolean onItemLongClick(final int position) {
                 String[] toDo = getContext().getResources().getStringArray(R.array.alert_dialog_list_todo_password_item_long_click);
-                YoAlertDialog.showAlertDialogList(getContext(), toDo, new OnToDoItemClickListener() {
+                AlertDialogUtils.showAlertDialogList(getContext(), toDo, new OnToDoItemClickListener() {
 
                     @Override
                     public void onItemClick(DialogInterface dialog, int which) {
@@ -121,7 +121,7 @@ public class MainActivity extends BaseAppCompatActivity {
                                 StartActivityTools.toAddPasswordActivity(PlaceholderFragment.this, true, true, passwordAdapter.getItem(position).getPasswordInfoId());
                                 break;
                             case 2:
-                                YoAlertDialog.showAlertDialog(getContext(), R.string.password_item_delect_todo, new OnToDoItemClickListener() {
+                                AlertDialogUtils.showAlertDialog(getContext(), R.string.password_item_delect_todo, new OnToDoItemClickListener() {
                                     @Override
                                     public void onPositiveClick(DialogInterface dialog, int which) {
                                         super.onPositiveClick(dialog, which);

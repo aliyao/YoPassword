@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +28,7 @@ import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
-import com.yoyo.yopassword.common.view.YoAlertDialog;
+import com.yoyo.yopassword.common.util.AlertDialogUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.grouping.view.adapter.GroupingAdapter;
@@ -59,7 +58,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
                 toDo = new String[1];
                 toDo[0] = mToDo[0];
             }
-            YoAlertDialog.showAlertDialogList(GroupingActivity.this, toDo, new OnToDoItemClickListener() {
+            AlertDialogUtils.showAlertDialogList(GroupingActivity.this, toDo, new OnToDoItemClickListener() {
 
                 @Override
                 public void onItemClick(DialogInterface dialog, int which) {
@@ -68,7 +67,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
                             doGroupingNameEdittext(groupingAdapter.getItem(position));
                             break;
                         case 1:
-                            YoAlertDialog.showAlertDialog(GroupingActivity.this, R.string.grouping_item_delect_todo, new OnToDoItemClickListener() {
+                            AlertDialogUtils.showAlertDialog(GroupingActivity.this, R.string.grouping_item_delect_todo, new OnToDoItemClickListener() {
                                 @Override
                                 public void onPositiveClick(DialogInterface dialog, int which) {
                                     super.onPositiveClick(dialog, which);
@@ -198,7 +197,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
                 }
             });
         }
-        YoAlertDialog.showAlertDialogEditText(GroupingActivity.this, R.string.action_add_grouping, viewlayout, new OnToDoItemClickListener() {
+        AlertDialogUtils.showAlertDialogEditText(GroupingActivity.this, R.string.action_add_grouping, viewlayout, new OnToDoItemClickListener() {
             @Override
             public void onPositiveClick(DialogInterface dialog, int which) {
                 super.onPositiveClick(dialog, which);
