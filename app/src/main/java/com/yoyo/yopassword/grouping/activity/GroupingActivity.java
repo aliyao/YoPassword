@@ -207,7 +207,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
     }
 
     private void doPositiveClick(EditText groupingNameEditText, GroupingInfo groupingInfo) {
-        String groupingName = groupingNameEditText.getText().toString();
+        String groupingName = groupingNameEditText.getText().toString().trim();
         if (TextUtils.isEmpty(groupingName)) {
             YoSnackbar.showSnackbar(refreshLayout, R.string.edit_grouping_name);
             return;

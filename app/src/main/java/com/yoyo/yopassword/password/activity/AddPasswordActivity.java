@@ -134,10 +134,10 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
      * 确定完成
      */
     private void doConfirm() {
-        String title = et_title.getText().toString();
-        String account = et_account.getText().toString();
-        String password = et_password.getText().toString();
-        String remarks = et_remarks.getText().toString();
+        String title = et_title.getText().toString().trim();
+        String account = et_account.getText().toString().trim();
+        String password = et_password.getText().toString().trim();
+        String remarks = et_remarks.getText().toString().trim();
         long groupingId = groupingInfo.getGroupingId();
         boolean isTop = cb_is_top.isChecked();
         boolean isHideAccount = cb_is_hide_account.isChecked();

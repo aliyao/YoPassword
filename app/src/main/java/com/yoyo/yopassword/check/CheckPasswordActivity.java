@@ -99,8 +99,8 @@ public class CheckPasswordActivity extends AppCompatActivity {
      * 确定完成
      */
     private void doConfirm() {
-        String password = etPassword.getText().toString();
-        String password2 = etPassword2.getText().toString();
+        String password = etPassword.getText().toString().trim();
+        String password2 = etPassword2.getText().toString().trim();
 
         if (TextUtils.isEmpty(password)) {
             YoSnackbar.showSnackbar(etPassword, R.string.edit_password);
