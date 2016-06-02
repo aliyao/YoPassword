@@ -2,6 +2,7 @@ package com.yoyo.yopassword.check;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -24,6 +25,7 @@ public class CheckPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check);
+        setupActionBar();
         isSuccess=false;
         etPassword=(EditText)findViewById(R.id.et_password);
         etPassword2=(EditText)findViewById(R.id.et_password2);
@@ -39,11 +41,16 @@ public class CheckPasswordActivity extends AppCompatActivity {
                             break;
                     }
                 }
-
                 return false;
             }
         });
-
+    }
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            // Show the Up button in the action bar.
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -57,7 +64,6 @@ public class CheckPasswordActivity extends AppCompatActivity {
     public void onYoClick(View view){
         switch (view.getId()){
             case R.id.btn_sign_out:
-                ACacheUtils.signOut(CheckPasswordActivity.this);
                 startActivity(new Intent(CheckPasswordActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
                 finish();
                 break;
@@ -73,9 +79,14 @@ public class CheckPasswordActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_confirm) {
-            doConfirm();
-            return true;
+        switch (id){
+            case R.id.action_confirm:
+                doConfirm();
+                return true;
+            case android.R.id.home:
+                startActivity(new Intent(CheckPasswordActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
+                finish();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -89,6 +100,10 @@ public class CheckPasswordActivity extends AppCompatActivity {
 
         if (TextUtils.isEmpty(password)) {
             YoSnackbar.showSnackbar(etPassword, R.string.edit_password);
+            return;
+        }
+        if (password.length()<6) {
+            YoSnackbar.showSnackbar(etPassword, R.string.password_six_tip);
             return;
         }
         if (TextUtils.isEmpty(password2)) {

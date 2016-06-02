@@ -1,6 +1,7 @@
 package com.yoyo.yopassword.grouping.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -29,6 +31,7 @@ import com.yoyo.yopassword.common.view.YoAlertDialog;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.grouping.view.adapter.GroupingAdapter;
+import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 
 import java.util.Date;
 import java.util.List;
@@ -145,6 +148,17 @@ public class GroupingActivity extends BaseAppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public void refreshGrouping(){
         List<GroupingInfo> groupingInfoList= X3DBUtils.findAll(GroupingInfo.class);
@@ -164,6 +178,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
         final EditText groupingNameEditText=(EditText)viewlayout.findViewById(R.id.et_add_grouping);
         if(groupingInfo!=null&&!TextUtils.isEmpty(groupingInfo.getGroupingName())){
             groupingNameEditText.setText(groupingInfo.getGroupingName());
+            groupingNameEditText.setSelection(groupingInfo.getGroupingName().length());
         }
         groupingNameEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override

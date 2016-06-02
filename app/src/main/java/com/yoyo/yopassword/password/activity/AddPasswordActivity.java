@@ -117,9 +117,13 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_confirm) {
-            doConfirm();
-            return true;
+        switch (id){
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_confirm:
+                doConfirm();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -146,6 +150,10 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         }
         if (TextUtils.isEmpty(password)) {
             YoSnackbar.showSnackbar(et_title, R.string.edit_password);
+            return;
+        }
+        if (password.length()<6) {
+            YoSnackbar.showSnackbar(et_title, R.string.password_six_tip);
             return;
         }
 

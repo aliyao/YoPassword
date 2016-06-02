@@ -52,4 +52,5 @@
     <string name="edit_password_no_same">两次密码不一致</string>
     <string name="edit_remarks">请输入标备注</string>
     <string name="copy_success_tip">复制成功</string>
+    <string name="password_six_tip">密码至少六位数</string>
 </resources>

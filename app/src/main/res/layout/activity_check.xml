@@ -18,51 +18,58 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
-            <TextView
-                android:id="@+id/tv_edit_password_tip"
+            <!--  <TextView
+                  android:id="@+id/tv_edit_password_tip"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center"
+                  android:text="@string/edit_password"
+                  android:textSize="@dimen/title_text_size_x" />-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_password1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/edit_password"
-                android:textSize="@dimen/title_text_size_x" />
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/et_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_edit_password_tip"
-                android:layout_marginTop="6dp"
-                android:gravity="center"
-                android:hint="@string/yo_password"
-                android:imeOptions="flagNavigateNext"
-                android:inputType="textPassword" />
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/edit_password"
+                    android:imeOptions="flagNavigateNext"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/tv_edit_password_tip2"
+            <!--  <TextView
+                  android:id="@+id/tv_edit_password_tip2"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@+id/et_password"
+                  android:layout_marginTop="16dp"
+                  android:gravity="center"
+                  android:text="@string/edit_password_too"
+                  android:textSize="@dimen/title_text_size_x" />-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_password2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/et_password"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:text="@string/edit_password_too"
-                android:textSize="@dimen/title_text_size_x" />
+                android:layout_below="@+id/til_password1">
 
-            <EditText
-                android:id="@+id/et_password2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_edit_password_tip2"
-                android:layout_marginTop="6dp"
-                android:gravity="center"
-                android:hint="@string/yo_password"
-                android:inputType="textPassword" />
+                <EditText
+                    android:id="@+id/et_password2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/edit_password_too"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/btn_sign_out"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/et_password2"
+                android:layout_below="@+id/til_password2"
                 android:onClick="onYoClick"
                 android:text="@string/action_sign_out" />
         </RelativeLayout>
