@@ -1,11 +1,11 @@
 package com.yoyo.yopassword.grouping.activity;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +15,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
@@ -31,7 +33,6 @@ import com.yoyo.yopassword.common.view.YoAlertDialog;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.grouping.view.adapter.GroupingAdapter;
-import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 
 import java.util.Date;
 import java.util.List;
@@ -40,11 +41,11 @@ public class GroupingActivity extends BaseAppCompatActivity {
     GroupingAdapter groupingAdapter;
     RefreshLayout refreshLayout;
     boolean isSelect;
-    OnBaseRecyclerViewListener onBaseRecyclerViewListener=new  OnBaseRecyclerViewListener() {
+    OnBaseRecyclerViewListener onBaseRecyclerViewListener = new OnBaseRecyclerViewListener() {
         @Override
         public void onItemClick(int position) {
-            if(isSelect){
-               StartActivityTools.doGroupingActivitySetResult(GroupingActivity.this,groupingAdapter.getItem(position).getGroupingId());
+            if (isSelect) {
+                StartActivityTools.doGroupingActivitySetResult(GroupingActivity.this, groupingAdapter.getItem(position).getGroupingId());
                 finish();
             }
         }
@@ -52,26 +53,26 @@ public class GroupingActivity extends BaseAppCompatActivity {
         @Override
         public boolean onItemLongClick(final int position) {
             String[] toDo = getResources().getStringArray(R.array.alert_dialog_list_todo_grouping_item_long_click);
-            GroupingInfo groupingInfoTo=groupingAdapter.getItem(position);
-            if(groupingInfoTo.getGroupingId()==AppConfig.DefaultGroupingId){
-                String[] mToDo=toDo;
-                toDo=new String[1];
-                toDo[0]=mToDo[0];
+            GroupingInfo groupingInfoTo = groupingAdapter.getItem(position);
+            if (groupingInfoTo.getGroupingId() == AppConfig.DefaultGroupingId) {
+                String[] mToDo = toDo;
+                toDo = new String[1];
+                toDo[0] = mToDo[0];
             }
-            YoAlertDialog.showAlertDialogList(GroupingActivity.this,toDo,new OnToDoItemClickListener(){
+            YoAlertDialog.showAlertDialogList(GroupingActivity.this, toDo, new OnToDoItemClickListener() {
 
                 @Override
                 public void onItemClick(DialogInterface dialog, int which) {
-                    switch (which){
+                    switch (which) {
                         case 0:
                             doGroupingNameEdittext(groupingAdapter.getItem(position));
                             break;
                         case 1:
-                            YoAlertDialog.showAlertDialog(GroupingActivity.this, R.string.grouping_item_delect_todo,new OnToDoItemClickListener(){
+                            YoAlertDialog.showAlertDialog(GroupingActivity.this, R.string.grouping_item_delect_todo, new OnToDoItemClickListener() {
                                 @Override
                                 public void onPositiveClick(DialogInterface dialog, int which) {
                                     super.onPositiveClick(dialog, which);
-                                    X3DBUtils.delectById(GroupingInfo.class,groupingAdapter.getItem(position).getGroupingId());
+                                    X3DBUtils.delectById(GroupingInfo.class, groupingAdapter.getItem(position).getGroupingId());
                                     refreshGrouping();
                                     refreshMainActivityGrouping();
                                 }
@@ -85,7 +86,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
         }
     };
 
-    private void refreshMainActivityGrouping(){
+    private void refreshMainActivityGrouping() {
         AppSingletonTools.getInstance().refreshGrouping();
     }
 
@@ -103,12 +104,12 @@ public class GroupingActivity extends BaseAppCompatActivity {
             }
         });
         setupActionBar();
-        refreshLayout= (RefreshLayout) findViewById(R.id.refresh_layout);
+        refreshLayout = (RefreshLayout) findViewById(R.id.refresh_layout);
         RecyclerView recyclerViewGrouping = (RecyclerView) findViewById(R.id.recycler_view_grouping);
         recyclerViewGrouping.setHasFixedSize(true);
         //设置布局管理器
         recyclerViewGrouping.setLayoutManager(new LinearLayoutManager(this));
-        groupingAdapter=new GroupingAdapter(null);
+        groupingAdapter = new GroupingAdapter(null);
         //设置adapter
         recyclerViewGrouping.setAdapter(groupingAdapter);
         //设置Item增加、移除动画
@@ -126,7 +127,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
             @Override
             public void onRefresh() {
                 refreshLayout.postDelayed(new Runnable() {
-               @Override
+                    @Override
                     public void run() {
                         refreshGrouping();
                     }
@@ -136,8 +137,9 @@ public class GroupingActivity extends BaseAppCompatActivity {
         groupingAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
         refreshLayout.setRefreshing(true);
         refreshGrouping();
-        isSelect=getIntent().getBooleanExtra(StartActivityTools.ToGroupingActivity_IsSelect,false);
+        isSelect = getIntent().getBooleanExtra(StartActivityTools.ToGroupingActivity_IsSelect, false);
     }
+
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
      */
@@ -148,10 +150,11 @@ public class GroupingActivity extends BaseAppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case android.R.id.home:
                 finish();
                 return true;
@@ -160,61 +163,62 @@ public class GroupingActivity extends BaseAppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void refreshGrouping(){
-        List<GroupingInfo> groupingInfoList= X3DBUtils.findAll(GroupingInfo.class);
+    public void refreshGrouping() {
+        List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
         groupingAdapter.setmData(groupingInfoList);
         groupingAdapter.notifyDataSetChanged();
-        if(refreshLayout.isRefreshing()){
+        if (refreshLayout.isRefreshing()) {
             refreshLayout.setRefreshing(false);
         }
     }
 
     /**
-     *
      * @param groupingInfo
      */
-    private void doGroupingNameEdittext(final GroupingInfo groupingInfo){
-        View viewlayout= LayoutInflater.from(GroupingActivity.this).inflate(R.layout.view_add_grouping_edittext, null);
-        final EditText groupingNameEditText=(EditText)viewlayout.findViewById(R.id.et_add_grouping);
-        if(groupingInfo!=null&&!TextUtils.isEmpty(groupingInfo.getGroupingName())){
+    private void doGroupingNameEdittext(final GroupingInfo groupingInfo) {
+        View viewlayout = LayoutInflater.from(GroupingActivity.this).inflate(R.layout.view_add_grouping_edittext, null);
+        final EditText groupingNameEditText = (EditText) viewlayout.findViewById(R.id.et_add_grouping);
+        if (groupingInfo != null && !TextUtils.isEmpty(groupingInfo.getGroupingName())) {
             groupingNameEditText.setText(groupingInfo.getGroupingName());
             groupingNameEditText.setSelection(groupingInfo.getGroupingName().length());
-        }
-        groupingNameEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    switch (event.getAction()) {
-                        case KeyEvent.ACTION_UP:             // 键盘松开
-                            doPositiveClick(groupingNameEditText,groupingInfo);
-                            break;
-                        case KeyEvent.ACTION_DOWN:          // 键盘按下
-                            break;
+            groupingNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    //当actionId == XX_SEND 或者 XX_DONE时都触发
+                    //或者event.getKeyCode == ENTER 且 event.getAction == ACTION_DOWN时也触发
+                    //注意，这是一定要判断event != null。因为在某些输入法上会返回null。
+                    if (actionId == EditorInfo.IME_ACTION_SEND
+                            || actionId == EditorInfo.IME_ACTION_DONE
+                            || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                        //处理事件
+                        doPositiveClick(groupingNameEditText, groupingInfo);
                     }
+                    return false;
                 }
-                return false;
-            }
-        });
-        YoAlertDialog.showAlertDialogEditText(GroupingActivity.this,R.string.action_add_grouping,viewlayout,new OnToDoItemClickListener(){
+            });
+        }
+        YoAlertDialog.showAlertDialogEditText(GroupingActivity.this, R.string.action_add_grouping, viewlayout, new OnToDoItemClickListener() {
             @Override
             public void onPositiveClick(DialogInterface dialog, int which) {
                 super.onPositiveClick(dialog, which);
-                doPositiveClick(groupingNameEditText,groupingInfo);
+                doPositiveClick(groupingNameEditText, groupingInfo);
             }
         });
     }
-    private void doPositiveClick(EditText groupingNameEditText,GroupingInfo groupingInfo){
-        String groupingName=groupingNameEditText.getText().toString();
-        if(TextUtils.isEmpty(groupingName)){
-            YoSnackbar.showSnackbar(refreshLayout,R.string.edit_grouping_name);
+
+    private void doPositiveClick(EditText groupingNameEditText, GroupingInfo groupingInfo) {
+        String groupingName = groupingNameEditText.getText().toString();
+        if (TextUtils.isEmpty(groupingName)) {
+            YoSnackbar.showSnackbar(refreshLayout, R.string.edit_grouping_name);
             return;
         }
-        GroupingInfo groupingInfoNew=groupingInfo;
-        if(groupingInfoNew==null){
-            groupingInfoNew= new GroupingInfo();
+        GroupingInfo groupingInfoNew = groupingInfo;
+        if (groupingInfoNew == null) {
+            groupingInfoNew = new GroupingInfo();
         }
         groupingInfoNew.setGroupingName(groupingName);
-        if(groupingInfoNew.getSaveInfoTime()<=0){
+        if (groupingInfoNew.getSaveInfoTime() <= 0) {
             groupingInfoNew.setSaveInfoTime(new Date().getTime());
         }
         X3DBUtils.save(groupingInfoNew);

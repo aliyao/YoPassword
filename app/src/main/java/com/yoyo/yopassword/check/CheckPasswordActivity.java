@@ -9,10 +9,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.common.util.ACacheUtils;
+import com.yoyo.yopassword.common.util.EditTextUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 import com.yoyo.yopassword.main.activity.MainActivity;
@@ -29,17 +32,18 @@ public class CheckPasswordActivity extends AppCompatActivity {
         isSuccess=false;
         etPassword=(EditText)findViewById(R.id.et_password);
         etPassword2=(EditText)findViewById(R.id.et_password2);
-        etPassword2.setOnKeyListener(new View.OnKeyListener() {
+        etPassword2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    switch (event.getAction()) {
-                        case KeyEvent.ACTION_UP:             // 键盘松开
-                            doConfirm();
-                            break;
-                        case KeyEvent.ACTION_DOWN:          // 键盘按下
-                            break;
-                    }
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                //当actionId == XX_SEND 或者 XX_DONE时都触发
+                //或者event.getKeyCode == ENTER 且 event.getAction == ACTION_DOWN时也触发
+                //注意，这是一定要判断event != null。因为在某些输入法上会返回null。
+                if (actionId == EditorInfo.IME_ACTION_SEND
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    //处理事件
+                    doConfirm();
                 }
                 return false;
             }
@@ -100,18 +104,22 @@ public class CheckPasswordActivity extends AppCompatActivity {
 
         if (TextUtils.isEmpty(password)) {
             YoSnackbar.showSnackbar(etPassword, R.string.edit_password);
+            EditTextUtils.requestFocus(etPassword);
             return;
         }
         if (password.length()<6) {
             YoSnackbar.showSnackbar(etPassword, R.string.password_six_tip);
+            EditTextUtils.requestFocus(etPassword);
             return;
         }
         if (TextUtils.isEmpty(password2)) {
-            YoSnackbar.showSnackbar(etPassword, R.string.edit_password_too);
+            YoSnackbar.showSnackbar(etPassword2, R.string.edit_password_too);
+            EditTextUtils.requestFocus(etPassword2);
             return;
         }
         if(!password.equals(password2)){
-            YoSnackbar.showSnackbar(etPassword, R.string.edit_password_no_same);
+            YoSnackbar.showSnackbar(etPassword2, R.string.edit_password_no_same);
+            EditTextUtils.requestFocus(etPassword2);
             return;
         }
         ACacheUtils.setCheckPassword(CheckPasswordActivity.this,password);

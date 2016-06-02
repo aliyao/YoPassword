@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.yoyo.yopassword.R;
+import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.common.view.YoToast;
 import com.yoyo.yopassword.login.OnLoginListener;
@@ -59,7 +60,7 @@ public class LoginApiUtils implements Handler.Callback {
         }
 
         //使用SSO授权，通过客户单授权
-        plat.SSOSetting(true);
+        plat.SSOSetting(AppConfig.Is_SSOSetting);
         plat.setPlatformActionListener(new PlatformActionListener() {
             public void onComplete(Platform plat, int action, HashMap<String, Object> res) {
                 if (action == Platform.ACTION_USER_INFOR) {

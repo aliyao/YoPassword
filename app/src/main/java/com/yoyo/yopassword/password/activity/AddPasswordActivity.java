@@ -15,6 +15,7 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.tool.StartActivityTools;
+import com.yoyo.yopassword.common.util.EditTextUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
@@ -142,18 +143,22 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         boolean isHideAccount = cb_is_hide_account.isChecked();
         if (TextUtils.isEmpty(title)) {
             YoSnackbar.showSnackbar(et_title, R.string.edit_title);
+            EditTextUtils.requestFocus(et_title);
             return;
         }
         if (TextUtils.isEmpty(account)) {
-            YoSnackbar.showSnackbar(et_title, R.string.edit_account);
+            YoSnackbar.showSnackbar(et_account, R.string.edit_account);
+            EditTextUtils.requestFocus(et_account);
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            YoSnackbar.showSnackbar(et_title, R.string.edit_password);
+            YoSnackbar.showSnackbar(et_password, R.string.edit_password);
+            EditTextUtils.requestFocus(et_password);
             return;
         }
         if (password.length()<6) {
-            YoSnackbar.showSnackbar(et_title, R.string.password_six_tip);
+            YoSnackbar.showSnackbar(et_password, R.string.password_six_tip);
+            EditTextUtils.requestFocus(et_password);
             return;
         }
 

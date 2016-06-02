@@ -21,5 +21,6 @@ public class AppConfig {
     public final static String DBName = "YoPasswordDB";
     //默认的组ID
     public final static long DefaultGroupingId = 1;
+    public final static boolean Is_SSOSetting=false;
 
 }

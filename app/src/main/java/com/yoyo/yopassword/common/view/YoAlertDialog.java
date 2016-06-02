@@ -44,7 +44,7 @@ public class YoAlertDialog {
         showAlertDialog(context,0,rStrMessage,R.string.btn_ok, R.string.btn_cancle, 0,null,false,onToDoItemClickListener);
     }
 
-    public static void showAlertDialog(final Context context, int rStrTitle, int rStrMessage, int rStrPositiveButtonText, int rStrNegativeButtonText, int rStrNeutralButtonText, View view,boolean isShowKeyboard,final OnToDoItemClickListener onToDoItemClickListener){
+    public static AlertDialog showAlertDialog(final Context context, int rStrTitle, int rStrMessage, int rStrPositiveButtonText, int rStrNegativeButtonText, int rStrNeutralButtonText, View view,boolean isShowKeyboard,final OnToDoItemClickListener onToDoItemClickListener){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if(rStrTitle>0){
@@ -62,7 +62,7 @@ public class YoAlertDialog {
                         imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
                     }
 
-                }, 200);
+                }, 300);
             }
         }
         if(rStrMessage>0){
@@ -103,10 +103,10 @@ public class YoAlertDialog {
                 }
             });
         }
-        builder.show();
+        return builder.show();
     }
 
-    public static void showAlertDialogEditText(Context context,int rStrTitle,View view,OnToDoItemClickListener onToDoItemClickListener){
-        showAlertDialog(context, rStrTitle, 0,R.string.btn_ok, R.string.btn_cancle, 0,view,true,onToDoItemClickListener);
+    public static AlertDialog showAlertDialogEditText(Context context,int rStrTitle,View view,OnToDoItemClickListener onToDoItemClickListener){
+        return showAlertDialog(context, rStrTitle, 0,R.string.btn_ok, R.string.btn_cancle, 0,view,true,onToDoItemClickListener);
     }
 }
