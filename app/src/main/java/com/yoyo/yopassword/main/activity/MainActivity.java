@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -29,11 +30,11 @@ import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.tool.AppSingletonTools;
 import com.yoyo.yopassword.common.tool.StartActivityTools;
 import com.yoyo.yopassword.common.util.ACacheUtils;
+import com.yoyo.yopassword.common.util.AlertDialogUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
-import com.yoyo.yopassword.common.util.AlertDialogUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
@@ -83,7 +84,7 @@ public class MainActivity extends BaseAppCompatActivity {
                 return true;
             case R.id.action_sign_out:
                 ACacheUtils.signOut(MainActivity.this);
-                startActivity(new Intent(MainActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
+                startActivity(new Intent(MainActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN, true));
                 finish();
                 return true;
         }
@@ -126,7 +127,7 @@ public class MainActivity extends BaseAppCompatActivity {
                                     public void onPositiveClick(DialogInterface dialog, int which) {
                                         super.onPositiveClick(dialog, which);
                                         X3DBUtils.delectById(PasswordInfo.class, passwordAdapter.getItem(position).getPasswordInfoId());
-                                        refreshPasswordAdapter();
+                                        refreshPasswordAdapter(0);
                                     }
                                 });
                                 break;
@@ -156,6 +157,19 @@ public class MainActivity extends BaseAppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             refreshLayout = (RefreshLayout) rootView.findViewById(R.id.refresh_layout);
             // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+                @Override
+                public void onRefresh() {
+                    refreshLayout.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
+                            refreshPasswordAdapter(groupingId);
+                        }
+                    }, AppConfig.RefreshViewTime);
+                }
+            });
             RecyclerView recyclerViewPassword = (RecyclerView) rootView.findViewById(R.id.recycler_view_password);
             recyclerViewPassword.setHasFixedSize(true);
             //设置布局管理器
@@ -173,30 +187,20 @@ public class MainActivity extends BaseAppCompatActivity {
             int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.space_item_decoration);
             recyclerViewPassword.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-
-            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-                @Override
-                public void onRefresh() {
-                    refreshLayout.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshPasswordAdapter();
-                        }
-                    }, AppConfig.RefreshViewTime);
-                }
-            });
-
             passwordAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
-            refreshPasswordAdapter();
+            long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
+            refreshPasswordAdapter(groupingId);
             return rootView;
         }
 
-        private void refreshPasswordAdapter() {
+        private void refreshPasswordAdapter(long groupingId) {
             if (passwordAdapter == null) {
                 return;
             }
-            Long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
+
+            if (groupingId <= 0) {
+                groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
+            }
             if (groupingId <= 0) {
                 return;
             }
@@ -223,8 +227,9 @@ public class MainActivity extends BaseAppCompatActivity {
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == StartActivityTools.ToAddPasswordActivity_RequestCode && resultCode == StartActivityTools.ToAddPasswordActivity_ResultCode) {
-                refreshPasswordAdapter();
+
                 long groupingId = data.getLongExtra(StartActivityTools.ToAddPasswordActivity_GroupingId, 0);
+                refreshPasswordAdapter(groupingId);
                 if (groupingId > 0) {
                     AppSingletonTools.getInstance().refreshFragmentItem(groupingId);
                 }
@@ -238,28 +243,55 @@ public class MainActivity extends BaseAppCompatActivity {
             if (pageTitleList.get(i).getGroupingId() == groupingId) {
                 PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
                 if (someFragment != null) {
-                    someFragment.refreshPasswordAdapter();
+                    someFragment.refreshPasswordAdapter(groupingId);
                     mViewPager.setCurrentItem(i);
                 }
             }
         }
     }
 
+    public void refreshFragmentOneItem() {
+        int page = 0;
+        mViewPager.setCurrentItem(page);
+        PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, page);
+        if (someFragment != null)
+            someFragment.refreshPasswordAdapter(0);
+        mSectionsPagerAdapter.notifyDataSetChanged();
+
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         public List<GroupingInfo> pageTitleList;
+        FragmentManager fm;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            this.fm = fm;
             pageTitleList = new ArrayList<>();
             refreshData(false);
         }
 
         public void refreshData(boolean isRefresh) {
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
+            List<GroupingInfo> pageTitleListNew = new ArrayList<>();
+            pageTitleListNew.addAll(pageTitleList);
             pageTitleList.clear();
             pageTitleList.addAll(groupingInfoList);
             if (isRefresh) {
                 notifyDataSetChanged();
+               for (int i = 0; i < pageTitleListNew.size(); i++) {
+                    if (!groupingInfoList.contains(pageTitleListNew.get(i))) {
+                        // 如果这个 fragment 需要更新
+                        FragmentTransaction ft = fm.beginTransaction();
+                        PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
+                        if (someFragment != null) {
+                            someFragment.refreshPasswordAdapter(0);
+                            // 移除旧的 fragment
+                            //ft.remove(someFragment);
+                            //ft.commit();
+                        }
+                    }
+                }
             }
         }
 

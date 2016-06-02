@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YoPassword</string>
+    <string name="app_name">YoPass</string>
 
     <string name="dummy_button_login">QQ授权登录</string>
     <string name="dummy_content">hi\n</string>
@@ -7,7 +7,7 @@
     <string name="qq_auth_cancel">授权登录取消</string>
     <string name="qq_auth_completel">授权登录成功</string>
     <string name="qq_auth_fail">授权登录失败</string>
-    <string name="title_activity_main">YoPassword</string>
+    <string name="title_activity_main">YoPass</string>
     <string name="action_grouping">分组管理</string>
     <string name="action_sign_out">退出账号</string>
     <string name="action_confirm">确定</string>
@@ -34,8 +34,8 @@
 
     <string name="password_item_delect_todo">是否确定删除？</string>
     <string name="grouping_item_delect_todo">是否确定删除？</string>
-    <string name="title_activity_add_password">YoPassword</string>
-    <string name="title_activity_grouping">YoPassword</string>
+    <string name="title_activity_add_password">YoPass</string>
+    <string name="title_activity_grouping">YoPass</string>
     <string name="edit_grouping_name">请输入组名</string>
 
     <string name="yo_title">标题</string>

@@ -90,7 +90,9 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     }
 
     private void refreshGroupingInfo() {
-        groupingBtn.setText(groupingInfo.getGroupingName());
+        if(groupingBtn!=null&&groupingInfo!=null){
+            groupingBtn.setText(groupingInfo.getGroupingName());
+        }
     }
 
     public void onYoClick(View v) {

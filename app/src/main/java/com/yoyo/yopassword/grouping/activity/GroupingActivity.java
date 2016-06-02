@@ -32,6 +32,7 @@ import com.yoyo.yopassword.common.util.AlertDialogUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.grouping.view.adapter.GroupingAdapter;
+import com.yoyo.yopassword.password.entity.PasswordInfo;
 
 import java.util.Date;
 import java.util.List;
@@ -71,9 +72,21 @@ public class GroupingActivity extends BaseAppCompatActivity {
                                 @Override
                                 public void onPositiveClick(DialogInterface dialog, int which) {
                                     super.onPositiveClick(dialog, which);
-                                    X3DBUtils.delectById(GroupingInfo.class, groupingAdapter.getItem(position).getGroupingId());
-                                    refreshGrouping();
-                                    refreshMainActivityGrouping();
+                                    try {
+                                        X3DBUtils.delectById(GroupingInfo.class, groupingAdapter.getItem(position).getGroupingId());
+                                        List<PasswordInfo> passwordInfoList=X3DBUtils.findAll(PasswordInfo.class,"groupingId","=",groupingAdapter.getItem(position).getGroupingId());
+                                        if(passwordInfoList!=null&&passwordInfoList.size()>0){
+                                           for (int i=0;i<passwordInfoList.size();i++){
+                                               passwordInfoList.get(i).setGroupingId(AppConfig.DefaultGroupingId);
+                                           }
+                                            X3DBUtils.save(passwordInfoList);
+                                        }
+                                        refreshGrouping();
+                                        refreshMainActivityGroupingDel();
+                                        refreshMainActivityGrouping();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
                             break;
@@ -87,6 +100,9 @@ public class GroupingActivity extends BaseAppCompatActivity {
 
     private void refreshMainActivityGrouping() {
         AppSingletonTools.getInstance().refreshGrouping();
+    }
+    private void refreshMainActivityGroupingDel() {
+        AppSingletonTools.getInstance().refreshFragmentOneItem();
     }
 
     @Override
