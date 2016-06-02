@@ -62,7 +62,7 @@ public class YoAlertDialog {
                         imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
                     }
 
-                }, 300);
+                }, 500);
             }
         }
         if(rStrMessage>0){
