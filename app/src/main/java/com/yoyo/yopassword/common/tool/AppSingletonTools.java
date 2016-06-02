@@ -33,13 +33,13 @@ public class AppSingletonTools {
 
     public void refreshGrouping(){
         if(instanceMainActivity!=null){
-            instanceMainActivity.mSectionsPagerAdapter.refreshData(true);
+            instanceMainActivity.mSectionsPagerAdapter.refreshData();
         }
     }
 
     public void refreshPassword(){
         if(instanceMainActivity!=null){
-            instanceMainActivity.mSectionsPagerAdapter.refreshData(true);
+            instanceMainActivity.mSectionsPagerAdapter.refreshData();
         }
     }
     public void refreshFragmentOneItem(){

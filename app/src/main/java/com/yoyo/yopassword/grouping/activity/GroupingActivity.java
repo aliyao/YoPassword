@@ -73,17 +73,17 @@ public class GroupingActivity extends BaseAppCompatActivity {
                                 public void onPositiveClick(DialogInterface dialog, int which) {
                                     super.onPositiveClick(dialog, which);
                                     try {
-                                        X3DBUtils.delectById(GroupingInfo.class, groupingAdapter.getItem(position).getGroupingId());
                                         List<PasswordInfo> passwordInfoList=X3DBUtils.findAll(PasswordInfo.class,"groupingId","=",groupingAdapter.getItem(position).getGroupingId());
                                         if(passwordInfoList!=null&&passwordInfoList.size()>0){
-                                           for (int i=0;i<passwordInfoList.size();i++){
-                                               passwordInfoList.get(i).setGroupingId(AppConfig.DefaultGroupingId);
-                                           }
+                                            for (int i=0;i<passwordInfoList.size();i++){
+                                                passwordInfoList.get(i).setGroupingId(AppConfig.DefaultGroupingId);
+                                            }
                                             X3DBUtils.save(passwordInfoList);
                                         }
+                                        X3DBUtils.delectById(GroupingInfo.class, groupingAdapter.getItem(position).getGroupingId());
                                         refreshGrouping();
-                                        refreshMainActivityGroupingDel();
                                         refreshMainActivityGrouping();
+                                        refreshMainActivityGroupingDel();
                                     }catch (Exception e){
                                         e.printStackTrace();
                                     }

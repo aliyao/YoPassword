@@ -77,7 +77,7 @@ public class MainActivity extends BaseAppCompatActivity {
             public void onPageSelected(int position) {
                 PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, position);
                 if (someFragment != null) {
-                    someFragment.refreshPasswordAdapter(0);
+                    someFragment.setGroupingIdRefresh(0);
                 }
             }
 
@@ -111,7 +111,6 @@ public class MainActivity extends BaseAppCompatActivity {
     }
 
     public static class PlaceholderFragment extends Fragment implements OnBaseRecyclerViewListener {
-        private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_SECTION_GROUPING_ID = "ARG_SECTION_GROUPING_ID";
         PasswordAdapter passwordAdapter;
         RefreshLayout refreshLayout;
@@ -145,7 +144,7 @@ public class MainActivity extends BaseAppCompatActivity {
                                     public void onPositiveClick(DialogInterface dialog, int which) {
                                         super.onPositiveClick(dialog, which);
                                         X3DBUtils.delectById(PasswordInfo.class, passwordAdapter.getItem(position).getPasswordInfoId());
-                                        refreshPasswordAdapter(0);
+                                        setGroupingIdRefresh(0);
                                     }
                                 });
                                 break;
@@ -163,7 +162,6 @@ public class MainActivity extends BaseAppCompatActivity {
         public static PlaceholderFragment newInstance(int sectionNumber, long groupingId) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             args.putLong(ARG_SECTION_GROUPING_ID, groupingId);
             fragment.setArguments(args);
             return fragment;
@@ -182,8 +180,7 @@ public class MainActivity extends BaseAppCompatActivity {
                     refreshLayout.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
-                            refreshPasswordAdapter(groupingId);
+                            setGroupingIdRefresh(0);
                         }
                     }, AppConfig.RefreshViewTime);
                 }
@@ -204,21 +201,24 @@ public class MainActivity extends BaseAppCompatActivity {
 
             int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.space_item_decoration);
             recyclerViewPassword.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
-            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             passwordAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
-            long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
-            refreshPasswordAdapter(groupingId);
+            setGroupingIdRefresh(0);
             return rootView;
         }
+        public void setGroupingIdRefresh(long groupingId){
+            if (groupingId>0){
+                getArguments().putLong(ARG_SECTION_GROUPING_ID,groupingId);
+            }
+            refreshPasswordAdapter();
 
-        private void refreshPasswordAdapter(long groupingId) {
+        }
+
+        void refreshPasswordAdapter() {
             if (passwordAdapter == null) {
                 return;
             }
+             long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
 
-            if (groupingId <= 0) {
-                groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
-            }
             if (groupingId <= 0) {
                 return;
             }
@@ -247,7 +247,7 @@ public class MainActivity extends BaseAppCompatActivity {
             if (requestCode == StartActivityTools.ToAddPasswordActivity_RequestCode && resultCode == StartActivityTools.ToAddPasswordActivity_ResultCode) {
 
                 long groupingId = data.getLongExtra(StartActivityTools.ToAddPasswordActivity_GroupingId, 0);
-                refreshPasswordAdapter(groupingId);
+                setGroupingIdRefresh(0);
                 if (groupingId > 0) {
                     AppSingletonTools.getInstance().refreshFragmentItem(groupingId);
                 }
@@ -261,7 +261,7 @@ public class MainActivity extends BaseAppCompatActivity {
             if (pageTitleList.get(i).getGroupingId() == groupingId) {
                 PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
                 if (someFragment != null) {
-                    someFragment.refreshPasswordAdapter(groupingId);
+                    someFragment.setGroupingIdRefresh(0);
                     mViewPager.setCurrentItem(i);
                 }
             }
@@ -273,9 +273,7 @@ public class MainActivity extends BaseAppCompatActivity {
         mViewPager.setCurrentItem(page);
         PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, page);
         if (someFragment != null)
-            someFragment.refreshPasswordAdapter(0);
-        mSectionsPagerAdapter.notifyDataSetChanged();
-
+            someFragment.setGroupingIdRefresh(0);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -286,31 +284,21 @@ public class MainActivity extends BaseAppCompatActivity {
             super(fm);
             this.fm = fm;
             pageTitleList = new ArrayList<>();
-            refreshData(false);
+            refreshData();
         }
 
-        public void refreshData(boolean isRefresh) {
+        public void refreshData() {
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
-            List<GroupingInfo> pageTitleListNew = new ArrayList<>();
-            pageTitleListNew.addAll(pageTitleList);
             pageTitleList.clear();
             pageTitleList.addAll(groupingInfoList);
-            if (isRefresh) {
-                notifyDataSetChanged();
-               for (int i = 0; i < pageTitleListNew.size(); i++) {
-                    if (!groupingInfoList.contains(pageTitleListNew.get(i))) {
-                        // 如果这个 fragment 需要更新
-                        FragmentTransaction ft = fm.beginTransaction();
-                        PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
-                        if (someFragment != null) {
-                            someFragment.refreshPasswordAdapter(0);
-                            // 移除旧的 fragment
-                            //ft.remove(someFragment);
-                            //ft.commit();
-                        }
-                    }
-                }
-            }
+
+            notifyDataSetChanged();
+        }
+        @Override
+        public long getItemId(int position) {
+            // 获取当前数据的hashCode
+            int hashCode = pageTitleList.get(position).hashCode();
+            return hashCode;
         }
 
         @Override
