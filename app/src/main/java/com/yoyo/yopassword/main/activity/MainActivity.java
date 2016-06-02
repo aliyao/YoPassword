@@ -67,6 +67,24 @@ public class MainActivity extends BaseAppCompatActivity {
                 StartActivityTools.toAddPasswordActivity(MainActivity.this, false, true, 0);
             }
         });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, position);
+                if (someFragment != null) {
+                    someFragment.refreshPasswordAdapter(0);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     @Override
