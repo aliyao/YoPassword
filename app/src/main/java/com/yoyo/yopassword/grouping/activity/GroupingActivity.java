@@ -22,13 +22,14 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
-import com.yoyo.yopassword.common.tool.AppSingletonTools;
-import com.yoyo.yopassword.common.tool.StartActivityTools;
+import com.yoyo.yopassword.common.tool.RxBusTools;
+import com.yoyo.yopassword.common.tool.YoStartActivityTools;
+import com.yoyo.yopassword.common.util.AlertDialogUtils;
+import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
-import com.yoyo.yopassword.common.util.AlertDialogUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.grouping.view.adapter.GroupingAdapter;
@@ -45,7 +46,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
         @Override
         public void onItemClick(int position) {
             if (isSelect) {
-                StartActivityTools.doGroupingActivitySetResult(GroupingActivity.this, groupingAdapter.getItem(position).getGroupingId());
+                RxBusUtils.get().post(RxBusTools.AddPasswordActivity_Adapter_RefreshData, groupingAdapter.getItem(position).getGroupingId());
                 finish();
             }
         }
@@ -99,10 +100,10 @@ public class GroupingActivity extends BaseAppCompatActivity {
     };
 
     private void refreshMainActivityGrouping() {
-        AppSingletonTools.getInstance().refreshGrouping();
+        RxBusUtils.get().post(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, 1);
     }
     private void refreshMainActivityGroupingDel() {
-        AppSingletonTools.getInstance().refreshFragmentOneItem();
+        RxBusUtils.get().post(RxBusTools.MainActivity_PlaceholderFragment_Del_RefreshData, 0);
     }
 
     @Override
@@ -152,7 +153,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
         groupingAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
         refreshLayout.setRefreshing(true);
         refreshGrouping();
-        isSelect = getIntent().getBooleanExtra(StartActivityTools.ToGroupingActivity_IsSelect, false);
+        isSelect = getIntent().getBooleanExtra(YoStartActivityTools.ToGroupingActivity_IsSelect, false);
     }
 
     /**

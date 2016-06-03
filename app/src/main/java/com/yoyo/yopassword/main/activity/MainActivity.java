@@ -10,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -27,10 +26,11 @@ import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.common.config.AppConfig;
-import com.yoyo.yopassword.common.tool.AppSingletonTools;
-import com.yoyo.yopassword.common.tool.StartActivityTools;
+import com.yoyo.yopassword.common.tool.RxBusTools;
+import com.yoyo.yopassword.common.tool.YoStartActivityTools;
 import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.AlertDialogUtils;
+import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
@@ -39,19 +39,26 @@ import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
+import com.yoyo.yopassword.password.entity.RxBusAddPasswordEntity;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseAppCompatActivity {
-    public SectionsPagerAdapter mSectionsPagerAdapter;
-    ViewPager mViewPager;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
+public class MainActivity extends BaseAppCompatActivity {
+    Observable<String> sectionsPagerAdapterRefreshData;
+    Observable<String> placeholderFragmentRefreshDataDel;
+    Observable<RxBusrFragmentItemEntity> placeholderFragmentItemRefreshData;
+    SectionsPagerAdapter mSectionsPagerAdapter;
+    ViewPager mViewPager;
     public void init() {
         super.init();
         setContentView(R.layout.activity_main);
-        AppSingletonTools.getInstance().initMainActivity(this);
+       // AppSingletonTools.getInstance().initMainActivity(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -64,27 +71,10 @@ public class MainActivity extends BaseAppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StartActivityTools.toAddPasswordActivity(MainActivity.this, false, true, 0);
+                YoStartActivityTools.toAddPasswordActivity_Add(MainActivity.this);
             }
         });
-
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, position);
-                if (someFragment != null) {
-                    someFragment.setGroupingIdRefresh(0);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+        initRxBusUtils();
     }
 
     @Override
@@ -98,7 +88,7 @@ public class MainActivity extends BaseAppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_grouping:
-                StartActivityTools.toGroupingActivity(MainActivity.this, false, true);
+                YoStartActivityTools.toGroupingActivity(MainActivity.this);
                 return true;
             case R.id.action_sign_out:
                 ACacheUtils.signOut(MainActivity.this);
@@ -136,7 +126,7 @@ public class MainActivity extends BaseAppCompatActivity {
                                 YoSnackbar.showSnackbar(refreshLayout, R.string.copy_success_tip);
                                 break;
                             case 1:
-                                StartActivityTools.toAddPasswordActivity(PlaceholderFragment.this, true, true, passwordAdapter.getItem(position).getPasswordInfoId());
+                                YoStartActivityTools.toAddPasswordActivity_Update(PlaceholderFragment.this.getContext(),passwordAdapter.getItem(position).getPasswordInfoId());
                                 break;
                             case 2:
                                 AlertDialogUtils.showAlertDialog(getContext(), R.string.password_item_delect_todo, new OnToDoItemClickListener() {
@@ -241,40 +231,8 @@ public class MainActivity extends BaseAppCompatActivity {
             return false;
         }
 
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == StartActivityTools.ToAddPasswordActivity_RequestCode && resultCode == StartActivityTools.ToAddPasswordActivity_ResultCode) {
-
-                long groupingId = data.getLongExtra(StartActivityTools.ToAddPasswordActivity_GroupingId, 0);
-                setGroupingIdRefresh(0);
-                if (groupingId > 0) {
-                    AppSingletonTools.getInstance().refreshFragmentItem(groupingId);
-                }
-            }
-        }
     }
 
-    public void refreshFragmentItem(long groupingId) {
-        List<GroupingInfo> pageTitleList = mSectionsPagerAdapter.pageTitleList;
-        for (int i = 0; i < pageTitleList.size(); i++) {
-            if (pageTitleList.get(i).getGroupingId() == groupingId) {
-                PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
-                if (someFragment != null) {
-                    someFragment.setGroupingIdRefresh(0);
-                    mViewPager.setCurrentItem(i);
-                }
-            }
-        }
-    }
-
-    public void refreshFragmentOneItem() {
-        int page = 0;
-        mViewPager.setCurrentItem(page);
-        PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, page);
-        if (someFragment != null)
-            someFragment.setGroupingIdRefresh(0);
-    }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         public List<GroupingInfo> pageTitleList;
@@ -291,7 +249,6 @@ public class MainActivity extends BaseAppCompatActivity {
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
             pageTitleList.clear();
             pageTitleList.addAll(groupingInfoList);
-
             notifyDataSetChanged();
         }
         @Override
@@ -322,19 +279,68 @@ public class MainActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        AppSingletonTools.getInstance().destroyMainActivity();
+       // AppSingletonTools.getInstance().destroyMainActivity();
+        RxBusUtils.get().unregister(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, sectionsPagerAdapterRefreshData);
+        RxBusUtils.get().unregister(RxBusTools.MainActivity_PlaceholderFragment_Del_RefreshData, placeholderFragmentRefreshDataDel);
+        RxBusUtils.get().unregister(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, placeholderFragmentItemRefreshData);
         super.onDestroy();
     }
+    //RxJava
+    public void initRxBusUtils(){
+        //刷新PagerAdapter
+        sectionsPagerAdapterRefreshData = RxBusUtils.get()
+                .register(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData);
+        sectionsPagerAdapterRefreshData.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object s) {
+                        if(s.equals(1)&&mSectionsPagerAdapter!=null){
+                            mSectionsPagerAdapter.refreshData();
+                        }
+                    }
+                });
+        //刷新 placeholderFragment
+       placeholderFragmentRefreshDataDel = RxBusUtils.get()
+                .register(RxBusTools.MainActivity_PlaceholderFragment_Del_RefreshData);
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == StartActivityTools.ToAddPasswordActivity_RequestCode && resultCode == StartActivityTools.ToAddPasswordActivity_ResultCode) {
-            long groupingId = data.getLongExtra(StartActivityTools.ToAddPasswordActivity_GroupingId, 0);
-            if (groupingId > 0) {
-                refreshFragmentItem(groupingId);
+        placeholderFragmentRefreshDataDel.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object s) {
+                        refreshFragmentOneItem();
+                    }
+                });
+        //刷新 placeholderFragment
+        placeholderFragmentItemRefreshData = RxBusUtils.get()
+                .register(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData);
+        placeholderFragmentItemRefreshData.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object gId) {
+                        refreshFragmentItem((long)gId);
+                    }
+                });
+        //RxBusUtils.get().post(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, 1);
+    }
+
+    private void refreshFragmentItem(long groupingId) {
+        List<GroupingInfo> pageTitleList = mSectionsPagerAdapter.pageTitleList;
+        for (int i = 0; i < pageTitleList.size(); i++) {
+            if (pageTitleList.get(i).getGroupingId() == groupingId) {
+                PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
+                if (someFragment != null) {
+                    someFragment.setGroupingIdRefresh(0);
+                    mViewPager.setCurrentItem(i);
+                }
             }
-
         }
+    }
+
+    private void refreshFragmentOneItem() {
+        int page = 0;
+        mViewPager.setCurrentItem(page);
+        PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, page);
+        if (someFragment != null)
+            someFragment.setGroupingIdRefresh(0);
     }
 }

@@ -1,6 +1,5 @@
 package com.yoyo.yopassword.password.activity;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -14,14 +13,21 @@ import android.widget.EditText;
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.common.config.AppConfig;
-import com.yoyo.yopassword.common.tool.StartActivityTools;
+import com.yoyo.yopassword.common.tool.RxBusTools;
+import com.yoyo.yopassword.common.tool.YoStartActivityTools;
 import com.yoyo.yopassword.common.util.EditTextUtils;
+import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+
 public class AddPasswordActivity extends BaseAppCompatActivity {
+    Observable<String> adapterRefreshData;
     Button groupingBtn;
     EditText et_title, et_account, et_password, et_remarks;
     CheckBox cb_is_top, cb_is_hide_account;
@@ -30,7 +36,6 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     boolean isUpdate;
     long updatePasswordInfoId;
     PasswordInfo passwordInfo;
-    boolean isEdit;
 
     public void init() {
         setContentView(R.layout.activity_add_password);
@@ -44,9 +49,8 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         cb_is_top = (CheckBox) findViewById(R.id.cb_is_top);
         cb_is_hide_account = (CheckBox) findViewById(R.id.cb_is_hide_account);
         setupActionBar();
-        isEdit = false;
-        isUpdate = getIntent().getBooleanExtra(StartActivityTools.ToAddPasswordActivity_IsUpdate, false);
-        updatePasswordInfoId = getIntent().getLongExtra(StartActivityTools.ToAddPasswordActivity_PasswordInfoId, 0);
+        isUpdate = getIntent().getBooleanExtra(YoStartActivityTools.ToAddPasswordActivity_IsUpdate, false);
+        updatePasswordInfoId = getIntent().getLongExtra(YoStartActivityTools.ToAddPasswordActivity_PasswordInfoId, 0);
         if (isUpdate && updatePasswordInfoId > 0) {
             passwordInfo = X3DBUtils.findItem(PasswordInfo.class, updatePasswordInfoId);
             groupingInfo = X3DBUtils.findItem(GroupingInfo.class, passwordInfo.getGroupingId());
@@ -55,8 +59,9 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
             groupingInfo = X3DBUtils.findItem(GroupingInfo.class, AppConfig.DefaultGroupingId);
             refreshGroupingInfo();
         }
-
+        initRxBusUtils();
     }
+
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -75,22 +80,8 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         refreshGroupingInfo();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == StartActivityTools.ToGroupingActivity_RequestCode && resultCode == StartActivityTools.ToGroupingActivity_ResultCode && data != null) {
-            long groupingId = data.getLongExtra(StartActivityTools.ToGroupingActivity_GroupingId, 0);
-            if (groupingId <= 0) return;
-            GroupingInfo groupingInfoData = X3DBUtils.findItem(GroupingInfo.class, groupingId);
-            if (groupingInfoData != null) {
-                groupingInfo = groupingInfoData;
-                refreshGroupingInfo();
-            }
-        }
-    }
-
     private void refreshGroupingInfo() {
-        if(groupingBtn!=null&&groupingInfo!=null){
+        if (groupingBtn != null && groupingInfo != null) {
             groupingBtn.setText(groupingInfo.getGroupingName());
         }
     }
@@ -98,17 +89,9 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     public void onYoClick(View v) {
         switch (v.getId()) {
             case R.id.btn_grouping:
-                StartActivityTools.toGroupingActivity(AddPasswordActivity.this, true, true);
+                YoStartActivityTools.toGroupingActivity_Select(AddPasswordActivity.this);
                 break;
         }
-    }
-
-    @Override
-    public void finish() {
-        if (isEdit) {
-            StartActivityTools.doAddPasswordActivitySetResult(AddPasswordActivity.this, groupingInfo.getGroupingId());
-        }
-        super.finish();
     }
 
     @Override
@@ -120,7 +103,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case android.R.id.home:
                 finish();
                 return true;
@@ -158,7 +141,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
             EditTextUtils.requestFocus(et_password);
             return;
         }
-        if (password.length()<6) {
+        if (password.length() < 6) {
             YoSnackbar.showSnackbar(et_password, R.string.password_six_tip);
             EditTextUtils.requestFocus(et_password);
             return;
@@ -180,7 +163,32 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
             passwordInfoEdit.setPasswordInfoId(updatePasswordInfoId);
         }
         X3DBUtils.save(passwordInfoEdit);
-        isEdit = true;
+        RxBusUtils.get().post(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, passwordInfoEdit.getGroupingId());
         finish();
+    }
+
+    public void initRxBusUtils() {
+        adapterRefreshData = RxBusUtils.get()
+                .register(RxBusTools.AddPasswordActivity_Adapter_RefreshData);
+
+        adapterRefreshData.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object gId) {
+                        long groupingId = (long) gId;
+                        if (groupingId <= 0) return;
+                        GroupingInfo groupingInfoData = X3DBUtils.findItem(GroupingInfo.class, groupingId);
+                        if (groupingInfoData != null) {
+                            groupingInfo = groupingInfoData;
+                            refreshGroupingInfo();
+                        }
+                    }
+                });
+    }
+
+    @Override
+    protected void onDestroy() {
+        RxBusUtils.get().unregister(RxBusTools.AddPasswordActivity_Adapter_RefreshData, adapterRefreshData);
+        super.onDestroy();
     }
 }

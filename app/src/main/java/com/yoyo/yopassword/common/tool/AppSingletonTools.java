@@ -1,7 +1,5 @@
 package com.yoyo.yopassword.common.tool;
 
-import com.yoyo.yopassword.main.activity.MainActivity;
-
 /**
  * Created by nidey on 2016/5/30.
  */
@@ -15,7 +13,7 @@ public class AppSingletonTools {
         }
         return single;
     }
-
+/*
     private static MainActivity instanceMainActivity;
 
     public void initMainActivity(MainActivity instanceMainActivity){
@@ -53,5 +51,5 @@ public class AppSingletonTools {
         if(instanceMainActivity!=null){
             instanceMainActivity.refreshFragmentItem(groupingId);
         }
-    }
+    }*/
 }
