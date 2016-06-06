@@ -20,6 +20,7 @@ import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
+import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 
 import rx.Observable;
@@ -36,6 +37,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     boolean isUpdate;
     long updatePasswordInfoId;
     PasswordInfo passwordInfo;
+    long oldGroupingId;
 
     public void init() {
         setContentView(R.layout.activity_add_password);
@@ -54,6 +56,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         if (isUpdate && updatePasswordInfoId > 0) {
             passwordInfo = X3DBUtils.findItem(PasswordInfo.class, updatePasswordInfoId);
             groupingInfo = X3DBUtils.findItem(GroupingInfo.class, passwordInfo.getGroupingId());
+            oldGroupingId=groupingInfo.getGroupingId();
             updatePasswordInfo();
         } else {
             groupingInfo = X3DBUtils.findItem(GroupingInfo.class, AppConfig.DefaultGroupingId);
@@ -163,7 +166,7 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
             passwordInfoEdit.setPasswordInfoId(updatePasswordInfoId);
         }
         X3DBUtils.save(passwordInfoEdit);
-        RxBusUtils.get().post(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, passwordInfoEdit.getGroupingId());
+        RxBusUtils.get().post(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, new RxBusFragmentItemEntity(oldGroupingId,passwordInfoEdit.getGroupingId()));
         finish();
     }
 

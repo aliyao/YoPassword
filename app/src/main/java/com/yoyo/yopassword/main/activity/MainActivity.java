@@ -38,8 +38,8 @@ import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
+import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
-import com.yoyo.yopassword.password.entity.RxBusAddPasswordEntity;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ import rx.functions.Action1;
 public class MainActivity extends BaseAppCompatActivity {
     Observable<String> sectionsPagerAdapterRefreshData;
     Observable<String> placeholderFragmentRefreshDataDel;
-    Observable<RxBusrFragmentItemEntity> placeholderFragmentItemRefreshData;
+    Observable<RxBusFragmentItemEntity> placeholderFragmentItemRefreshData;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
     public void init() {
@@ -314,23 +314,25 @@ public class MainActivity extends BaseAppCompatActivity {
         placeholderFragmentItemRefreshData = RxBusUtils.get()
                 .register(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData);
         placeholderFragmentItemRefreshData.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
+                .subscribe(new Action1<RxBusFragmentItemEntity>() {
                     @Override
-                    public void call(Object gId) {
-                        refreshFragmentItem((long)gId);
+                    public void call(RxBusFragmentItemEntity rxBusFragmentItemEntity) {
+                        refreshFragmentItem(rxBusFragmentItemEntity);
                     }
                 });
         //RxBusUtils.get().post(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, 1);
     }
 
-    private void refreshFragmentItem(long groupingId) {
+    private void refreshFragmentItem(RxBusFragmentItemEntity rxBusFragmentItemEntity) {
         List<GroupingInfo> pageTitleList = mSectionsPagerAdapter.pageTitleList;
         for (int i = 0; i < pageTitleList.size(); i++) {
-            if (pageTitleList.get(i).getGroupingId() == groupingId) {
+            if (pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getNewGroupingId()||pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getOldGroupingId()) {
                 PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
                 if (someFragment != null) {
                     someFragment.setGroupingIdRefresh(0);
-                    mViewPager.setCurrentItem(i);
+                    if(pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getNewGroupingId()){
+                        mViewPager.setCurrentItem(i);
+                    }
                 }
             }
         }
