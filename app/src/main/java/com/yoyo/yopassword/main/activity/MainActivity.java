@@ -266,9 +266,8 @@ public class MainActivity extends BaseAppCompatActivity {
 
         @Override
         public long getItemId(int position) {
-            // 获取当前数据的hashCode
-            int hashCode = pageTitleList.get(position).hashCode();
-            return hashCode;
+            long groupingId = pageTitleList.get(position).getGroupingId();
+            return groupingId;
         }
 
         @Override
