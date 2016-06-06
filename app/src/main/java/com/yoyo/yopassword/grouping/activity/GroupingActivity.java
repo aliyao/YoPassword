@@ -34,6 +34,7 @@ import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.grouping.view.adapter.GroupingAdapter;
 import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
+import com.yoyo.yopassword.main.entity.RxBusSectionsPagerEntity;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 
 import java.util.Date;
@@ -84,7 +85,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
                                         }
                                         X3DBUtils.delectById(GroupingInfo.class, groupingAdapter.getItem(position).getGroupingId());
                                         refreshGrouping();
-                                        refreshMainActivityGrouping();
+                                        refreshMainActivityGrouping(groupingAdapter.getItem(position).getGroupingId());
                                         refreshMainActivityGroupingDel();
                                     }catch (Exception e){
                                         e.printStackTrace();
@@ -100,8 +101,8 @@ public class GroupingActivity extends BaseAppCompatActivity {
         }
     };
 
-    private void refreshMainActivityGrouping() {
-        RxBusUtils.get().post(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, 1);
+    private void refreshMainActivityGrouping(long delGroupingId) {
+        RxBusUtils.get().post(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, new RxBusSectionsPagerEntity(delGroupingId));
     }
     private void refreshMainActivityGroupingDel() {
         RxBusUtils.get().post(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, new RxBusFragmentItemEntity(0,1));
@@ -240,7 +241,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
         }
         X3DBUtils.save(groupingInfoNew);
         refreshGrouping();
-        refreshMainActivityGrouping();
+        refreshMainActivityGrouping(0);
     }
 
     @Override

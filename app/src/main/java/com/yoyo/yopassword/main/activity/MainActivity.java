@@ -39,6 +39,7 @@ import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
+import com.yoyo.yopassword.main.entity.RxBusSectionsPagerEntity;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 
@@ -50,15 +51,15 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 public class MainActivity extends BaseAppCompatActivity {
-    Observable<String> sectionsPagerAdapterRefreshData;
-   // Observable<String> placeholderFragmentRefreshDataDel;
+    Observable<RxBusSectionsPagerEntity> sectionsPagerAdapterRefreshData;
     Observable<RxBusFragmentItemEntity> placeholderFragmentItemRefreshData;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
+
     public void init() {
         super.init();
         setContentView(R.layout.activity_main);
-       // AppSingletonTools.getInstance().initMainActivity(this);
+        // AppSingletonTools.getInstance().initMainActivity(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -126,7 +127,7 @@ public class MainActivity extends BaseAppCompatActivity {
                                 YoSnackbar.showSnackbar(refreshLayout, R.string.copy_success_tip);
                                 break;
                             case 1:
-                                YoStartActivityTools.toAddPasswordActivity_Update(PlaceholderFragment.this.getContext(),passwordAdapter.getItem(position).getPasswordInfoId());
+                                YoStartActivityTools.toAddPasswordActivity_Update(PlaceholderFragment.this.getContext(), passwordAdapter.getItem(position).getPasswordInfoId());
                                 break;
                             case 2:
                                 AlertDialogUtils.showAlertDialog(getContext(), R.string.password_item_delect_todo, new OnToDoItemClickListener() {
@@ -195,9 +196,10 @@ public class MainActivity extends BaseAppCompatActivity {
             setGroupingIdRefresh(0);
             return rootView;
         }
-        public void setGroupingIdRefresh(long groupingId){
-            if (groupingId>0){
-                getArguments().putLong(ARG_SECTION_GROUPING_ID,groupingId);
+
+        public void setGroupingIdRefresh(long groupingId) {
+            if (groupingId > 0) {
+                getArguments().putLong(ARG_SECTION_GROUPING_ID, groupingId);
             }
             refreshPasswordAdapter();
 
@@ -207,7 +209,7 @@ public class MainActivity extends BaseAppCompatActivity {
             if (passwordAdapter == null) {
                 return;
             }
-             long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
+            long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
 
             if (groupingId <= 0) {
                 return;
@@ -242,15 +244,26 @@ public class MainActivity extends BaseAppCompatActivity {
             super(fm);
             this.fm = fm;
             pageTitleList = new ArrayList<>();
-            refreshData();
+            refreshData(0);
         }
 
-        public void refreshData() {
+        public void refreshData(long groupingId) {
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
+            List<Fragment> fragments = fm.getFragments();
+            if(groupingId>0){
+                for (int i=0;i<fragments.size();i++) {
+                    if(groupingId==pageTitleList.get(i).getGroupingId()){
+                        fm.beginTransaction().remove(fragments.get(i));
+                        fm.beginTransaction().commitAllowingStateLoss();
+                        break;
+                    }
+                }
+            }
             pageTitleList.clear();
             pageTitleList.addAll(groupingInfoList);
             notifyDataSetChanged();
         }
+
         @Override
         public long getItemId(int position) {
             // 获取当前数据的hashCode
@@ -279,22 +292,23 @@ public class MainActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onDestroy() {
-       // AppSingletonTools.getInstance().destroyMainActivity();
+        // AppSingletonTools.getInstance().destroyMainActivity();
         RxBusUtils.get().unregister(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, sectionsPagerAdapterRefreshData);
         RxBusUtils.get().unregister(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, placeholderFragmentItemRefreshData);
         super.onDestroy();
     }
+
     //RxJava
-    public void initRxBusUtils(){
+    public void initRxBusUtils() {
         //刷新PagerAdapter
         sectionsPagerAdapterRefreshData = RxBusUtils.get()
                 .register(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData);
         sectionsPagerAdapterRefreshData.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
+                .subscribe(new Action1<RxBusSectionsPagerEntity>() {
                     @Override
-                    public void call(Object s) {
-                        if(s.equals(1)&&mSectionsPagerAdapter!=null){
-                            mSectionsPagerAdapter.refreshData();
+                    public void call(RxBusSectionsPagerEntity rxBusSectionsPagerEntity) {
+                        if (rxBusSectionsPagerEntity!=null && mSectionsPagerAdapter != null) {
+                            mSectionsPagerAdapter.refreshData(rxBusSectionsPagerEntity.getDelGroupingId());
                         }
                     }
                 });
@@ -314,23 +328,15 @@ public class MainActivity extends BaseAppCompatActivity {
     private void refreshFragmentItem(RxBusFragmentItemEntity rxBusFragmentItemEntity) {
         List<GroupingInfo> pageTitleList = mSectionsPagerAdapter.pageTitleList;
         for (int i = 0; i < pageTitleList.size(); i++) {
-            if (pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getNewGroupingId()||pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getOldGroupingId()) {
+            if (pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getNewGroupingId() || pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getOldGroupingId()) {
                 PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
                 if (someFragment != null) {
                     someFragment.setGroupingIdRefresh(0);
-                    if(pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getNewGroupingId()){
+                    if (pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getNewGroupingId()) {
                         mViewPager.setCurrentItem(i);
                     }
                 }
             }
         }
     }
-
-    /*private void refreshFragmentOneItem() {
-        int page = 0;
-        mViewPager.setCurrentItem(page);
-        PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, page);
-        if (someFragment != null)
-            someFragment.setGroupingIdRefresh(0);
-    }*/
 }
