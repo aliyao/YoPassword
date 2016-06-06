@@ -51,7 +51,7 @@ import rx.functions.Action1;
 
 public class MainActivity extends BaseAppCompatActivity {
     Observable<String> sectionsPagerAdapterRefreshData;
-    Observable<String> placeholderFragmentRefreshDataDel;
+   // Observable<String> placeholderFragmentRefreshDataDel;
     Observable<RxBusFragmentItemEntity> placeholderFragmentItemRefreshData;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -281,7 +281,6 @@ public class MainActivity extends BaseAppCompatActivity {
     protected void onDestroy() {
        // AppSingletonTools.getInstance().destroyMainActivity();
         RxBusUtils.get().unregister(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, sectionsPagerAdapterRefreshData);
-        RxBusUtils.get().unregister(RxBusTools.MainActivity_PlaceholderFragment_Del_RefreshData, placeholderFragmentRefreshDataDel);
         RxBusUtils.get().unregister(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, placeholderFragmentItemRefreshData);
         super.onDestroy();
     }
@@ -297,17 +296,6 @@ public class MainActivity extends BaseAppCompatActivity {
                         if(s.equals(1)&&mSectionsPagerAdapter!=null){
                             mSectionsPagerAdapter.refreshData();
                         }
-                    }
-                });
-        //刷新 placeholderFragment
-       placeholderFragmentRefreshDataDel = RxBusUtils.get()
-                .register(RxBusTools.MainActivity_PlaceholderFragment_Del_RefreshData);
-
-        placeholderFragmentRefreshDataDel.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object s) {
-                        refreshFragmentOneItem();
                     }
                 });
         //刷新 placeholderFragment
@@ -338,11 +326,11 @@ public class MainActivity extends BaseAppCompatActivity {
         }
     }
 
-    private void refreshFragmentOneItem() {
+    /*private void refreshFragmentOneItem() {
         int page = 0;
         mViewPager.setCurrentItem(page);
         PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, page);
         if (someFragment != null)
             someFragment.setGroupingIdRefresh(0);
-    }
+    }*/
 }

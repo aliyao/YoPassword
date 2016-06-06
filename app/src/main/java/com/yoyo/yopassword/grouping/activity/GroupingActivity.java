@@ -33,6 +33,7 @@ import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.grouping.view.adapter.GroupingAdapter;
+import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 
 import java.util.Date;
@@ -103,7 +104,7 @@ public class GroupingActivity extends BaseAppCompatActivity {
         RxBusUtils.get().post(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, 1);
     }
     private void refreshMainActivityGroupingDel() {
-        RxBusUtils.get().post(RxBusTools.MainActivity_PlaceholderFragment_Del_RefreshData, 0);
+        RxBusUtils.get().post(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, new RxBusFragmentItemEntity(0,1));
     }
 
     @Override

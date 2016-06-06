@@ -12,6 +12,5 @@ package com.yoyo.yopassword.common.tool;
 public class RxBusTools {
     public static final String MainActivity_SectionsPagerAdapter_RefreshData="MainActivity_SectionsPagerAdapter_RefreshData";
     public static final String MainActivity_PlaceholderFragment_Item_RefreshData="MainActivity_PlaceholderFragment_Item_RefreshData";
-    public static final String MainActivity_PlaceholderFragment_Del_RefreshData="MainActivity_PlaceholderFragment_Del_RefreshData";
     public static final String AddPasswordActivity_Adapter_RefreshData="AddPasswordActivity_Adapter_RefreshData";
 }
