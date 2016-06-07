@@ -12,7 +12,7 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
-import com.yoyo.yopassword.check.CheckPasswordActivity;
+import com.yoyo.yopassword.check.SetPasswordActivity;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
@@ -106,7 +106,7 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
                             if(!TextUtils.isEmpty(ACacheUtils.getCheckPassword(HelloLoginActivity.this))){
                                 startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
                             }else {
-                                startActivity(new Intent(HelloLoginActivity.this, CheckPasswordActivity.class));
+                                startActivity(new Intent(HelloLoginActivity.this, SetPasswordActivity.class));
                             }
 
                             finish();

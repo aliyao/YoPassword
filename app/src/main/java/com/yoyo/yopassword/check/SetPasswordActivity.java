@@ -20,7 +20,7 @@ import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 import com.yoyo.yopassword.main.activity.MainActivity;
 
-public class CheckPasswordActivity extends AppCompatActivity {
+public class SetPasswordActivity extends AppCompatActivity {
     boolean isSuccess;
     EditText etPassword,etPassword2;
 
@@ -60,7 +60,7 @@ public class CheckPasswordActivity extends AppCompatActivity {
     @Override
     public void finish() {
         if (!isSuccess){
-            ACacheUtils.signOut(CheckPasswordActivity.this);
+            ACacheUtils.signOut(SetPasswordActivity.this);
         }
         super.finish();
     }
@@ -68,7 +68,7 @@ public class CheckPasswordActivity extends AppCompatActivity {
     public void onYoClick(View view){
         switch (view.getId()){
             case R.id.btn_sign_out:
-                startActivity(new Intent(CheckPasswordActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
+                startActivity(new Intent(SetPasswordActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
                 finish();
                 break;
         }
@@ -88,7 +88,7 @@ public class CheckPasswordActivity extends AppCompatActivity {
                 doConfirm();
                 return true;
             case android.R.id.home:
-                startActivity(new Intent(CheckPasswordActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
+                startActivity(new Intent(SetPasswordActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN,true));
                 finish();
                 return true;
         }
@@ -122,8 +122,8 @@ public class CheckPasswordActivity extends AppCompatActivity {
             EditTextUtils.requestFocus(etPassword2);
             return;
         }
-        ACacheUtils.setCheckPassword(CheckPasswordActivity.this,password);
-        startActivity(new Intent(CheckPasswordActivity.this, MainActivity.class));
+        ACacheUtils.setCheckPassword(SetPasswordActivity.this,password);
+        startActivity(new Intent(SetPasswordActivity.this, MainActivity.class));
         isSuccess=true;
         finish();
     }
