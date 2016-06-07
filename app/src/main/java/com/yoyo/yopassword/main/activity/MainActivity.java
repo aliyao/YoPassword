@@ -135,7 +135,7 @@ public class MainActivity extends BaseAppCompatActivity {
                                     public void onPositiveClick(DialogInterface dialog, int which) {
                                         super.onPositiveClick(dialog, which);
                                         X3DBUtils.delectById(PasswordInfo.class, passwordAdapter.getItem(position).getPasswordInfoId());
-                                        setGroupingIdRefresh(0);
+                                        refreshPasswordAdapter();
                                     }
                                 });
                                 break;
@@ -176,7 +176,7 @@ public class MainActivity extends BaseAppCompatActivity {
                     refreshLayout.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            setGroupingIdRefresh(0);
+                            refreshPasswordAdapter();
                         }
                     }, AppConfig.RefreshViewTime);
                 }
@@ -198,17 +198,10 @@ public class MainActivity extends BaseAppCompatActivity {
             int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.space_item_decoration);
             recyclerViewPassword.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
             passwordAdapter.setOnRecyclerViewListener(onBaseRecyclerViewListener);
-            setGroupingIdRefresh(0);
+            refreshPasswordAdapter();
             return rootView;
         }
 
-        public void setGroupingIdRefresh(long groupingId) {
-            if (groupingId > 0) {
-                getArguments().putLong(ARG_SECTION_GROUPING_ID, groupingId);
-            }
-            refreshPasswordAdapter();
-
-        }
 
         void refreshPasswordAdapter() {
             if (passwordAdapter == null) {
@@ -254,13 +247,14 @@ public class MainActivity extends BaseAppCompatActivity {
 
         public void refreshData(long groupingId) {
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
-            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            List<Fragment> fragments = fm.getFragments();
             if(groupingId>0){
                 for (int i=0;i<fragments.size();i++) {
-                    if(groupingId==((PlaceholderFragment)fragments.get(i)).getGroupingId()){
-                        getSupportFragmentManager().beginTransaction().remove(fragments.get(i));
-                        getSupportFragmentManager().beginTransaction().commitAllowingStateLoss();
-                        getSupportFragmentManager().executePendingTransactions();
+                    long placeholderFragmentGroupingId=((PlaceholderFragment)fragments.get(i)).getGroupingId();
+                    if(groupingId==placeholderFragmentGroupingId){
+                        fm.beginTransaction().remove(fragments.get(i));
+                        fm.beginTransaction().commitAllowingStateLoss();
+                        fm.executePendingTransactions();
                         break;
                     }
                 }
@@ -336,7 +330,7 @@ public class MainActivity extends BaseAppCompatActivity {
             if (pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getNewGroupingId() || pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getOldGroupingId()) {
                 PlaceholderFragment someFragment = (PlaceholderFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, i);
                 if (someFragment != null) {
-                    someFragment.setGroupingIdRefresh(0);
+                    someFragment.refreshPasswordAdapter();
                     if (pageTitleList.get(i).getGroupingId() == rxBusFragmentItemEntity.getNewGroupingId()) {
                         mViewPager.setCurrentItem(i);
                     }

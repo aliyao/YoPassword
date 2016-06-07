@@ -83,10 +83,11 @@ public class GroupingActivity extends BaseAppCompatActivity {
                                             }
                                             X3DBUtils.save(passwordInfoList);
                                         }
-                                        X3DBUtils.delectById(GroupingInfo.class, groupingAdapter.getItem(position).getGroupingId());
-                                        refreshGrouping();
-                                        refreshMainActivityGrouping(groupingAdapter.getItem(position).getGroupingId());
+                                        long groupingId=groupingAdapter.getItem(position).getGroupingId();
+                                        X3DBUtils.delectById(GroupingInfo.class, groupingId);
+                                        refreshMainActivityGrouping(groupingId);
                                         refreshMainActivityGroupingDel();
+                                        refreshGrouping();
                                     }catch (Exception e){
                                         e.printStackTrace();
                                     }
