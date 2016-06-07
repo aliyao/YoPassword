@@ -24,11 +24,12 @@ public class CheckPasswordActivity extends BaseAppCompatActivity {
     boolean isSuccess;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void init() {
+        super.init();
         setContentView(R.layout.activity_check_password);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setNoCheck(true);
         isSuccess = false;
         etPassword = (EditText) findViewById(R.id.et_password);
         etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -51,9 +52,6 @@ public class CheckPasswordActivity extends BaseAppCompatActivity {
 
     @Override
     public void finish() {
-        if (!isSuccess) {
-            ACacheUtils.signOut(CheckPasswordActivity.this);
-        }
         super.finish();
     }
 

@@ -29,6 +29,7 @@ public class SetPasswordActivity extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check);
         setupActionBar();
+        setNoCheck(true);
         isSuccess=false;
         etPassword=(EditText)findViewById(R.id.et_password);
         etPassword2=(EditText)findViewById(R.id.et_password2);

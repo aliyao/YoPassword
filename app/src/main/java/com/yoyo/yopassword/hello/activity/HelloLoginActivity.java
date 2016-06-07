@@ -150,6 +150,7 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
         btn_login = findViewById(R.id.btn_login);
         fullscreen_content = findViewById(R.id.fullscreen_content);
         initApp();
+        setNoCheck(true);
     }
 
     private void initApp() {
