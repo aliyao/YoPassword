@@ -158,6 +158,11 @@ public class MainActivity extends BaseAppCompatActivity {
             return fragment;
         }
 
+        public long  getGroupingId(){
+            long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
+            return groupingId;
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -249,12 +254,13 @@ public class MainActivity extends BaseAppCompatActivity {
 
         public void refreshData(long groupingId) {
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
-            List<Fragment> fragments = fm.getFragments();
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
             if(groupingId>0){
                 for (int i=0;i<fragments.size();i++) {
-                    if(groupingId==pageTitleList.get(i).getGroupingId()){
-                        fm.beginTransaction().remove(fragments.get(i));
-                        fm.beginTransaction().commitAllowingStateLoss();
+                    if(groupingId==((PlaceholderFragment)fragments.get(i)).getGroupingId()){
+                        getSupportFragmentManager().beginTransaction().remove(fragments.get(i));
+                        getSupportFragmentManager().beginTransaction().commitAllowingStateLoss();
+                        getSupportFragmentManager().executePendingTransactions();
                         break;
                     }
                 }
