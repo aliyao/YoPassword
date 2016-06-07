@@ -21,4 +21,9 @@ public class BaseAppCompatActivity extends AppCompatActivity {
   }
 
   public void init(){}
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+  }
 }
