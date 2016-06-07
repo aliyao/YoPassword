@@ -9,7 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -39,7 +39,6 @@ import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
-import com.yoyo.yopassword.main.entity.RxBusSectionsPagerEntity;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
 
@@ -51,7 +50,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 public class MainActivity extends BaseAppCompatActivity {
-    Observable<RxBusSectionsPagerEntity> sectionsPagerAdapterRefreshData;
+    Observable<Object> sectionsPagerAdapterRefreshData;
     Observable<RxBusFragmentItemEntity> placeholderFragmentItemRefreshData;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -234,45 +233,51 @@ public class MainActivity extends BaseAppCompatActivity {
     }
 
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         public List<GroupingInfo> pageTitleList;
         FragmentManager fm;
+        private ArrayList<Fragment> mFragmentList;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             this.fm = fm;
             pageTitleList = new ArrayList<>();
-            refreshData(0);
+            refreshData();
         }
 
-        public void refreshData(long groupingId) {
+        public void refreshData() {
             List<GroupingInfo> groupingInfoList = X3DBUtils.findAll(GroupingInfo.class);
-            List<Fragment> fragments = fm.getFragments();
-            if(groupingId>0){
-                for (int i=0;i<fragments.size();i++) {
-                    long placeholderFragmentGroupingId=((PlaceholderFragment)fragments.get(i)).getGroupingId();
-                    if(groupingId==placeholderFragmentGroupingId){
-                        fm.beginTransaction().remove(fragments.get(i));
-                        fm.beginTransaction().commitAllowingStateLoss();
-                        fm.executePendingTransactions();
-                        break;
-                    }
-                }
-            }
             pageTitleList.clear();
             pageTitleList.addAll(groupingInfoList);
+            updateData();
+        }
+
+
+        public void updateData() {
+            ArrayList<Fragment> fragments = new ArrayList<>();
+            for (int i = 0, size = pageTitleList.size(); i < size; i++) {
+               // Log.e("FPagerAdapter1", pageTitleList.get(i).toString());
+                fragments.add(PlaceholderFragment.newInstance(i + 1, pageTitleList.get(i).getGroupingId()));
+            }
+            setFragmentList(fragments);
+        }
+
+        private void setFragmentList(ArrayList<Fragment> fragmentList) {
+            if(this.mFragmentList != null){
+                mFragmentList.clear();
+            }
+            this.mFragmentList = fragmentList;
             notifyDataSetChanged();
         }
 
-        @Override
-        public long getItemId(int position) {
-            long groupingId = pageTitleList.get(position).getGroupingId();
-            return groupingId;
+
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position + 1, pageTitleList.get(position).getGroupingId());
+            return mFragmentList.get(position);
         }
 
         @Override
@@ -303,11 +308,11 @@ public class MainActivity extends BaseAppCompatActivity {
         sectionsPagerAdapterRefreshData = RxBusUtils.get()
                 .register(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData);
         sectionsPagerAdapterRefreshData.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<RxBusSectionsPagerEntity>() {
+                .subscribe(new Action1<Object>() {
                     @Override
-                    public void call(RxBusSectionsPagerEntity rxBusSectionsPagerEntity) {
-                        if (rxBusSectionsPagerEntity!=null && mSectionsPagerAdapter != null) {
-                            mSectionsPagerAdapter.refreshData(rxBusSectionsPagerEntity.getDelGroupingId());
+                    public void call(Object object) {
+                        if (object.equals(1) && mSectionsPagerAdapter != null) {
+                            mSectionsPagerAdapter.refreshData();
                         }
                     }
                 });
