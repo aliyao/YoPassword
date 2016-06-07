@@ -3,7 +3,6 @@ package com.yoyo.yopassword.check;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -14,13 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.yoyo.yopassword.R;
+import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.EditTextUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 import com.yoyo.yopassword.main.activity.MainActivity;
 
-public class SetPasswordActivity extends AppCompatActivity {
+public class SetPasswordActivity extends BaseAppCompatActivity {
     boolean isSuccess;
     EditText etPassword,etPassword2;
 
