@@ -73,8 +73,8 @@ public class ACacheUtils {
             mCache = ACache.get(mContext);
         }
         put( mContext, LoginStatus,0);
-        put(mContext,OpenId,"");
-        put(mContext,CheckPassword,"");
+        //put(mContext,OpenId,"");
+       // put(mContext,CheckPassword,"");
     }
 
     public static Object getAsObject(Context mContext,String key){

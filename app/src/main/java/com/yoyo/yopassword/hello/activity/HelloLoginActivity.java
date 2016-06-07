@@ -12,6 +12,7 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
+import com.yoyo.yopassword.check.CheckPasswordActivity;
 import com.yoyo.yopassword.check.SetPasswordActivity;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.ACacheUtils;
@@ -21,7 +22,6 @@ import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.entity.LoginAuthSuccessEntity;
 import com.yoyo.yopassword.login.OnLoginListener;
 import com.yoyo.yopassword.login.util.LoginApiUtils;
-import com.yoyo.yopassword.main.activity.MainActivity;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -30,13 +30,13 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
 
-public class HelloLoginActivity extends BaseAppCompatActivity{
+public class HelloLoginActivity extends BaseAppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;
     public static final String KEY_TO_LOGIN = "KEY_TO_LOGIN";
     private static final int KEY_LOGIN_SUCCESS = 1000;
     private final Handler mHideHandler = new Handler();
     View fullscreen_content;
-    View fullscreen_content_controls,btn_login;
+    View fullscreen_content_controls, btn_login;
 
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -76,44 +76,46 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
     };
 
 
-    Handler loginHandler=new Handler(){
+    Handler loginHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
-                    startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
+                    startActivity(new Intent(HelloLoginActivity.this, CheckPasswordActivity.class));
                     finish();
                     break;
                 case KEY_LOGIN_SUCCESS:
-                    Object[] obj=(Object[])msg.obj;
-                    Platform platform=(Platform)obj[0];
-                    HashMap<String, Object> res=(HashMap<String, Object>) obj[1];
-                    if(res!=null){
+                    Object[] obj = (Object[]) msg.obj;
+                    Platform platform = (Platform) obj[0];
+                    HashMap<String, Object> res = (HashMap<String, Object>) obj[1];
+                    if (res != null) {
                         Gson gson = new Gson();
-                        String entityStr=gson.toJson(res);
-                        LoginAuthSuccessEntity loginAuthEntity=gson.fromJson(entityStr,LoginAuthSuccessEntity.class);
-                        if(loginAuthEntity!=null){
-                            String openid=platform.getDb().getUserId();
+                        String entityStr = gson.toJson(res);
+                        LoginAuthSuccessEntity loginAuthEntity = gson.fromJson(entityStr, LoginAuthSuccessEntity.class);
+                        if (loginAuthEntity != null) {
+                            String openid = platform.getDb().getUserId();
                             loginAuthEntity.setOpen_id(openid);
-                            YoSnackbar.showSnackbar(fullscreen_content,R.string.qq_auth_completel);
-                            ACacheUtils.loginIn(HelloLoginActivity.this,loginAuthEntity.getOpen_id());
-                            GroupingInfo groupingInfo= X3DBUtils.findItem(GroupingInfo.class,AppConfig.DefaultGroupingId);
-                            if(groupingInfo==null|| TextUtils.isEmpty(groupingInfo.getGroupingName())){
+                            YoSnackbar.showSnackbar(fullscreen_content, R.string.qq_auth_completel);
+                            ACacheUtils.loginIn(HelloLoginActivity.this, loginAuthEntity.getOpen_id());
+                            GroupingInfo groupingInfo = X3DBUtils.findItem(GroupingInfo.class, AppConfig.DefaultGroupingId);
+                            if (groupingInfo == null || TextUtils.isEmpty(groupingInfo.getGroupingName())) {
                                 groupingInfo = new GroupingInfo(HelloLoginActivity.this.getResources().getString(R.string.action_default_grouping_name), new Date().getTime());
                                 X3DBUtils.save(groupingInfo);
                             }
-                            if(!TextUtils.isEmpty(ACacheUtils.getCheckPassword(HelloLoginActivity.this))){
-                                startActivity(new Intent(HelloLoginActivity.this,MainActivity.class));
-                            }else {
+                           /* if (!TextUtils.isEmpty(ACacheUtils.getCheckPassword(HelloLoginActivity.this))) {
+                                startActivity(new Intent(HelloLoginActivity.this, MainActivity.class));
+                            } else*/
+                            if (TextUtils.isEmpty(ACacheUtils.getCheckPassword(HelloLoginActivity.this))) {
                                 startActivity(new Intent(HelloLoginActivity.this, SetPasswordActivity.class));
+                            } else {
+                                startActivity(new Intent(HelloLoginActivity.this, CheckPasswordActivity.class));
                             }
-
                             finish();
                             return;
                         }
                     }
-                    YoSnackbar.showSnackbar(fullscreen_content,R.string.qq_auth_fail);
+                    YoSnackbar.showSnackbar(fullscreen_content, R.string.qq_auth_fail);
                     break;
             }
         }
@@ -126,40 +128,41 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
         api.setOnLoginListener(new OnLoginListener() {
             @Override
             public boolean onLogin(Platform platform, HashMap<String, Object> res) {
-                Message message=new Message();
-                message.what=KEY_LOGIN_SUCCESS;
-                Object[] objects=new Object[2];
-                objects[0]=platform;
-                objects[1]=res;
-                message.obj=objects;
+                Message message = new Message();
+                message.what = KEY_LOGIN_SUCCESS;
+                Object[] objects = new Object[2];
+                objects[0] = platform;
+                objects[1] = res;
+                message.obj = objects;
                 loginHandler.sendMessage(message);
                 return false;
             }
         });
-        api.login(this,fullscreen_content);
+        api.login(this, fullscreen_content);
     }
 
-    public void init(){
+    public void init() {
         super.init();
         setContentView(R.layout.activity_hello_login);
         //初始化SDK
         ShareSDK.initSDK(HelloLoginActivity.this);
         fullscreen_content_controls = findViewById(R.id.fullscreen_content_controls);
-        btn_login= findViewById(R.id.btn_login);
+        btn_login = findViewById(R.id.btn_login);
         fullscreen_content = findViewById(R.id.fullscreen_content);
         initApp();
     }
-    private void initApp(){
-        if(ACacheUtils.isLogin(HelloLoginActivity.this)){
+
+    private void initApp() {
+        if (ACacheUtils.isLogin(HelloLoginActivity.this)) {
             btn_login.setVisibility(View.GONE);
-            loginHandler.sendEmptyMessageDelayed(1,1000);
-        }else {
+            loginHandler.sendEmptyMessageDelayed(1, 1000);
+        } else {
             btn_login.setVisibility(View.VISIBLE);
         }
     }
 
-    public void onYoClick(View view){
-        switch (view.getId()){
+    public void onYoClick(View view) {
+        switch (view.getId()) {
             case R.id.btn_login:
                 loginQQ();
                 break;
@@ -171,12 +174,12 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
      * qq授权登录退出
      */
     public void logoutQQ() {
-        try{
-            Platform plat = ShareSDK.getPlatform(HelloLoginActivity.this,QQ.NAME);
+        try {
+            Platform plat = ShareSDK.getPlatform(HelloLoginActivity.this, QQ.NAME);
             if (plat != null && plat.isValid()) {
                 plat.removeAccount();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -185,9 +188,9 @@ public class HelloLoginActivity extends BaseAppCompatActivity{
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if(getIntent().getBooleanExtra(KEY_TO_LOGIN,false)){
+        if (getIntent().getBooleanExtra(KEY_TO_LOGIN, false)) {
             delayedShow(0);
-        }else{
+        } else {
             delayedHide(0);
             delayedShow(2000);
         }

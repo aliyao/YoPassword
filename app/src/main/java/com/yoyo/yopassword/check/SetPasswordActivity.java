@@ -76,7 +76,7 @@ public class SetPasswordActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_check_password, menu);
+        getMenuInflater().inflate(R.menu.menu_set_password, menu);
         return true;
     }
 

@@ -58,9 +58,14 @@
             android:name=".grouping.activity.GroupingActivity"
             android:label="@string/title_activity_grouping"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".check.SetPasswordActivity"
+        <activity
+            android:name=".check.SetPasswordActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+            android:name=".check.CheckPasswordActivity"
+            android:label="@string/title_activity_check_password"
             android:windowSoftInputMode="stateVisible|adjustResize"
-            ></activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
