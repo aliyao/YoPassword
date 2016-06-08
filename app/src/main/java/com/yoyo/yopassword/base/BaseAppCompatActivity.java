@@ -1,10 +1,9 @@
 package com.yoyo.yopassword.base;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.yoyo.yopassword.check.CheckPasswordActivity;
+import com.yoyo.yopassword.common.util.ActivityManager;
 
 /**
  * 项目名称：YoPassword
@@ -20,6 +19,7 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityManager.getInstance().addActivity(this);
         init();
     }
 
@@ -53,13 +53,14 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(!isNoCheck){
-            startActivity(new Intent(BaseAppCompatActivity.this, CheckPasswordActivity.class));
-        }
+        //if(!isNoCheck){
+           // startActivity(new Intent(BaseAppCompatActivity.this, CheckPasswordActivity.class));
+       // }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ActivityManager.getInstance().removeActivity(this);
     }
 }

@@ -1,7 +1,6 @@
 package com.yoyo.yopassword.check;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.common.util.ACacheUtils;
+import com.yoyo.yopassword.common.util.ActivityManager;
 import com.yoyo.yopassword.common.util.EditTextUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
@@ -50,11 +50,6 @@ public class CheckPasswordActivity extends BaseAppCompatActivity {
         });
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-    }
-
     /**
      * 确定完成
      */
@@ -76,6 +71,9 @@ public class CheckPasswordActivity extends BaseAppCompatActivity {
             YoSnackbar.showSnackbar(etPassword, R.string.edit_password_error);
             return;
         }
+        if(ActivityManager.getInstance().isToMainAcrivity()){
+            startActivity(new Intent(CheckPasswordActivity.this, MainActivity.class));
+        }
         isSuccess = true;
         finish();
     }
@@ -94,12 +92,21 @@ public class CheckPasswordActivity extends BaseAppCompatActivity {
                 return true;
             case R.id.action_sign_out:
                 ACacheUtils.signOut(CheckPasswordActivity.this);
+                ActivityManager.getInstance().finishOthers();
                 startActivity(new Intent(CheckPasswordActivity.this, HelloLoginActivity.class).putExtra(HelloLoginActivity.KEY_TO_LOGIN, true));
                 finish();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ActivityManager.getInstance().exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }
