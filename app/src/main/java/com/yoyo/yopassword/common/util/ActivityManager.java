@@ -70,10 +70,17 @@ public class ActivityManager {
         }
     }
 
-    public boolean isToMainAcrivity() {
+    public boolean isToMainActivity() {
        if(activityList!=null&& activityList.size()>1){
            return false;
        }
         return true;
+    }
+
+    public boolean isOneActivity() {
+        if(activityList == null|| activityList.size()<=1){
+            return true;
+        }
+        return false;
     }
 }
