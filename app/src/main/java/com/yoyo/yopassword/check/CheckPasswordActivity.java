@@ -76,7 +76,6 @@ public class CheckPasswordActivity extends BaseAppCompatActivity {
             YoSnackbar.showSnackbar(etPassword, R.string.edit_password_error);
             return;
         }
-        startActivity(new Intent(CheckPasswordActivity.this, MainActivity.class));
         isSuccess = true;
         finish();
     }
