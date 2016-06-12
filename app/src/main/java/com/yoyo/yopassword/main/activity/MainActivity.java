@@ -16,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.tool.RxBusTools;
 import com.yoyo.yopassword.common.tool.YoStartActivityTools;
 import com.yoyo.yopassword.common.util.ACacheUtils;
+import com.yoyo.yopassword.common.util.ActivityManager;
 import com.yoyo.yopassword.common.util.AlertDialogUtils;
 import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
@@ -343,4 +345,13 @@ public class MainActivity extends BaseAppCompatActivity {
             }
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+           setFinish(true);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

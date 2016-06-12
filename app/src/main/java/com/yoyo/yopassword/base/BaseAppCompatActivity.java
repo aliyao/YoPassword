@@ -21,6 +21,7 @@ import java.util.List;
  */
 public class BaseAppCompatActivity extends AppCompatActivity {
     boolean  isNoCheck;
+    boolean  isFinish;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +34,10 @@ public class BaseAppCompatActivity extends AppCompatActivity {
 
     public void setNoCheck(boolean noCheck) {
         isNoCheck = noCheck;
+    }
+
+    public void setFinish(boolean finish) {
+        isFinish = finish;
     }
 
     @Override
@@ -53,7 +58,7 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-         if(!isNoCheck&& !isAppRunningForeground(BaseAppCompatActivity.this) && !ActivityManager.getInstance().isOneActivity()){
+         if(!isFinish && !isNoCheck && !isAppRunningForeground(BaseAppCompatActivity.this)){
             startActivity(new Intent(BaseAppCompatActivity.this, CheckPasswordActivity.class));
         }
     }
