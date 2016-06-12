@@ -5,9 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -26,8 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.yoyo.yopassword.R;
@@ -39,7 +35,6 @@ import com.yoyo.yopassword.common.tool.AppSingletonTools;
 import com.yoyo.yopassword.common.tool.RxBusTools;
 import com.yoyo.yopassword.common.tool.YoStartActivityTools;
 import com.yoyo.yopassword.common.util.ACacheUtils;
-import com.yoyo.yopassword.common.util.ActivityManager;
 import com.yoyo.yopassword.common.util.AlertDialogUtils;
 import com.yoyo.yopassword.common.util.DateUtils;
 import com.yoyo.yopassword.common.util.RxBusUtils;
@@ -124,7 +119,7 @@ public class MainActivity extends BaseAppCompatActivity {
         OnBaseRecyclerViewListener onBaseRecyclerViewListener = new OnBaseRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
-                doShowItemPasswordInfo(getContext(),passwordAdapter.getItem(position));
+                doShowItemPasswordInfo(getContext(), passwordAdapter.getItem(position));
             }
 
             @Override
@@ -136,7 +131,7 @@ public class MainActivity extends BaseAppCompatActivity {
                     public void onItemClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                startActivity(new Intent(getContext(),CheckPasswordActivity.class).putExtra(CheckPasswordActivity.KEY_TO_CHECK_PASSWORD_COPY_PASSWORD,passwordAdapter.getItem(position).getPassword()).putExtra(CheckPasswordActivity.KEY_TO_CHECK_PASSWORD_COPY,true));
+                                startActivity(new Intent(getContext(), CheckPasswordActivity.class).putExtra(CheckPasswordActivity.KEY_TO_CHECK_PASSWORD_COPY_PASSWORD, passwordAdapter.getItem(position).getPassword()).putExtra(CheckPasswordActivity.KEY_TO_CHECK_PASSWORD_COPY, true));
                                 break;
                             case 1:
                                 YoStartActivityTools.toAddPasswordActivity_Update(PlaceholderFragment.this.getContext(), passwordAdapter.getItem(position).getPasswordInfoId());
@@ -264,14 +259,14 @@ public class MainActivity extends BaseAppCompatActivity {
         public void updateData() {
             ArrayList<Fragment> fragments = new ArrayList<>();
             for (int i = 0, size = pageTitleList.size(); i < size; i++) {
-               // Log.e("FPagerAdapter1", pageTitleList.get(i).toString());
+                // Log.e("FPagerAdapter1", pageTitleList.get(i).toString());
                 fragments.add(PlaceholderFragment.newInstance(i + 1, pageTitleList.get(i).getGroupingId()));
             }
             setFragmentList(fragments);
         }
 
         private void setFragmentList(ArrayList<Fragment> fragmentList) {
-            if(this.mFragmentList != null){
+            if (this.mFragmentList != null) {
                 mFragmentList.clear();
             }
             this.mFragmentList = fragmentList;
@@ -308,7 +303,7 @@ public class MainActivity extends BaseAppCompatActivity {
         RxBusUtils.get().unregister(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, sectionsPagerAdapterRefreshData);
         RxBusUtils.get().unregister(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, placeholderFragmentItemRefreshData);
         RxBusUtils.get().unregister(RxBusTools.MainActivity_AlertDialog_ToDo_Item_Copy, alertDialogToDoItemCopy);
-        if(screenObserver!=null){
+        if (screenObserver != null) {
             screenObserver.shutdownObserver();
         }
         super.onDestroy();
@@ -346,7 +341,7 @@ public class MainActivity extends BaseAppCompatActivity {
                 .subscribe(new Action1<RxBusAlertdialogItemCopyEntity>() {
                     @Override
                     public void call(RxBusAlertdialogItemCopyEntity rxBusAlertdialogItemCopyEntity) {
-                        if (rxBusAlertdialogItemCopyEntity!=null&& !TextUtils.isEmpty(rxBusAlertdialogItemCopyEntity.getPassword())) {
+                        if (rxBusAlertdialogItemCopyEntity != null && !TextUtils.isEmpty(rxBusAlertdialogItemCopyEntity.getPassword())) {
                             ClipboardManager myClipboard = (ClipboardManager) MainActivity.this.getSystemService(CLIPBOARD_SERVICE);
                             String text = rxBusAlertdialogItemCopyEntity.getPassword();
                             ClipData myClip = ClipData.newPlainText("text", text);
@@ -375,13 +370,13 @@ public class MainActivity extends BaseAppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-           setFinish(true);
+            setFinish(true);
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initScreenObserver(){
-        screenObserver=new ScreenObserver(MainActivity.this);
+    private void initScreenObserver() {
+        screenObserver = new ScreenObserver(MainActivity.this);
         screenObserver.startObserver(new ScreenObserver.ScreenStateListener() {
             @Override
             public void onScreenOn() {
@@ -402,22 +397,23 @@ public class MainActivity extends BaseAppCompatActivity {
 
     /**
      * 展示用户信息
+     *
      * @param passwordInfo
      */
-    private static void doShowItemPasswordInfo(Context context,PasswordInfo passwordInfo) {
+    private static void doShowItemPasswordInfo(Context context, PasswordInfo passwordInfo) {
         View vlayout = LayoutInflater.from(context).inflate(R.layout.view_alert_dialog_password_info, null);
-        TextView password_item_title=(TextView)vlayout.findViewById(R.id.password_item_title);
-        TextView password_item_save_info_time=(TextView)vlayout.findViewById(R.id.password_item_save_info_time);
-        TextView password_item_account=(TextView)vlayout.findViewById(R.id.password_item_account);
-        TextView password_item_remarks=(TextView)vlayout.findViewById(R.id.password_item_remarks);
-        TextView password_item_password=(TextView)vlayout.findViewById(R.id.password_item_password);
-        View password_item_top=vlayout.findViewById(R.id.password_item_top);
+        TextView password_item_title = (TextView) vlayout.findViewById(R.id.password_item_title);
+        TextView password_item_save_info_time = (TextView) vlayout.findViewById(R.id.password_item_save_info_time);
+        TextView password_item_account = (TextView) vlayout.findViewById(R.id.password_item_account);
+        TextView password_item_remarks = (TextView) vlayout.findViewById(R.id.password_item_remarks);
+        TextView password_item_password = (TextView) vlayout.findViewById(R.id.password_item_password);
+        View password_item_top = vlayout.findViewById(R.id.password_item_top);
 
         password_item_account.setText(passwordInfo.getAccount());
         password_item_remarks.setText(AppSingletonTools.getRemarksText(passwordInfo.getRemarks()));
         password_item_title.setText(passwordInfo.getTitle());
         password_item_save_info_time.setText(DateUtils.getTimestampString(passwordInfo.getSaveInfoTime()));
-        password_item_top.setVisibility(passwordInfo.isTop()?View.VISIBLE:View.INVISIBLE);
+        password_item_top.setVisibility(passwordInfo.isTop() ? View.VISIBLE : View.INVISIBLE);
         password_item_password.setText(passwordInfo.getPassword());
 
         AlertDialogUtils.showAlertDialogInfo(context, R.string.action_password_info_item, vlayout);
