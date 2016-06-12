@@ -26,8 +26,8 @@ import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
 public class CheckPasswordActivity extends BaseAppCompatActivity {
     EditText etPassword;
     boolean isSuccess;
-    public static final String KEY_TO_CHECK_PASSWORD_COPY= "KEY_TO_CHECK_PASSWORD_COPY";
-    public static final String KEY_TO_CHECK_PASSWORD_COPY_PASSWORD= "KEY_TO_CHECK_PASSWORD_COPY_PASSWORD";
+    //public static final String KEY_TO_CHECK_PASSWORD_COPY= "KEY_TO_CHECK_PASSWORD_COPY";
+    //public static final String KEY_TO_CHECK_PASSWORD_COPY_PASSWORD= "KEY_TO_CHECK_PASSWORD_COPY_PASSWORD";
 
     @Override
     public void init() {
@@ -81,10 +81,10 @@ public class CheckPasswordActivity extends BaseAppCompatActivity {
             startActivity(new Intent(CheckPasswordActivity.this, MainActivity.class));
         }
         isSuccess = true;
-        String passwordText=getIntent().getStringExtra(KEY_TO_CHECK_PASSWORD_COPY_PASSWORD);
+       /* String passwordText=getIntent().getStringExtra(KEY_TO_CHECK_PASSWORD_COPY_PASSWORD);
         if(getIntent().getBooleanExtra(KEY_TO_CHECK_PASSWORD_COPY,false)&&!TextUtils.isEmpty(passwordText)){
             RxBusUtils.get().post(RxBusTools.MainActivity_AlertDialog_ToDo_Item_Copy, new RxBusAlertdialogItemCopyEntity(passwordText));
-        }
+        }*/
         finish();
     }
     @Override

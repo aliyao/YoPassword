@@ -62,7 +62,7 @@ import rx.functions.Action1;
 public class MainActivity extends BaseAppCompatActivity {
     Observable<Object> sectionsPagerAdapterRefreshData;
     Observable<RxBusFragmentItemEntity> placeholderFragmentItemRefreshData;
-    Observable<RxBusAlertdialogItemCopyEntity> alertDialogToDoItemCopy;
+   // Observable<RxBusAlertdialogItemCopyEntity> alertDialogToDoItemCopy;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
     ScreenObserver screenObserver;
@@ -132,7 +132,12 @@ public class MainActivity extends BaseAppCompatActivity {
                     public void onItemClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                startActivity(new Intent(getContext(), CheckPasswordActivity.class).putExtra(CheckPasswordActivity.KEY_TO_CHECK_PASSWORD_COPY_PASSWORD, passwordAdapter.getItem(position).getPassword()).putExtra(CheckPasswordActivity.KEY_TO_CHECK_PASSWORD_COPY, true));
+                                ClipboardManager myClipboard = (ClipboardManager) getContext().getSystemService(CLIPBOARD_SERVICE);
+                                String text = passwordAdapter.getItem(position).getPassword();
+                                ClipData myClip = ClipData.newPlainText("text", text);
+                                myClipboard.setPrimaryClip(myClip);
+                                YoSnackbar.showSnackbar(refreshLayout, R.string.copy_success_tip);
+                               // startActivity(new Intent(getContext(), CheckPasswordActivity.class).putExtra(CheckPasswordActivity.KEY_TO_CHECK_PASSWORD_COPY_PASSWORD, passwordAdapter.getItem(position).getPassword()).putExtra(CheckPasswordActivity.KEY_TO_CHECK_PASSWORD_COPY, true));
                                 break;
                             case 1:
                                 YoStartActivityTools.toAddPasswordActivity_Update(PlaceholderFragment.this.getContext(), passwordAdapter.getItem(position).getPasswordInfoId());
@@ -320,7 +325,7 @@ public class MainActivity extends BaseAppCompatActivity {
         // AppSingletonTools.getInstance().destroyMainActivity();
         RxBusUtils.get().unregister(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, sectionsPagerAdapterRefreshData);
         RxBusUtils.get().unregister(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, placeholderFragmentItemRefreshData);
-        RxBusUtils.get().unregister(RxBusTools.MainActivity_AlertDialog_ToDo_Item_Copy, alertDialogToDoItemCopy);
+        //RxBusUtils.get().unregister(RxBusTools.MainActivity_AlertDialog_ToDo_Item_Copy, alertDialogToDoItemCopy);
         if (screenObserver != null) {
             screenObserver.shutdownObserver();
         }
@@ -353,7 +358,7 @@ public class MainActivity extends BaseAppCompatActivity {
                 });
         //RxBusUtils.get().post(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, 1);
 
-        alertDialogToDoItemCopy = RxBusUtils.get()
+      /*  alertDialogToDoItemCopy = RxBusUtils.get()
                 .register(RxBusTools.MainActivity_AlertDialog_ToDo_Item_Copy);
         alertDialogToDoItemCopy.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<RxBusAlertdialogItemCopyEntity>() {
@@ -367,7 +372,7 @@ public class MainActivity extends BaseAppCompatActivity {
                             YoSnackbar.showSnackbar(mViewPager, R.string.copy_success_tip);
                         }
                     }
-                });
+                });*/
     }
 
     private void refreshFragmentItem(RxBusFragmentItemEntity rxBusFragmentItemEntity) {
