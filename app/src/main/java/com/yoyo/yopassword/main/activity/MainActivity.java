@@ -2,9 +2,12 @@ package com.yoyo.yopassword.main.activity;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -26,6 +29,7 @@ import android.view.ViewGroup;
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
+import com.yoyo.yopassword.check.CheckPasswordActivity;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.tool.RxBusTools;
 import com.yoyo.yopassword.common.tool.YoStartActivityTools;
@@ -33,6 +37,7 @@ import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.ActivityManager;
 import com.yoyo.yopassword.common.util.AlertDialogUtils;
 import com.yoyo.yopassword.common.util.RxBusUtils;
+import com.yoyo.yopassword.common.util.ScreenObserver;
 import com.yoyo.yopassword.common.util.X3DBUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
@@ -56,6 +61,7 @@ public class MainActivity extends BaseAppCompatActivity {
     Observable<RxBusFragmentItemEntity> placeholderFragmentItemRefreshData;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
+    ScreenObserver screenObserver;
 
     public void init() {
         super.init();
@@ -77,6 +83,7 @@ public class MainActivity extends BaseAppCompatActivity {
             }
         });
         initRxBusUtils();
+        initScreenObserver();
     }
 
     @Override
@@ -157,11 +164,6 @@ public class MainActivity extends BaseAppCompatActivity {
             args.putLong(ARG_SECTION_GROUPING_ID, groupingId);
             fragment.setArguments(args);
             return fragment;
-        }
-
-        public long  getGroupingId(){
-            long groupingId = getArguments().getLong(ARG_SECTION_GROUPING_ID, 0);
-            return groupingId;
         }
 
         @Override
@@ -301,6 +303,9 @@ public class MainActivity extends BaseAppCompatActivity {
         // AppSingletonTools.getInstance().destroyMainActivity();
         RxBusUtils.get().unregister(RxBusTools.MainActivity_SectionsPagerAdapter_RefreshData, sectionsPagerAdapterRefreshData);
         RxBusUtils.get().unregister(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, placeholderFragmentItemRefreshData);
+        if(screenObserver!=null){
+            screenObserver.shutdownObserver();
+        }
         super.onDestroy();
     }
 
@@ -354,4 +359,23 @@ public class MainActivity extends BaseAppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    private void initScreenObserver(){
+        screenObserver=new ScreenObserver(MainActivity.this);
+        screenObserver.startObserver(new ScreenObserver.ScreenStateListener() {
+            @Override
+            public void onScreenOn() {
+
+            }
+
+            @Override
+            public void onScreenOff() {
+                startActivity(new Intent(MainActivity.this, CheckPasswordActivity.class));
+            }
+
+            @Override
+            public void onUserPresent() {
+
+            }
+        });
+    }
 }
