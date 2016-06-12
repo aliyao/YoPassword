@@ -227,7 +227,7 @@ public class MainActivity extends BaseAppCompatActivity {
                 try {
                     String password=passwordInfoList.get(i).getPassword();
                     String passwordDes= DesUtils.decryptThreeDESECB(password,AppConfig.APP_KEY);
-                    passwordInfoList.get(i).setAccount(passwordDes);
+                    passwordInfoList.get(i).setPassword(passwordDes);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
