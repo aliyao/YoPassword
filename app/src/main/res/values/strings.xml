@@ -57,4 +57,6 @@
 
     <string name="edit_right_password">请输入正确的密码</string>
     <string name="edit_password_error">密码错误</string>
+
+    <string name="action_password_info_item">密码信息</string>
 </resources>

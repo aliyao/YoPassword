@@ -26,17 +26,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
 import com.yoyo.yopassword.check.CheckPasswordActivity;
 import com.yoyo.yopassword.common.config.AppConfig;
+import com.yoyo.yopassword.common.tool.AppSingletonTools;
 import com.yoyo.yopassword.common.tool.RxBusTools;
 import com.yoyo.yopassword.common.tool.YoStartActivityTools;
 import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.ActivityManager;
 import com.yoyo.yopassword.common.util.AlertDialogUtils;
+import com.yoyo.yopassword.common.util.DateUtils;
 import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.ScreenObserver;
 import com.yoyo.yopassword.common.util.X3DBUtils;
@@ -119,7 +124,7 @@ public class MainActivity extends BaseAppCompatActivity {
         OnBaseRecyclerViewListener onBaseRecyclerViewListener = new OnBaseRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
-
+                doShowItemPasswordInfo(getContext(),passwordAdapter.getItem(position));
             }
 
             @Override
@@ -394,4 +399,28 @@ public class MainActivity extends BaseAppCompatActivity {
             }
         });
     }
+
+    /**
+     * 展示用户信息
+     * @param passwordInfo
+     */
+    private static void doShowItemPasswordInfo(Context context,PasswordInfo passwordInfo) {
+        View vlayout = LayoutInflater.from(context).inflate(R.layout.view_alert_dialog_password_info, null);
+        TextView password_item_title=(TextView)vlayout.findViewById(R.id.password_item_title);
+        TextView password_item_save_info_time=(TextView)vlayout.findViewById(R.id.password_item_save_info_time);
+        TextView password_item_account=(TextView)vlayout.findViewById(R.id.password_item_account);
+        TextView password_item_remarks=(TextView)vlayout.findViewById(R.id.password_item_remarks);
+        TextView password_item_password=(TextView)vlayout.findViewById(R.id.password_item_password);
+        View password_item_top=vlayout.findViewById(R.id.password_item_top);
+
+        password_item_account.setText(passwordInfo.getAccount());
+        password_item_remarks.setText(AppSingletonTools.getRemarksText(passwordInfo.getRemarks()));
+        password_item_title.setText(passwordInfo.getTitle());
+        password_item_save_info_time.setText(DateUtils.getTimestampString(passwordInfo.getSaveInfoTime()));
+        password_item_top.setVisibility(passwordInfo.isTop()?View.VISIBLE:View.INVISIBLE);
+        password_item_password.setText(passwordInfo.getPassword());
+
+        AlertDialogUtils.showAlertDialogInfo(context, R.string.action_password_info_item, vlayout);
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.yoyo.yopassword.common.tool;
 
+import android.text.TextUtils;
+
 /**
  * Created by nidey on 2016/5/30.
  */
@@ -52,4 +54,11 @@ public class AppSingletonTools {
             instanceMainActivity.refreshFragmentItem(groupingId);
         }
     }*/
+
+    public static String getRemarksText(String remarks){
+        if(TextUtils.isEmpty(remarks)){
+            return "无";
+        }
+        return remarks;
+    }
 }

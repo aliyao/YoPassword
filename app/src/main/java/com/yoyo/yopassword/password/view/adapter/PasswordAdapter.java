@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.yoyo.yopassword.R;
+import com.yoyo.yopassword.common.tool.AppSingletonTools;
 import com.yoyo.yopassword.common.util.DateUtils;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 import com.yoyo.yopassword.base.YoBaseAdapter;
@@ -45,17 +46,10 @@ public class PasswordAdapter extends YoBaseAdapter<PasswordInfo, PasswordViewHol
         super.onBindViewHolder(holder, position);
         PasswordInfo passwordInfo=getItem(position);
         holder.password_item_account.setText(passwordInfo.isHideAccount()?"********":passwordInfo.getAccount());
-        holder.password_item_remarks.setText(getRemarksText(passwordInfo.getRemarks()));
+        holder.password_item_remarks.setText(AppSingletonTools.getRemarksText(passwordInfo.getRemarks()));
         holder.password_item_title.setText(passwordInfo.getTitle());
         holder.password_item_save_info_time.setText(DateUtils.getTimestampString(passwordInfo.getSaveInfoTime()));
         holder.password_item_top.setVisibility(passwordInfo.isTop()?View.VISIBLE:View.INVISIBLE);
-    }
-
-    public String getRemarksText(String remarks){
-        if(TextUtils.isEmpty(remarks)){
-            return "无";
-        }
-        return remarks;
     }
 }
 
