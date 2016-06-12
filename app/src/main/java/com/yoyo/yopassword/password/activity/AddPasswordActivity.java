@@ -2,12 +2,14 @@ package com.yoyo.yopassword.password.activity;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.yoyo.yopassword.R;
@@ -50,6 +52,14 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         et_remarks = (EditText) findViewById(R.id.et_remarks);
         cb_is_top = (CheckBox) findViewById(R.id.cb_is_top);
         cb_is_hide_account = (CheckBox) findViewById(R.id.cb_is_hide_account);
+
+        cb_is_hide_account.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                showHideAccount();
+            }
+        });
+
         setupActionBar();
         isUpdate = getIntent().getBooleanExtra(YoStartActivityTools.ToAddPasswordActivity_IsUpdate, false);
         updatePasswordInfoId = getIntent().getLongExtra(YoStartActivityTools.ToAddPasswordActivity_PasswordInfoId, 0);
@@ -86,6 +96,15 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     private void refreshGroupingInfo() {
         if (groupingBtn != null && groupingInfo != null) {
             groupingBtn.setText(groupingInfo.getGroupingName());
+        }
+        showHideAccount();
+    }
+
+    private void showHideAccount(){
+        if(cb_is_hide_account.isChecked()){
+            et_account.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }else {
+            et_account.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         }
     }
 
