@@ -20,4 +20,6 @@ public class AppConfig {
     //默认的组ID
     public final static long DefaultGroupingId = 1;
     public final static boolean Is_SSOSetting=false;
+
+    public final static String APP_KEY="3hD4XA8yv12L9X04EMFzWQ2XD5hK0sE1cN86n";
 }
