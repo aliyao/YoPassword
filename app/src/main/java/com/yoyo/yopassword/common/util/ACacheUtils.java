@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.entity.ACacheEntity;
+import com.yoyo.yopassword.common.util.safe.BPCodeUtil;
 import com.yoyo.yopassword.common.util.safe.DesUtils;
 
 import java.io.Serializable;
@@ -47,6 +48,8 @@ public class ACacheUtils {
     }
 
     public static void setACacheEntity(Context mContext, ACacheEntity mACacheEntity) {
+        String randomCode= BPCodeUtil.getInstance().createCode();
+        mACacheEntity.setRandomCode(randomCode);
         Gson gson = new Gson();
         String jsonText = gson.toJson(mACacheEntity);
         try {
