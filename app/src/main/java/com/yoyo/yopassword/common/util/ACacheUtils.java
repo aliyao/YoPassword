@@ -33,7 +33,7 @@ public class ACacheUtils {
             String acacheInfo = getACacheInstance(mContext).getAsString(ACACHE_INFO);
             if (!TextUtils.isEmpty(acacheInfo)) {
                 try {
-                    String jsonTextDecrypt = DesUtils.decryptThreeDESECB(acacheInfo, AppConfig.APP_KEY);
+                    String jsonTextDecrypt = DesUtils.decryptMode(AppConfig.APP_KEY_NUM, AppConfig.APP_KEY,acacheInfo);
                     ACacheEntity mACacheEntity = gson.fromJson(jsonTextDecrypt, ACacheEntity.class);
                     mACacheEntityInstance = mACacheEntity;
                 } catch (Exception e) {
@@ -53,7 +53,7 @@ public class ACacheUtils {
         Gson gson = new Gson();
         String jsonText = gson.toJson(mACacheEntity);
         try {
-            String jsonTextEncrypt = DesUtils.encryptThreeDESECB(jsonText, AppConfig.APP_KEY);
+            String jsonTextEncrypt = DesUtils.encryptMode(AppConfig.APP_KEY_NUM, AppConfig.APP_KEY,jsonText);
             put(mContext, ACACHE_INFO, jsonTextEncrypt);
         } catch (Exception e) {
             e.printStackTrace();

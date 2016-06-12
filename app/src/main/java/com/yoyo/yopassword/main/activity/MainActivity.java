@@ -225,14 +225,14 @@ public class MainActivity extends BaseAppCompatActivity {
                 for(int i=0;i<passwordInfoList.size();i++){
                     try {
                         String account=passwordInfoList.get(i).getAccount();
-                        String accountDes= DesUtils.decryptThreeDESECB(account,AppConfig.APP_KEY);
+                        String accountDes= DesUtils.decryptMode(account,AppConfig.APP_KEY);
                         passwordInfoList.get(i).setAccount(accountDes);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     try {
                         String password=passwordInfoList.get(i).getPassword();
-                        String passwordDes= DesUtils.decryptThreeDESECB(password,AppConfig.APP_KEY);
+                        String passwordDes= DesUtils.decryptMode(password,AppConfig.APP_KEY);
                         passwordInfoList.get(i).setPassword(passwordDes);
                     }catch (Exception e){
                         e.printStackTrace();

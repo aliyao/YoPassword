@@ -86,13 +86,13 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
 
     private void updatePasswordInfo() {
         try {
-            String accountDes= DesUtils.decryptThreeDESECB(passwordInfo.getAccount(),AppConfig.APP_KEY);
+            String accountDes= DesUtils.decryptMode(passwordInfo.getAccount(),AppConfig.APP_KEY);
             et_account.setText(accountDes);
         }catch (Exception e){
             e.printStackTrace();
         }
         try {
-            String passwordDes= DesUtils.decryptThreeDESECB(passwordInfo.getPassword(),AppConfig.APP_KEY);
+            String passwordDes= DesUtils.decryptMode(passwordInfo.getPassword(),AppConfig.APP_KEY);
             et_password.setText(passwordDes);
         }catch (Exception e){
             e.printStackTrace();
@@ -182,8 +182,8 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         }
 
         try {
-            String accountEncrypt= DesUtils.encryptThreeDESECB(account,AppConfig.APP_KEY);
-            String passwordEncrypt= DesUtils.encryptThreeDESECB(password,AppConfig.APP_KEY);
+            String accountEncrypt= DesUtils.encryptMode(account,AppConfig.APP_KEY);
+            String passwordEncrypt= DesUtils.encryptMode(password,AppConfig.APP_KEY);
             PasswordInfo passwordInfoEdit = new PasswordInfo();
             passwordInfoEdit.setTitle(title);
             passwordInfoEdit.setAccount(accountEncrypt);
