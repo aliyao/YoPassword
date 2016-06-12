@@ -12,16 +12,22 @@ import android.widget.TextView;
 
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
+import com.yoyo.yopassword.common.tool.RxBusTools;
 import com.yoyo.yopassword.common.util.ACacheUtils;
 import com.yoyo.yopassword.common.util.ActivityManager;
 import com.yoyo.yopassword.common.util.EditTextUtils;
+import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
 import com.yoyo.yopassword.main.activity.MainActivity;
+import com.yoyo.yopassword.main.entity.RxBusAlertdialogItemCopyEntity;
+import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
 
 public class CheckPasswordActivity extends BaseAppCompatActivity {
     EditText etPassword;
     boolean isSuccess;
+    public static final String KEY_TO_CHECK_PASSWORD_COPY= "KEY_TO_CHECK_PASSWORD_COPY";
+    public static final String KEY_TO_CHECK_PASSWORD_COPY_PASSWORD= "KEY_TO_CHECK_PASSWORD_COPY_PASSWORD";
 
     @Override
     public void init() {
@@ -75,6 +81,10 @@ public class CheckPasswordActivity extends BaseAppCompatActivity {
             startActivity(new Intent(CheckPasswordActivity.this, MainActivity.class));
         }
         isSuccess = true;
+        String passwordText=getIntent().getStringExtra(KEY_TO_CHECK_PASSWORD_COPY_PASSWORD);
+        if(getIntent().getBooleanExtra(KEY_TO_CHECK_PASSWORD_COPY,false)&&!TextUtils.isEmpty(passwordText)){
+            RxBusUtils.get().post(RxBusTools.MainActivity_AlertDialog_ToDo_Item_Copy, new RxBusAlertdialogItemCopyEntity(passwordText));
+        }
         finish();
     }
     @Override
