@@ -20,6 +20,7 @@ import com.yoyo.yopassword.common.tool.YoStartActivityTools;
 import com.yoyo.yopassword.common.util.EditTextUtils;
 import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
+import com.yoyo.yopassword.common.util.safe.DesUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
@@ -84,10 +85,21 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
     }
 
     private void updatePasswordInfo() {
+        try {
+            String accountDes= DesUtils.decryptThreeDESECB(passwordInfo.getAccount(),AppConfig.APP_KEY);
+            et_account.setText(accountDes);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try {
+            String passwordDes= DesUtils.decryptThreeDESECB(passwordInfo.getPassword(),AppConfig.APP_KEY);
+            et_password.setText(passwordDes);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         et_title.setText(passwordInfo.getTitle());
-        et_account.setText(passwordInfo.getAccount());
         et_remarks.setText(passwordInfo.getRemarks());
-        et_password.setText(passwordInfo.getPassword());
         cb_is_top.setChecked(passwordInfo.isTop());
         cb_is_hide_account.setChecked(passwordInfo.isHideAccount());
         refreshGroupingInfo();
@@ -169,24 +181,30 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
             return;
         }
 
-        PasswordInfo passwordInfoEdit = new PasswordInfo();
-        passwordInfoEdit.setTitle(title);
-        passwordInfoEdit.setAccount(account);
-        passwordInfoEdit.setPassword(password);
-        passwordInfoEdit.setRemarks(remarks);
-        passwordInfoEdit.setGroupingId(groupingId);
-        passwordInfoEdit.setTop(isTop);
-        passwordInfoEdit.setHideAccount(isHideAccount);
-        if (passwordInfo != null) {
-            passwordInfoEdit.setSaveInfoTime(passwordInfo.getSaveInfoTime());
-        }
+        try {
+            String accountEncrypt= DesUtils.encryptThreeDESECB(account,AppConfig.APP_KEY);
+            String passwordEncrypt= DesUtils.encryptThreeDESECB(password,AppConfig.APP_KEY);
+            PasswordInfo passwordInfoEdit = new PasswordInfo();
+            passwordInfoEdit.setTitle(title);
+            passwordInfoEdit.setAccount(accountEncrypt);
+            passwordInfoEdit.setPassword(passwordEncrypt);
+            passwordInfoEdit.setRemarks(remarks);
+            passwordInfoEdit.setGroupingId(groupingId);
+            passwordInfoEdit.setTop(isTop);
+            passwordInfoEdit.setHideAccount(isHideAccount);
+            if (passwordInfo != null) {
+                passwordInfoEdit.setSaveInfoTime(passwordInfo.getSaveInfoTime());
+            }
 
-        if (updatePasswordInfoId > 0) {
-            passwordInfoEdit.setPasswordInfoId(updatePasswordInfoId);
+            if (updatePasswordInfoId > 0) {
+                passwordInfoEdit.setPasswordInfoId(updatePasswordInfoId);
+            }
+            X3DBUtils.save(passwordInfoEdit);
+            RxBusUtils.get().post(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, new RxBusFragmentItemEntity(oldGroupingId,passwordInfoEdit.getGroupingId()));
+            finish();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        X3DBUtils.save(passwordInfoEdit);
-        RxBusUtils.get().post(RxBusTools.MainActivity_PlaceholderFragment_Item_RefreshData, new RxBusFragmentItemEntity(oldGroupingId,passwordInfoEdit.getGroupingId()));
-        finish();
     }
 
     public void initRxBusUtils() {

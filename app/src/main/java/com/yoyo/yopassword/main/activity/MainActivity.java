@@ -40,6 +40,7 @@ import com.yoyo.yopassword.common.util.DateUtils;
 import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.ScreenObserver;
 import com.yoyo.yopassword.common.util.X3DBUtils;
+import com.yoyo.yopassword.common.util.safe.DesUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
@@ -215,6 +216,23 @@ public class MainActivity extends BaseAppCompatActivity {
                 return;
             }
             List<PasswordInfo> passwordInfoList = X3DBUtils.findAll(PasswordInfo.class, "groupingId", "=", groupingId);
+            for(int i=0;i<passwordInfoList.size();i++){
+                try {
+                    String account=passwordInfoList.get(i).getAccount();
+                    String accountDes= DesUtils.decryptThreeDESECB(account,AppConfig.APP_KEY);
+                    passwordInfoList.get(i).setAccount(accountDes);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                try {
+                    String password=passwordInfoList.get(i).getPassword();
+                    String passwordDes= DesUtils.decryptThreeDESECB(password,AppConfig.APP_KEY);
+                    passwordInfoList.get(i).setAccount(passwordDes);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
             passwordAdapter.setmData(passwordInfoList);
             passwordAdapter.notifyDataSetChanged();
             if (refreshLayout.isRefreshing()) {
@@ -408,13 +426,25 @@ public class MainActivity extends BaseAppCompatActivity {
         TextView password_item_remarks = (TextView) vlayout.findViewById(R.id.password_item_remarks);
         TextView password_item_password = (TextView) vlayout.findViewById(R.id.password_item_password);
         View password_item_top = vlayout.findViewById(R.id.password_item_top);
-
         password_item_account.setText(passwordInfo.getAccount());
+        password_item_password.setText(passwordInfo.getPassword());
+      /*  try {
+            String accountDes= DesUtils.decryptThreeDESECB(passwordInfo.getAccount(),AppConfig.APP_KEY);
+            password_item_account.setText(accountDes);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            String passwordDes= DesUtils.decryptThreeDESECB(passwordInfo.getPassword(),AppConfig.APP_KEY);
+            password_item_password.setText(passwordDes);
+        }catch (Exception e){
+            e.printStackTrace();
+        }*/
         password_item_remarks.setText(AppSingletonTools.getRemarksText(passwordInfo.getRemarks()));
         password_item_title.setText(passwordInfo.getTitle());
         password_item_save_info_time.setText(DateUtils.getTimestampString(passwordInfo.getSaveInfoTime()));
         password_item_top.setVisibility(passwordInfo.isTop() ? View.VISIBLE : View.INVISIBLE);
-        password_item_password.setText(passwordInfo.getPassword());
 
         AlertDialogUtils.showAlertDialogInfo(context, R.string.action_password_info_item, vlayout);
     }
