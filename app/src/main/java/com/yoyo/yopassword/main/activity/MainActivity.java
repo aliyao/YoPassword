@@ -221,23 +221,24 @@ public class MainActivity extends BaseAppCompatActivity {
                 return;
             }
             List<PasswordInfo> passwordInfoList = X3DBUtils.findAll(PasswordInfo.class, "groupingId", "=", groupingId);
-            for(int i=0;i<passwordInfoList.size();i++){
-                try {
-                    String account=passwordInfoList.get(i).getAccount();
-                    String accountDes= DesUtils.decryptThreeDESECB(account,AppConfig.APP_KEY);
-                    passwordInfoList.get(i).setAccount(accountDes);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                try {
-                    String password=passwordInfoList.get(i).getPassword();
-                    String passwordDes= DesUtils.decryptThreeDESECB(password,AppConfig.APP_KEY);
-                    passwordInfoList.get(i).setPassword(passwordDes);
-                }catch (Exception e){
-                    e.printStackTrace();
+            if(passwordInfoList!=null){
+                for(int i=0;i<passwordInfoList.size();i++){
+                    try {
+                        String account=passwordInfoList.get(i).getAccount();
+                        String accountDes= DesUtils.decryptThreeDESECB(account,AppConfig.APP_KEY);
+                        passwordInfoList.get(i).setAccount(accountDes);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    try {
+                        String password=passwordInfoList.get(i).getPassword();
+                        String passwordDes= DesUtils.decryptThreeDESECB(password,AppConfig.APP_KEY);
+                        passwordInfoList.get(i).setPassword(passwordDes);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
-
             passwordAdapter.setmData(passwordInfoList);
             passwordAdapter.notifyDataSetChanged();
             if (refreshLayout.isRefreshing()) {
