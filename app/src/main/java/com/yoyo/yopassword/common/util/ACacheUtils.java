@@ -7,10 +7,8 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.entity.ACacheEntity;
-import com.yoyo.yopassword.common.util.safe.BPCodeUtil;
 import com.yoyo.yopassword.common.util.safe.AESUtils;
-
-import java.io.Serializable;
+import com.yoyo.yopassword.common.util.safe.BPCodeUtil;
 
 /**
  * Created by yoyo on 2015/4/22.
@@ -114,7 +112,7 @@ public class ACacheUtils {
           }
           return mCache.getAsObject(key);
       }*/
-    public static void put(Context mContext, String key, Serializable value) {
+    public static void put(Context mContext, String key, String value) {
         getACacheInstance(mContext).put(key, value);
     }
    /* public static void putTimeS(Context mContext,String key, Serializable value,int s){
