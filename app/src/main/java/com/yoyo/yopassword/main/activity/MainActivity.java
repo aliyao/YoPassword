@@ -17,7 +17,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,14 +39,13 @@ import com.yoyo.yopassword.common.util.DateUtils;
 import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.ScreenObserver;
 import com.yoyo.yopassword.common.util.X3DBUtils;
-import com.yoyo.yopassword.common.util.safe.DesUtils;
+import com.yoyo.yopassword.common.util.safe.AESUtils;
 import com.yoyo.yopassword.common.view.OnToDoItemClickListener;
 import com.yoyo.yopassword.common.view.RefreshLayout;
 import com.yoyo.yopassword.common.view.SpaceItemDecoration;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.hello.activity.HelloLoginActivity;
-import com.yoyo.yopassword.main.entity.RxBusAlertdialogItemCopyEntity;
 import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
 import com.yoyo.yopassword.password.entity.PasswordInfo;
 import com.yoyo.yopassword.password.view.adapter.PasswordAdapter;
@@ -225,14 +223,14 @@ public class MainActivity extends BaseAppCompatActivity {
                 for(int i=0;i<passwordInfoList.size();i++){
                     try {
                         String account=passwordInfoList.get(i).getAccount();
-                        String accountDes= DesUtils.decryptMode(account,AppConfig.APP_KEY);
+                        String accountDes= AESUtils.decrypt(account,AppConfig.APP_KEY);
                         passwordInfoList.get(i).setAccount(accountDes);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     try {
                         String password=passwordInfoList.get(i).getPassword();
-                        String passwordDes= DesUtils.decryptMode(password,AppConfig.APP_KEY);
+                        String passwordDes= AESUtils.decrypt(password,AppConfig.APP_KEY);
                         passwordInfoList.get(i).setPassword(passwordDes);
                     }catch (Exception e){
                         e.printStackTrace();
@@ -435,14 +433,14 @@ public class MainActivity extends BaseAppCompatActivity {
         password_item_account.setText(passwordInfo.getAccount());
         password_item_password.setText(passwordInfo.getPassword());
       /*  try {
-            String accountDes= DesUtils.decryptThreeDESECB(passwordInfo.getAccount(),AppConfig.APP_KEY);
+            String accountDes= AESUtils.decryptThreeDESECB(passwordInfo.getAccount(),AppConfig.APP_KEY);
             password_item_account.setText(accountDes);
         }catch (Exception e){
             e.printStackTrace();
         }
 
         try {
-            String passwordDes= DesUtils.decryptThreeDESECB(passwordInfo.getPassword(),AppConfig.APP_KEY);
+            String passwordDes= AESUtils.decryptThreeDESECB(passwordInfo.getPassword(),AppConfig.APP_KEY);
             password_item_password.setText(passwordDes);
         }catch (Exception e){
             e.printStackTrace();

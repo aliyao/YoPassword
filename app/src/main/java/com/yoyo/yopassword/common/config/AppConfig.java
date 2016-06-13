@@ -21,6 +21,8 @@ public class AppConfig {
     public final static long DefaultGroupingId = 1;
     public final static boolean Is_SSOSetting=false;
 
-    public final static String APP_KEY="3hD4XA8yv12L9X04EMFzWQ2X";
-    public final static String APP_KEY_NUM="54236434";
+    /*public final static String APP_KEY="3hD4XA8yv12L9X04EMFzWQ2X";
+    public final static String APP_KEY_NUM="46338373";*/
+
+    public final static String APP_KEY="pD691wBFKUfObfLi";
 }

@@ -20,7 +20,7 @@ import com.yoyo.yopassword.common.tool.YoStartActivityTools;
 import com.yoyo.yopassword.common.util.EditTextUtils;
 import com.yoyo.yopassword.common.util.RxBusUtils;
 import com.yoyo.yopassword.common.util.X3DBUtils;
-import com.yoyo.yopassword.common.util.safe.DesUtils;
+import com.yoyo.yopassword.common.util.safe.AESUtils;
 import com.yoyo.yopassword.common.view.YoSnackbar;
 import com.yoyo.yopassword.grouping.entity.GroupingInfo;
 import com.yoyo.yopassword.main.entity.RxBusFragmentItemEntity;
@@ -86,13 +86,13 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
 
     private void updatePasswordInfo() {
         try {
-            String accountDes= DesUtils.decryptMode(passwordInfo.getAccount(),AppConfig.APP_KEY);
+            String accountDes= AESUtils.decrypt(passwordInfo.getAccount(),AppConfig.APP_KEY);
             et_account.setText(accountDes);
         }catch (Exception e){
             e.printStackTrace();
         }
         try {
-            String passwordDes= DesUtils.decryptMode(passwordInfo.getPassword(),AppConfig.APP_KEY);
+            String passwordDes= AESUtils.decrypt(passwordInfo.getPassword(),AppConfig.APP_KEY);
             et_password.setText(passwordDes);
         }catch (Exception e){
             e.printStackTrace();
@@ -182,8 +182,8 @@ public class AddPasswordActivity extends BaseAppCompatActivity {
         }
 
         try {
-            String accountEncrypt= DesUtils.encryptMode(account,AppConfig.APP_KEY);
-            String passwordEncrypt= DesUtils.encryptMode(password,AppConfig.APP_KEY);
+            String accountEncrypt= AESUtils.encrypt(account,AppConfig.APP_KEY);
+            String passwordEncrypt= AESUtils.encrypt(password,AppConfig.APP_KEY);
             PasswordInfo passwordInfoEdit = new PasswordInfo();
             passwordInfoEdit.setTitle(title);
             passwordInfoEdit.setAccount(accountEncrypt);

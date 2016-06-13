@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.entity.ACacheEntity;
 import com.yoyo.yopassword.common.util.safe.BPCodeUtil;
-import com.yoyo.yopassword.common.util.safe.DesUtils;
+import com.yoyo.yopassword.common.util.safe.AESUtils;
 
 import java.io.Serializable;
 
@@ -33,7 +33,7 @@ public class ACacheUtils {
             String acacheInfo = getACacheInstance(mContext).getAsString(ACACHE_INFO);
             if (!TextUtils.isEmpty(acacheInfo)) {
                 try {
-                    String jsonTextDecrypt = DesUtils.decryptMode(AppConfig.APP_KEY_NUM, AppConfig.APP_KEY,acacheInfo);
+                    String jsonTextDecrypt = AESUtils.decrypt(acacheInfo, AppConfig.APP_KEY);
                     ACacheEntity mACacheEntity = gson.fromJson(jsonTextDecrypt, ACacheEntity.class);
                     mACacheEntityInstance = mACacheEntity;
                 } catch (Exception e) {
@@ -53,7 +53,7 @@ public class ACacheUtils {
         Gson gson = new Gson();
         String jsonText = gson.toJson(mACacheEntity);
         try {
-            String jsonTextEncrypt = DesUtils.encryptMode(AppConfig.APP_KEY_NUM, AppConfig.APP_KEY,jsonText);
+            String jsonTextEncrypt = AESUtils.encrypt(jsonText, AppConfig.APP_KEY);
             put(mContext, ACACHE_INFO, jsonTextEncrypt);
         } catch (Exception e) {
             e.printStackTrace();
