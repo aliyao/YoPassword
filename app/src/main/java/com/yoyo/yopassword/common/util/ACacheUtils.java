@@ -70,7 +70,9 @@ public class ACacheUtils {
 
     private static String getAcacheInfoName(Context mContext){
         String acacheInfoName= getACacheInstance(mContext).getAsString(ACACHE_INFO_USER);
-        acacheInfoName= MD5Util.MD5ExamNum(acacheInfoName,AppConfig.APP_MD5_USER_ID_KEY);
+        if(!TextUtils.isEmpty(acacheInfoName)){
+            acacheInfoName= MD5Util.MD5ExamNum(acacheInfoName,AppConfig.APP_MD5_USER_ID_KEY);
+        }
         return acacheInfoName;
     }
 
