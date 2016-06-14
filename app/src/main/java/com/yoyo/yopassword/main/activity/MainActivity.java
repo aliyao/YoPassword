@@ -228,14 +228,14 @@ public class MainActivity extends BaseAppCompatActivity {
                 for(int i=0;i<passwordInfoList.size();i++){
                     try {
                         String account=passwordInfoList.get(i).getAccount();
-                        String accountDes= AESUtils.decrypt(account,AppConfig.APP_KEY);
+                        String accountDes= AESUtils.decrypt(account,AppConfig.APP_AES_KEY);
                         passwordInfoList.get(i).setAccount(accountDes);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     try {
                         String password=passwordInfoList.get(i).getPassword();
-                        String passwordDes= AESUtils.decrypt(password,AppConfig.APP_KEY);
+                        String passwordDes= AESUtils.decrypt(password,AppConfig.APP_AES_KEY);
                         passwordInfoList.get(i).setPassword(passwordDes);
                     }catch (Exception e){
                         e.printStackTrace();
@@ -437,19 +437,6 @@ public class MainActivity extends BaseAppCompatActivity {
         View password_item_top = vlayout.findViewById(R.id.password_item_top);
         password_item_account.setText(passwordInfo.getAccount());
         password_item_password.setText(passwordInfo.getPassword());
-      /*  try {
-            String accountDes= AESUtils.decryptThreeDESECB(passwordInfo.getAccount(),AppConfig.APP_KEY);
-            password_item_account.setText(accountDes);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            String passwordDes= AESUtils.decryptThreeDESECB(passwordInfo.getPassword(),AppConfig.APP_KEY);
-            password_item_password.setText(passwordDes);
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
         password_item_remarks.setText(AppSingletonTools.getRemarksText(passwordInfo.getRemarks()));
         password_item_title.setText(passwordInfo.getTitle());
         password_item_save_info_time.setText(DateUtils.getTimestampString(passwordInfo.getSaveInfoTime()));

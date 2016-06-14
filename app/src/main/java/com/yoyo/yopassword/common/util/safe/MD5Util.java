@@ -4,9 +4,9 @@ import java.security.MessageDigest;
 
 
 public class MD5Util {
-    public final static Object MD5ExamNum(Object object, String pswYinzi) {
-        object = FilterUtils.FilterNumAndLetters(object.toString());
-        String s1 = calc(object + pswYinzi);//密码因子，增加破解难度
+    public final static String MD5ExamNum(String text, String key) {
+        text = FilterUtils.FilterNumAndLetters(text.toString());
+        String s1 = calc(text + key);//密码因子，增加破解难度
         String s2 = calc(s1);
         return s2;
     }

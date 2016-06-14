@@ -9,6 +9,7 @@ import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.util.entity.ACacheEntity;
 import com.yoyo.yopassword.common.util.safe.AESUtils;
 import com.yoyo.yopassword.common.util.safe.BPCodeUtil;
+import com.yoyo.yopassword.common.util.safe.MD5Util;
 
 /**
  * Created by yoyo on 2015/4/22.
@@ -31,7 +32,7 @@ public class ACacheUtils {
             String acacheInfo = getACacheInstance(mContext).getAsString(ACACHE_INFO);
             if (!TextUtils.isEmpty(acacheInfo)) {
                 try {
-                    String jsonTextDecrypt = AESUtils.decrypt(acacheInfo, AppConfig.APP_KEY);
+                    String jsonTextDecrypt = AESUtils.decrypt(acacheInfo, AppConfig.APP_AES_KEY);
                     ACacheEntity mACacheEntity = gson.fromJson(jsonTextDecrypt, ACacheEntity.class);
                     mACacheEntityInstance = mACacheEntity;
                 } catch (Exception e) {
@@ -51,7 +52,7 @@ public class ACacheUtils {
         Gson gson = new Gson();
         String jsonText = gson.toJson(mACacheEntity);
         try {
-            String jsonTextEncrypt = AESUtils.encrypt(jsonText, AppConfig.APP_KEY);
+            String jsonTextEncrypt = AESUtils.encrypt(jsonText, AppConfig.APP_AES_KEY);
             put(mContext, ACACHE_INFO, jsonTextEncrypt);
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,6 +80,7 @@ public class ACacheUtils {
     }
 
     public static void loginIn(Context mContext, String openId) {
+        openId= MD5Util.MD5ExamNum(openId,AppConfig.APP_MD5_KEY);
         ACacheEntity mACacheEntity = getACacheEntityInstance(mContext);
         mACacheEntity.setLoginStatus(1);
         mACacheEntity.setOpenId(openId);
