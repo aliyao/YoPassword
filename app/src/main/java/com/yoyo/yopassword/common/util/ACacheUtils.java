@@ -54,6 +54,7 @@ public class ACacheUtils {
         try {
             String jsonTextEncrypt = AESUtils.encrypt(jsonText, AppConfig.APP_AES_KEY);
             put(mContext, ACACHE_INFO, jsonTextEncrypt);
+            mACacheEntityInstance=null;
         } catch (Exception e) {
             e.printStackTrace();
         }
