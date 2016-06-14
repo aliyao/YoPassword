@@ -16,7 +16,8 @@ import com.yoyo.yopassword.common.util.safe.MD5Util;
  */
 public class ACacheUtils {
     static ACache mCacheInstance;
-    final static String ACACHE_INFO = "ACACHE_INFO";
+    final static String ACACHE_INFO_USER = "ACACHE_INFO_USER";
+    //final static String ACACHE_INFO = "ACACHE_INFO";
     static ACacheEntity mACacheEntityInstance;
 
     private synchronized static ACache getACacheInstance(Context mContext) {
@@ -29,14 +30,17 @@ public class ACacheUtils {
     private synchronized static ACacheEntity getACacheEntityInstance(Context mContext) {
         if (mACacheEntityInstance == null) {
             Gson gson = new Gson();
-            String acacheInfo = getACacheInstance(mContext).getAsString(ACACHE_INFO);
-            if (!TextUtils.isEmpty(acacheInfo)) {
-                try {
-                    String jsonTextDecrypt = AESUtils.decrypt(acacheInfo, AppConfig.APP_AES_KEY);
-                    ACacheEntity mACacheEntity = gson.fromJson(jsonTextDecrypt, ACacheEntity.class);
-                    mACacheEntityInstance = mACacheEntity;
-                } catch (Exception e) {
-                    e.printStackTrace();
+            String acacheInfoName= getAcacheInfoName(mContext);
+            if(!TextUtils.isEmpty(acacheInfoName)){
+                String acacheInfo = getACacheInstance(mContext).getAsString(acacheInfoName);
+                if (!TextUtils.isEmpty(acacheInfo)) {
+                    try {
+                        String jsonTextDecrypt = AESUtils.decrypt(acacheInfo, AppConfig.APP_AES_KEY);
+                        ACacheEntity mACacheEntity = gson.fromJson(jsonTextDecrypt, ACacheEntity.class);
+                        mACacheEntityInstance = mACacheEntity;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             if (mACacheEntityInstance == null) {
@@ -52,15 +56,32 @@ public class ACacheUtils {
         Gson gson = new Gson();
         String jsonText = gson.toJson(mACacheEntity);
         try {
+            String acacheInfoName= getAcacheInfoName(mContext);
+            if(TextUtils.isEmpty(acacheInfoName)){
+               return;
+            }
             String jsonTextEncrypt = AESUtils.encrypt(jsonText, AppConfig.APP_AES_KEY);
-            put(mContext, ACACHE_INFO, jsonTextEncrypt);
+            put(mContext, acacheInfoName, jsonTextEncrypt);
             mACacheEntityInstance=null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    private static String getAcacheInfoName(Context mContext){
+        String acacheInfoName= getACacheInstance(mContext).getAsString(ACACHE_INFO_USER);
+        acacheInfoName= MD5Util.MD5ExamNum(acacheInfoName,AppConfig.APP_MD5_USER_ID_KEY);
+        return acacheInfoName;
+    }
+
+    private static void setAcacheInfoName(Context mContext,String encryptOpenId){
+        getACacheInstance(mContext).put(ACACHE_INFO_USER,encryptOpenId);
+    }
+
+    private static String getEncryptOpenId(String openId){
+        String encryptOpenId= MD5Util.MD5ExamNum(openId,AppConfig.APP_MD5_USER_INFO_KEY);
+        return encryptOpenId;
+    }
     public static void setCheckPassword(Context mContext, String checkPassword) {
         ACacheEntity mACacheEntity = getACacheEntityInstance(mContext);
         mACacheEntity.setCheckPassword(checkPassword);
@@ -81,7 +102,8 @@ public class ACacheUtils {
     }
 
     public static void loginIn(Context mContext, String openId) {
-        openId= MD5Util.MD5ExamNum(openId,AppConfig.APP_MD5_KEY);
+        openId= getEncryptOpenId(openId);
+        setAcacheInfoName(mContext,openId);
         ACacheEntity mACacheEntity = getACacheEntityInstance(mContext);
         String openIdMD5=mACacheEntity.getOpenId();
         if(TextUtils.isEmpty(openIdMD5)|| !(openIdMD5.equals(openId))){

@@ -22,5 +22,6 @@ public class AppConfig {
     public final static boolean Is_SSOSetting=false;
 
     public final static String APP_AES_KEY="pD691wBFKUfObfLi";
-    public final static String APP_MD5_KEY="ycyuf7QEaWAZ5NQi";
+    public final static String APP_MD5_USER_INFO_KEY="ycyuf7QEaWAZ5NQi";
+    public final static String APP_MD5_USER_ID_KEY="fOFKRoiQljGzt9kf";
 }
