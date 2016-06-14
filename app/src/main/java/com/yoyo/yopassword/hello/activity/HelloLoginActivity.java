@@ -103,9 +103,6 @@ public class HelloLoginActivity extends BaseAppCompatActivity {
                                 groupingInfo = new GroupingInfo(HelloLoginActivity.this.getResources().getString(R.string.action_default_grouping_name), new Date().getTime());
                                 X3DBUtils.save(groupingInfo);
                             }
-                           /* if (!TextUtils.isEmpty(ACacheUtils.getCheckPassword(HelloLoginActivity.this))) {
-                                startActivity(new Intent(HelloLoginActivity.this, MainActivity.class));
-                            } else*/
                             if (TextUtils.isEmpty(ACacheUtils.getCheckPassword(HelloLoginActivity.this))) {
                                 startActivity(new Intent(HelloLoginActivity.this, SetPasswordActivity.class));
                             } else {

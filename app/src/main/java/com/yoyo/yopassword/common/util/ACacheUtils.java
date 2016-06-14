@@ -46,7 +46,7 @@ public class ACacheUtils {
         return mACacheEntityInstance;
     }
 
-    public static void setACacheEntity(Context mContext, ACacheEntity mACacheEntity) {
+    private static void setACacheEntity(Context mContext, ACacheEntity mACacheEntity) {
         String randomCode= BPCodeUtil.getInstance().createCode();
         mACacheEntity.setRandomCode(randomCode);
         Gson gson = new Gson();
@@ -68,22 +68,26 @@ public class ACacheUtils {
 
     public static String getCheckPassword(Context mContext) {
         ACacheEntity mACacheEntity = getACacheEntityInstance(mContext);
-        Object mCheckPassword = mACacheEntity.getCheckPassword();
-        return mCheckPassword == null ? null : mCheckPassword.toString();
+        String mCheckPassword = mACacheEntity.getCheckPassword();
+        return mCheckPassword;
     }
 
     public static boolean isLogin(Context mContext) {
         ACacheEntity mACacheEntity = getACacheEntityInstance(mContext);
-        Object mCheckPassword = mACacheEntity.getCheckPassword();
-        Object mLoginStatus = mACacheEntity.getLoginStatus();
-        return (mLoginStatus != null && mLoginStatus.equals(1)) && mCheckPassword != null && !TextUtils.isEmpty(mCheckPassword.toString());
+        String mCheckPassword = mACacheEntity.getCheckPassword();
+        int mLoginStatus = mACacheEntity.getLoginStatus();
+        return  mLoginStatus==1 && !TextUtils.isEmpty(mCheckPassword);
     }
 
     public static void loginIn(Context mContext, String openId) {
         openId= MD5Util.MD5ExamNum(openId,AppConfig.APP_MD5_KEY);
         ACacheEntity mACacheEntity = getACacheEntityInstance(mContext);
+        String openIdMD5=mACacheEntity.getOpenId();
+        if(TextUtils.isEmpty(openIdMD5)|| !(openIdMD5.equals(openId))){
+            mACacheEntity=new ACacheEntity();
+            mACacheEntity.setOpenId(openId);
+        }
         mACacheEntity.setLoginStatus(1);
-        mACacheEntity.setOpenId(openId);
         setACacheEntity(mContext, mACacheEntity);
     }
 
