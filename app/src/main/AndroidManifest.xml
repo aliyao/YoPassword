@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
 
-
     <application
         android:name=".base.YoBaseApplication"
         android:allowBackup="true"
@@ -66,8 +65,14 @@
         <activity
             android:name=".check.CheckPasswordActivity"
             android:label="@string/title_activity_check_password"
-            android:windowSoftInputMode="stateVisible|adjustResize"
             android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+            android:name=".check.ChangePasswordActivity"
+            android:label="@string/title_activity_change_password"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

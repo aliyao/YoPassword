@@ -28,7 +28,9 @@ import android.widget.TextView;
 import com.yoyo.yopassword.R;
 import com.yoyo.yopassword.base.BaseAppCompatActivity;
 import com.yoyo.yopassword.base.OnBaseRecyclerViewListener;
+import com.yoyo.yopassword.check.ChangePasswordActivity;
 import com.yoyo.yopassword.check.CheckPasswordActivity;
+import com.yoyo.yopassword.check.SetPasswordActivity;
 import com.yoyo.yopassword.common.config.AppConfig;
 import com.yoyo.yopassword.common.tool.AppSingletonTools;
 import com.yoyo.yopassword.common.tool.RxBusTools;
@@ -100,6 +102,9 @@ public class MainActivity extends BaseAppCompatActivity {
         switch (id) {
             case R.id.action_grouping:
                 YoStartActivityTools.toGroupingActivity(MainActivity.this);
+                return true;
+            case R.id.action_change_password:
+                startActivity(new Intent(MainActivity.this, ChangePasswordActivity.class));
                 return true;
             case R.id.action_sign_out:
                 ACacheUtils.signOut(MainActivity.this);

@@ -8,6 +8,7 @@
     <string name="qq_auth_completel">授权登录成功</string>
     <string name="qq_auth_fail">授权登录失败</string>
     <string name="title_activity_main">YoPass</string>
+    <string name="action_change_password">修改密码</string>
     <string name="action_grouping">分组管理</string>
     <string name="action_sign_out">退出账号</string>
     <string name="action_confirm">确定</string>
@@ -47,6 +48,11 @@
 
     <string name="edit_title">请输入标题</string>
     <string name="edit_account">请输入账号</string>
+    <string name="change_password_edit_old_password">请输入旧密码</string>
+    <string name="change_password_edit_new_password">请输入新密码</string>
+    <string name="change_password_edit_new_password_too">请再次输入新密码</string>
+    <string name="change_password_old_password_error">旧密码错误</string>
+
     <string name="edit_password">请输入密码</string>
     <string name="edit_password_too">请再次输入密码</string>
     <string name="edit_password_no_same">两次密码不一致</string>
@@ -59,4 +65,5 @@
     <string name="edit_password_error">密码错误</string>
 
     <string name="action_password_info_item">密码信息</string>
+    <string name="title_activity_change_password">修改密码</string>
 </resources>
