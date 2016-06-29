@@ -66,4 +66,9 @@
 
     <string name="action_password_info_item">密码信息</string>
     <string name="title_activity_change_password">修改密码</string>
+
+    <string name="net_error">网络异常</string>
+
+    <string name="update_text">检测到新版本，确定更新</string>
+    <string name="btn_ok_web_update">网页更新</string>
 </resources>

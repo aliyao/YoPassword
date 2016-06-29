@@ -45,9 +45,13 @@ public class AlertDialogUtils {
         showAlertDialog(context,0,rStrMessage,R.string.btn_ok, R.string.btn_cancle, 0,null,false,onToDoItemClickListener);
     }
 
-    public static AlertDialog showAlertDialog(final Context context, int rStrTitle, int rStrMessage, int rStrPositiveButtonText, int rStrNegativeButtonText, int rStrNeutralButtonText, View view,boolean isShowKeyboard,final OnToDoItemClickListener onToDoItemClickListener){
+    public static AlertDialog showAlertDialog(final Context context, int rStrTitle, int rStrMessage, int rStrPositiveButtonText, int rStrNegativeButtonText, int rStrNeutralButtonText, View view, boolean isShowKeyboard, final OnToDoItemClickListener onToDoItemClickListener){
+        return showAlertDialog(context, rStrTitle,rStrMessage, rStrPositiveButtonText, rStrNegativeButtonText, rStrNeutralButtonText, view, isShowKeyboard,true,onToDoItemClickListener);
+    }
 
+    public static AlertDialog showAlertDialog(final Context context, int rStrTitle, int rStrMessage, int rStrPositiveButtonText, int rStrNegativeButtonText, int rStrNeutralButtonText, View view, boolean isShowKeyboard,boolean cancelable, final OnToDoItemClickListener onToDoItemClickListener){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(cancelable);
         if(rStrTitle>0){
             builder.setTitle(rStrTitle);
         }
