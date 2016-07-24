@@ -15,32 +15,32 @@ import com.yoyo.yopassword.common.config.AppConfig;
  */
 public class YoLogUtils {
     public static void i(String msg){
-        if(AppConfig.isDebug){
+        if(!AppConfig.isDebug){
             return;
         }
         Log.i(AppConfig.logTag,msg);
     }
     public static void e(String msg){
-        if(AppConfig.isDebug){
+        if(!AppConfig.isDebug){
             return;
         }
         Log.e(AppConfig.logTag,msg);
     }
     public static void d(String msg){
-        if(AppConfig.isDebug){
+        if(!AppConfig.isDebug){
             return;
         }
         Log.d(AppConfig.logTag,msg);
     }
 
     public static void d(String tag,String msg){
-        if(AppConfig.isDebug){
+        if(!AppConfig.isDebug){
             return;
         }
         Log.d(AppConfig.logTag+tag,msg);
     }
     public static void v(String msg){
-        if(AppConfig.isDebug){
+        if(!AppConfig.isDebug){
             return;
         }
         Log.v(AppConfig.logTag,msg);
