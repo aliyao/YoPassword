@@ -88,6 +88,17 @@ public class X3DBUtils {
         return list;
     }
 
+    public static  <T> List<T> findAll(Class<T> entityType,String columnName, String op, Object value,String columnNameOrderBy,boolean desc)  {
+        List<T> list=null;
+        try {
+            DbManager db = getDb();
+            list= db.selector(entityType).where(columnName,op,value).orderBy(columnNameOrderBy,desc).findAll();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static  <T> T findItem(Class<T> entityType, Object idValue)  {
         T item=null;
         try {

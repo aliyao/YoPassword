@@ -308,8 +308,10 @@ public class MainActivity extends BaseAppCompatActivity {
             if (groupingId <= 0) {
                 return;
             }
-            List<PasswordInfo> passwordInfoList = X3DBUtils.findAll(PasswordInfo.class, "groupingId", "=", groupingId);
+            List<PasswordInfo> passwordInfoList = X3DBUtils.findAll(PasswordInfo.class, "groupingId", "=", groupingId,"saveInfoTime",true);
+            List<PasswordInfo> passwordList =new ArrayList<>();
             if(passwordInfoList!=null){
+                int topNum=0;
                 for(int i=0;i<passwordInfoList.size();i++){
                     try {
                         String account=passwordInfoList.get(i).getAccount();
@@ -325,9 +327,15 @@ public class MainActivity extends BaseAppCompatActivity {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+                    if( passwordInfoList.get(i).isTop()){
+                        passwordList.add( topNum,passwordInfoList.get(i));
+                        topNum++;
+                    }else{
+                        passwordList.add( passwordInfoList.get(i));
+                    }
                 }
             }
-            passwordAdapter.setmData(passwordInfoList);
+            passwordAdapter.setmData(passwordList);
             passwordAdapter.notifyDataSetChanged();
             if (refreshLayout.isRefreshing()) {
                 refreshLayout.setRefreshing(false);
